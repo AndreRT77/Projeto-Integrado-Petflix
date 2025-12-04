@@ -79,7 +79,6 @@ const buscarPetID = async function (id) {
 }
 }
 
-
 //Insere um Pet
 const inserirPet = async function (Pet, contentType) {
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
