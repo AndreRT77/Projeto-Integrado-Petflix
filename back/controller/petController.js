@@ -250,6 +250,7 @@ const excluirPet = async function (id) {
     }
 }
 //validação dos dados de cadastro e atualização do Pet
+//******************************************FALTA ACABAR ISSO, VER QND CHEGAR*****************************************
 const validarDadosPet = async function (Pet) {
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
     //Validações de todas entradas de dados
@@ -290,7 +291,7 @@ const validarDadosPet = async function (Pet) {
         MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Descricao incorreta]'
         return MESSAGES.ERROR_REQUIRED_FIELDS
 
-    } else if (Pet.midia == undefined || Pet.trailer.length > 200) {
+    } else if (Pet.midia == undefined || Pet.midia.length > 200) {
         MESSAGES.ERROR_REQUIRED_FIELDS.message += '[midia incorreto]'
         return MESSAGES.ERROR_REQUIRED_FIELDS
 
