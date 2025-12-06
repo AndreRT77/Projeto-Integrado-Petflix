@@ -16,9 +16,9 @@ const getSelectAllResponsaveis = async function () {
     try {
         //script sql
         //utilizando o método seguro $queryRaw
-        let resul = await prisma.$queryRaw`SELECT * FROM tbl_responsavel_pet`
+        let result = await prisma.$queryRaw`SELECT * FROM tbl_responsavel_pet`
 
-        if (result.lenght > 0)
+        if (result.length > 0)
             return result
         else
             return false
@@ -38,7 +38,7 @@ const selectByIdResponsavel = async function (id) {
         //utilizando o método seguro $queryRaw
         let result = await prisma.$queryRaw`SELECT * FROM tbl_responsavel_pet WHERE id_responsavel_pet = ${id}`
 
-        if (result.lenght > 0)
+        if (result.length > 0)
             return result
         else
             return false
@@ -134,7 +134,7 @@ const setUpdateResponsavel = async function (dadosResponsavel) {
 }
 
 //deletar um responsável
-const setDeleteResponsave = async function() {
+const setDeleteResponsavel = async function(id) {
 
     try {
         //usando metodo seguro para delete
@@ -160,5 +160,5 @@ module.exports = {
     selectLastID,
     setInsertResponsavel,
     setUpdateResponsavel,
-    setDeleteResponsave
+    setDeleteResponsavel
 }

@@ -1,7 +1,7 @@
 /*******************************************************************************************
  * Objetivo: Arquivo responsável pelas requisições da API da locadora de pets
  * Data:03/12/2025
- * Autor: André Roberto Tavares
+ * Autor: André Roberto Tavares / João Pedro Teodoro Nunes Correia
  * Versão: 1.0
  *******************************************************************************************/
 

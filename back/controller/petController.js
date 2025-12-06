@@ -259,39 +259,39 @@ const validarDadosPet = async function (Pet) {
         MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Nome incorreto]'
         return MESSAGES.ERROR_REQUIRED_FIELDS
 
-    } else if (Pet.idade == undefined) {
+    } else if (Pet.idade == undefined || Pet.idade == null || Pet.idade.length > 40) {
         MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Idade incorreta]'
         return MESSAGES.ERROR_REQUIRED_FIELDS
 
-    } else if (Pet.raca == undefined || Pet.data_lancamento.length != 10) {
+    } else if (Pet.raca == undefined || Pet.raca == '' || Pet.raca == null || Pet.raca.length > 100) {   
         MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Raça incorreta]'
         return MESSAGES.ERROR_REQUIRED_FIELDS
 
-    } else if (Pet.sexo == '' || Pet.sexo == undefined || Pet.sexo == null || Pet.duracao.length > 8) {
+    } else if (Pet.sexo == '' || Pet.sexo == undefined || Pet.sexo == null || Pet.sexo.length > 15) {
         MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Sexo incorreta]'
         return MESSAGES.ERROR_REQUIRED_FIELDS
 
-    } else if (Pet.tamanho == '' || Pet.tamanho == undefined || Pet.tamanho == null || Pet.orcamento.length > 14 || typeof (Pet.tamanho) != 'number') {
+    } else if (Pet.tamanho == '' || Pet.tamanho == undefined || Pet.tamanho == null || Pet.tamanho.length > 14) {
         MESSAGES.ERROR_REQUIRED_FIELDS.message += '[tamanho incorreto]'
         return MESSAGES.ERROR_REQUIRED_FIELDS
 
-    }    else if (Pet.status_adocao == undefined) {
+    }    else if (Pet.status_adocao == undefined || Pet.status_adocao == null || Pet.status_adocao.length > 20) {
         MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Status incorreto]'
         return MESSAGES.ERROR_REQUIRED_FIELDS
 
-    }    else if (Pet.nacionalidade == undefined) {
+    }    else if (Pet.nacionalidade == '' || Pet.nacionalidade == undefined || Pet.nacionalidade == null || Pet.nacionalidade.length > 56) {
         MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Nacionalidade incorreta]'
         return MESSAGES.ERROR_REQUIRED_FIELDS
 
-    }    else if (Pet.necessidades_especiais == undefined) {
+    }    else if (Pet.necessidades_especiais == '' || Pet.necessidades_especiais == undefined || Pet.necessidades_especiais == null) {
         MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Necessidades incorretas]'
         return MESSAGES.ERROR_REQUIRED_FIELDS
 
-    }    else if (Pet.descricao == undefined) {
+    }    else if (Pet.descricao == '' || Pet.descricao == undefined || Pet.descricao == null) {
         MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Descricao incorreta]'
         return MESSAGES.ERROR_REQUIRED_FIELDS
 
-    } else if (Pet.midia == undefined || Pet.midia.length > 200) {
+    } else if (Pet.midia == undefined || Pet.midia == null) {
         MESSAGES.ERROR_REQUIRED_FIELDS.message += '[midia incorreto]'
         return MESSAGES.ERROR_REQUIRED_FIELDS
 
