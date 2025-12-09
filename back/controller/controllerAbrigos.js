@@ -1,6 +1,6 @@
 /*********************************************************************************************** 
 * Objetivo: Arquivo responsável por orquestrar as requisições da API para os abrigos
-* Data: 06/12/2025
+* Data: 09/12/2025
 * Autor: João Pedro Teodoro Nunes Correia
 * Versão: 1.0
 ************************************************************************************************/
