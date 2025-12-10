@@ -1,0 +1,112 @@
+:root{
+    --primary-color: #2C2C2C;
+    --secondary-color: #ACDEAA;
+    
+}
+@media screen and (min-width: 393px){
+    * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        display: grid;
+        background-color: #ffffff;
+    }
+    header {
+        background-color: var(--primary-color);
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding-left: 10px;
+        padding-right: 10px;
+        align-items: center;
+    }
+    img #menu, #search, #seta{
+        width: 30px;
+        height: 30px;
+    }
+    img#petflix{
+        width: 100px;
+        height: 46px;
+    }
+    main{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    div.ad {
+        display: flex;
+        align-items: center;
+    }
+    img#propaganda{
+        width: 393px;
+        height: 221px;
+        z-index: 0;
+    }
+    button {
+        background-color: #4D5B24;
+        color: #ffffff;
+        position: absolute;
+    }
+    section.sugestoes {
+        width: 393px;
+        background-color: #F3F3F3;
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+        gap: 10px;
+    }
+    div.cardsPets {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+    div.card {
+        display: grid;
+        background-color: #F3F3F3;
+        width: 107px;
+        height: 138px;
+        justify-items: center;
+        border: 2px solid #727272;
+        border-radius: 10px;
+    }
+    div.status{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    p{
+        font-size: 8px;
+    }
+    
+    
+    footer {
+        background-color: var(--primary-color);
+        height: 85px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    img#p{
+        height: 57px;
+    }
+    footer h3{
+        font-size: 13px;
+    }
+    footer h3, footer p{
+        color: var(--secondary-color);
+    }
+    div.siteInfo{
+        display: flex;
+        flex-direction: column;
+    }
+    div.info{
+        display: flex;
+        flex-direction: row;
+    }
+}
