@@ -1,29 +1,38 @@
-:root{
-    --primary-color: #2C2C2C;
-    --secondary-color: #ACDEAA;
-    
-}
+
 @media screen and (min-width: 393px){
+    html {
+        height: 100%;
+    }
+    :root{
+    --primary-color: #2C2C2C;
+    --secondary-color: #ACDEAA;  
+    }
     * {
         padding: 0;
         margin: 0;
         box-sizing: border-box;
     }
-    
     body {
-        display: grid;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
         background-color: #ffffff;
     }
     header {
         background-color: var(--primary-color);
         display: flex;
+        flex-direction: column;
+    }
+    header .cabeçalho{
+        display: flex;
         flex-direction: row;
+        width: 100%;
         justify-content: space-between;
         padding-left: 10px;
         padding-right: 10px;
         align-items: center;
     }
-    img #menu, #search, #seta{
+    img#menu,#search,#seta{
         width: 30px;
         height: 30px;
     }
@@ -31,10 +40,27 @@
         width: 100px;
         height: 46px;
     }
+    header .navigation{
+        background-color: #565656;
+        width: 100%;
+        height: 25px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding-left: 30px;
+        padding-right: 30px;
+        align-items: center;
+    }
+    header a{
+        color: #ACDEAA;
+        font-size: 13px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
     main{
         display: flex;
         flex-direction: column;
         align-items: center;
+        flex-grow: 1;
     }
     div.ad {
         display: flex;
@@ -49,22 +75,25 @@
         background-color: #4D5B24;
         color: #ffffff;
         position: absolute;
+        top: 200px;
+        left: 40px;
     }
     section.sugestoes {
         width: 393px;
+        height: 222px;
         background-color: #F3F3F3;
         display: flex;
         flex-direction: column;
         padding: 10px;
         gap: 10px;
     }
-    div.cardsPets {
+    div.cards {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
     }
-    div.card {
+    div.cardpet {
         display: grid;
         background-color: #F3F3F3;
         width: 107px;
@@ -74,6 +103,7 @@
         border-radius: 10px;
     }
     div.status{
+        width: 100%;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
@@ -81,8 +111,24 @@
     p{
         font-size: 8px;
     }
-    
-    
+    section.parcerias {
+        width: 393px;
+        height: 253px;
+        background-color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+        gap: 10px;
+    }
+    div.cardong {
+        display: grid;
+        background-color: #F3F3F3;
+        width: 107px;
+        height: auto;
+        justify-items: center;
+        border: 2px solid #727272;
+        border-radius: 10px;
+    }
     footer {
         background-color: var(--primary-color);
         height: 85px;
