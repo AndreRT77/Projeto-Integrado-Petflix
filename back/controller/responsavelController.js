@@ -1,9 +1,9 @@
-/********************************************************************************************
- * Objetivo: Arquivo responsável pela manipulação de dados para realizar o CRUD de responsáveis
+/*********************************************************************************************************************************************
+ * Objetivo: Arquivo responsável pela manipulação de dados para realizar o CRUD de responsáveis pelo pet (antes do pet ser adotado)
  * Data: 05/12/2025
  * Nome: João Pedro Teodoro Nunes Correia
  * Versão 1.0:
- *******************************************************************************************/
+ ********************************************************************************************************************************************/
 
 //import da model do dao do responsavel do pet
 const responsavelPetDAO = require('../model/DAO/responsavelPet.js')

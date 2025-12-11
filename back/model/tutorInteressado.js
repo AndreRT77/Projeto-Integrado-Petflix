@@ -30,6 +30,27 @@ const getSelectAllTutorInteressado = async function () {
 
 }
 
+//Retornar um interessado específico (buscando por algum id)
+const selectByIdTutorInteressado = async function (id) {
+
+    try {
+        //script sql
+        //utilizando o método seguro $queryRaw
+        let result = await prisma.$queryRaw`SELECT * FROM tbl_tutor_interessado WHERE id_tutor_interessado = ${id}`
+
+        if (result.length > 0)
+            return result
+        else
+            return false
+
+    } catch (error) {
+        //console log abaixo feito para debugar em caso de erro
+        //console.log(error)
+        return false
+    }
+
+}
+
 
 
 //POR ENQUANTO NÃO IREI INSERIR NENHUMA FUNÇÃO DE INSERÇÃO, POIS O TUTOR INTERESSADO SERÁ "CRIADO" COM UMA FUNÇÃO DE PROCEDURE
