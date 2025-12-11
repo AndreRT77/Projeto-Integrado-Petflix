@@ -7,9 +7,8 @@
 
 //Import da model do DAO do Raca
 const RacaDAO = require('../../model/DAO/Raca.js')
-const controllerEspecie = require('./especie_controller.js')
-const controllerAbrigo = require('./abrigo_controller.js')
-const controllerOng = require('./ong_controller.js')
+const controllerraca = require('./raca_controller.js')
+
 
 
 //Import do arquivo de mensagens
@@ -27,9 +26,9 @@ const listarRacas = async function () {
 
                 //Processamento para adicionar os gêneros aos Racas 
                 for (Raca of resultRacas){
-                    let resultEspecies = await controllerEspecie.listarRacasIdEspecie(Raca.id)
-                    if(resultEspecies.status_code == 200)
-                    Raca.Especie = resultEspecies.items.RacaEspecie
+                    let resultracas = await controllerraca.listarRacasIdraca(Raca.id)
+                    if(resultracas.status_code == 200)
+                    Raca.raca = resultracas.items.Racaraca
 
                 }
                 MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
@@ -98,15 +97,15 @@ const inserirRaca = async function (Raca, contentType) {
                     if(lastID){
                         //Adiciona o ID no JSON com os dados do Raca
                     Raca.id = lastID
-                        for(Especie of Raca.Especie){
-                     // Processar a inserção dos dados na tabela de relação entre Raca e Especie
-                    //  Raca.Especie.forEach(async (Especie) => {
-                        let RacaEspecie = { 
+                        for(raca of Raca.raca){
+                     // Processar a inserção dos dados na tabela de relação entre Raca e raca
+                    //  Raca.raca.forEach(async (raca) => {
+                        let Racaraca = { 
                             id_Raca: lastID, 
-                            id_Especie: Especie.id
+                            id_raca: raca.id
                         }
-                        let resultRacasEspecie = await controllerEspecie.inserirRacaEspecie(RacaEspecie,contentType)
-                        if (resultRacasEspecie.status_code != 201)
+                        let resultRacasraca = await controllerraca.inserirRacaraca(Racaraca,contentType)
+                        if (resultRacasraca.status_code != 201)
                             return MESSAGES.ERROR.ERROR_RELATION_INSERT
                     }
                     
@@ -116,14 +115,14 @@ const inserirRaca = async function (Raca, contentType) {
                     MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_CREATED_ITEM.status_code
                     MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_CREATED_ITEM.message
 
-                    delete Raca.Especie
+                    delete Raca.raca
 
                     //Pesquisa no BD todos os gêmeros que foram associados ao Raca
-                    let resultDadosEspecie = await controllerEspecie.listarRacasIdEspecie(lastID)
+                    let resultDadosraca = await controllerraca.listarRacasIdraca(lastID)
 
 
-                    //Cria novamente o atributo Especie e coloca o resultado do BD com os gêneros
-                    Raca.Especie = resultDadosEspecie
+                    //Cria novamente o atributo raca e coloca o resultado do BD com os gêneros
+                    Raca.raca = resultDadosraca
 
                     MESSAGES.DEFAULT_HEADER.items = Raca
 
@@ -250,55 +249,42 @@ const excluirRaca = async function (id) {
     }
 }
 //validação dos dados de cadastro e atualização do Raca
-//******************************************FALTA ACABAR ISSO, VER QND CHEGAR*****************************************
 const validarDadosRaca = async function (Raca) {
-    let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
-    //Validações de todas entradas de dados
+    let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES));
+    // Validações de todas entradas de dados
 
     if (Raca.nome == '' || Raca.nome == undefined || Raca.nome == null || Raca.nome.length > 100) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Nome incorreto]'
-        return MESSAGES.ERROR_REQUIRED_FIELDS
+        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Nome incorreto]';
+        return MESSAGES.ERROR_REQUIRED_FIELDS;
 
-    } else if (Raca.idade == undefined || Raca.idade == null || Raca.idade.length > 40) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Idade incorreta]'
-        return MESSAGES.ERROR_REQUIRED_FIELDS
+    } else if (Raca.expectativa_de_vida == undefined || Raca.expectativa_de_vida == null || isNaN(Raca.expectativa_de_vida) || Raca.expectativa_de_vida <= 0) {
+        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Expectativa de vida incorreta]';
+        return MESSAGES.ERROR_REQUIRED_FIELDS;
 
-    } else if (Raca.Raca == undefined || Raca.Raca == '' || Raca.Raca == null || Raca.Raca.length > 100) {   
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Raça incorreta]'
-        return MESSAGES.ERROR_REQUIRED_FIELDS
+    } else if (Raca.saude == '' || Raca.saude == undefined || Raca.saude == null) {
+        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Saúde incorreta]';
+        return MESSAGES.ERROR_REQUIRED_FIELDS;
 
-    } else if (Raca.sexo == '' || Raca.sexo == undefined || Raca.sexo == null || Raca.sexo.length > 15) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Sexo incorreta]'
-        return MESSAGES.ERROR_REQUIRED_FIELDS
+    } else if (Raca.peso_medio == undefined || Raca.peso_medio == null || isNaN(Raca.peso_medio) || Raca.peso_medio <= 0) {
+        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Peso médio incorreto]';
+        return MESSAGES.ERROR_REQUIRED_FIELDS;
 
-    } else if (Raca.tamanho == '' || Raca.tamanho == undefined || Raca.tamanho == null || Raca.tamanho.length > 14) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[tamanho incorreto]'
-        return MESSAGES.ERROR_REQUIRED_FIELDS
+    } else if (Raca.porte == '' || Raca.porte == undefined || Raca.porte == null || !['Pequeno', 'Médio', 'Grande', 'Gigante'].includes(Raca.porte)) {
+        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Porte incorreto]';
+        return MESSAGES.ERROR_REQUIRED_FIELDS;
 
-    }    else if (Raca.status_adocao == undefined || Raca.status_adocao == null || Raca.status_adocao.length > 20) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Status incorreto]'
-        return MESSAGES.ERROR_REQUIRED_FIELDS
+    } else if (Raca.capacidades == '' || Raca.capacidades == undefined || Raca.capacidades == null) {
+        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Capacidades incorretas]';
+        return MESSAGES.ERROR_REQUIRED_FIELDS;
 
-    }    else if (Raca.nacionalidade == '' || Raca.nacionalidade == undefined || Raca.nacionalidade == null || Raca.nacionalidade.length > 56) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Nacionalidade incorreta]'
-        return MESSAGES.ERROR_REQUIRED_FIELDS
-
-    }    else if (Raca.necessidades_especiais == '' || Raca.necessidades_especiais == undefined || Raca.necessidades_especiais == null) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Necessidades incorretas]'
-        return MESSAGES.ERROR_REQUIRED_FIELDS
-
-    }    else if (Raca.descricao == '' || Raca.descricao == undefined || Raca.descricao == null) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Descricao incorreta]'
-        return MESSAGES.ERROR_REQUIRED_FIELDS
-
-    } else if (Raca.midia == undefined || Raca.midia == null) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[midia incorreto]'
-        return MESSAGES.ERROR_REQUIRED_FIELDS
+    } else if (Raca.id_especie == undefined || Raca.id_especie == null || isNaN(Raca.id_especie) || Raca.id_especie <= 0) {
+        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[ID da espécie incorreto]';
+        return MESSAGES.ERROR_REQUIRED_FIELDS;
 
     } else {
-        return false
+        return false; // Dados válidos
     }
-}
+};
 
 module.exports = {
     listarRacas,

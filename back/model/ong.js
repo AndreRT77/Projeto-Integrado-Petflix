@@ -87,7 +87,7 @@ const setInsertOngs = async function(Ong){
             ${Ong.cnpj},
             '${Ong.informacoes}',
             '${Ong.email}',
-            '${Ong.contato}'
+            ${Ong.contato}
         )`
         //executeRawUnsafe() -> Executa o scipt SQL que não tem retorno de valores
        let result = await prisma.$executeRawUnsafe(sql)
@@ -111,7 +111,7 @@ const setUpdateOngs = async function(Ong){
             cnpj=${Ong.cnpj},
             informacoes='${Ong.informacoes}',
             email='${Ong.email}',
-            contato='${Ong.contato}'
+            contato=${Ong.contato}
             `
 
         //executeRawUnsafe() -> Executa o scipt SQL que não tem retorno de valores
@@ -132,7 +132,7 @@ const setUpdateOngs = async function(Ong){
 const setDeleteOngs = async function(id){
     try {
         //Script SQL
-        let sql = `delete from tbl_Ong where id=${id}`
+        let sql = `delete from tbl_ong where id=${id}`
         
         //Encaminha para o BD o srcipt SQL
         let result = await prisma.$queryRawUnsafe(sql)
