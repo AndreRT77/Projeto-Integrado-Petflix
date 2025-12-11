@@ -6,6 +6,8 @@
     :root{
     --primary-color: #2C2C2C;
     --secondary-color: #ACDEAA;  
+    --adopted-color: #FFABAB;
+    --inAnalises-color: #FFE180;
     }
     * {
         padding: 0;
@@ -66,8 +68,57 @@
         display: flex;
         flex-direction: row;
         align-items: center;
+        justify-content: space-between;
         width: 100%;
-        gap: 10px;
+        padding: 5px;
+    }
+    .titulo h3{
+        font-size: 15px;
+    }
+    .titulo .pedidos{
+        background-color: var(--secondary-color);
+        border-radius: 5px;
+        padding: 4px;
+    }
+    .pedidos a{
+        color: #000000;
+    }
+    div.requests{
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: linear-gradient(150deg, #ACDEAA 20%, #565656 50%);
+        width: 356px;
+        height: 650px;
+        border-radius: 10px;
+        z-index: 100;
+        top: 100px;
+    }
+    h2{
+        color: #ffffff;
+    }
+    div.cardPedido {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        background-color: var(--secondary-color);
+        width: 339px;
+        height: 108px;
+        align-items: center;
+        border: 2px solid #527751;
+        border-radius: 20px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    .cardPedido img{
+        width: 66px;
+        height: 67px;
+    }
+    .perfil{
+        display: flex;
+        flex-direction: column;
+        
     }
     div.card {
         position: relative;
@@ -102,16 +153,17 @@
         flex-direction: row;
         justify-content: space-between;
     }
-    div.remover{
-        width: 77px;
-        height: 21px;
-        display: flex;
-        flex-direction: row;
-        background-color: #ACDEAA;
-        border-radius: 5px;
-        justify-content: space-between;
-        align-items: center;
-        padding: 5px;
+    label{
+        font-family: Arial, Helvetica, sans-serif;
+    }
+    .verde{
+        background-color: var(--secondary-color);
+    }
+    .amarelo{
+        background-color: var(--inAnalises-color);
+    }
+    .vermelho{
+        background-color: var(--adopted-color);
     }
     p{
         font-size: 10px;

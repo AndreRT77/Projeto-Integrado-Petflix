@@ -7,7 +7,7 @@
     <link rel="shortcut icon" href="./img/p.png" />
     <link rel="stylesheet" href="style.css">
     <script src="app.js"></script>
-    <title>PetFlix Favoritos</title>
+    <title>Petflix Anunciados</title>
 </head>
 
 <body>
@@ -26,8 +26,30 @@
     </header>
     <main>
         <div class="titulo">
-            <h3>Seus pets Favoritos</h3>
-            <img src="../img/favorito.png" id="favorito">
+            <h3>Seus pets anunciados para adoção</h3>
+            <div class="pedidos">
+                <a href="#">Ver pedidos</a>
+            </div>
+        </div>
+        <div class="requests">
+            <h2>Pedidos:</h2>
+            <div class="cardPedido">
+                <div class="perfil">
+                    <img src="../img/icone.png" alt="">
+                    <a href="#">Ver perfil</a>
+                </div>
+                <div class="informação">
+                    <h3>Jonas</h3>
+                    <div>
+                        <p>Pinheiros - SP</p>
+                        <p>Adotou em: 27/11/2025</p>
+                    </div>
+                    <div class="status">
+                        <p>Para: Jimmy</p>
+                        <p>Status: Aprovado</p>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="card">
             <img src="../img/clara.png" id="pet">
@@ -39,15 +61,14 @@
                     <p>Tímida e Inteligente</p>
                 </div>
                 <div class="status">
-                    <p>Status: Disponivel</p>
-                    <div class="remover">
-                        <p>Remover</p>
-                        <img src="../img/Remove.png" alt="">
-                    </div>
+                    <label for="status">Status:</label>
+                    <select name="status" id="status">
+                        <option value="disponivel" class="verde">Disponivel</option>
+                        <option value="em andamento" class="amarelo">Em andamento</option>
+                        <option value="adotado" class="vermelho">Adotado</option>
+                    </select>
                 </div>
-
             </div>
-            <img src="../img/Favorite.png" id="favorite">
         </div>
     </main>
     <footer>
