@@ -1,37 +1,40 @@
 /*******************************************************************************************
- * Objetivo: Arquivo responsável pela manipulação de dados entre o APP e a model para o CRUD de Especies 
- * Data:11/12/2025
+ * Objetivo: Arquivo responsável pela manipulação de dados entre o APP e a model para o CRUD de Racas 
+ * Data:09/12/2025
  * Autor: André Roberto Tavares
  * Versão: 1.0
  *******************************************************************************************/
 
-//Import da model do DAO do Especie
-const EspecieDAO = require('../../model/DAO/Especie.js')
+//Import da model do DAO do Raca
+const RacaDAO = require('../../model/DAO/Raca.js')
+const controllerEspecie = require('./especie_controller.js')
+const controllerAbrigo = require('./abrigo_controller.js')
+const controllerOng = require('./ong_controller.js')
 
 
 //Import do arquivo de mensagens
 const DEFAULT_MESSAGES = require('../modulo/config_messages.js')
 
-//Retorna uma lista de todos os Especies 
-const listarEspecies = async function () {
+//Retorna uma lista de todos os Racas 
+const listarRacas = async function () {
     //Criando um objeto novo para as mensagens 
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
     try {
-        //Chama a função do DAO para retornar a lista de Especies do BD
-        let resultEspecies = await EspecieDAO.getSelectAllEspecies()
-        if (resultEspecies) {
-            if (resultEspecies.length > 0) {
+        //Chama a função do DAO para retornar a lista de Racas do BD
+        let resultRacas = await RacaDAO.getSelectAllRacas()
+        if (resultRacas) {
+            if (resultRacas.length > 0) {
 
-                //Processamento para adicionar os gêneros aos Especies 
-                for (Especie of resultEspecies){
-                    let resultEspecies = await controllerEspecie.listarEspeciesIdEspecie(Especie.id)
+                //Processamento para adicionar os gêneros aos Racas 
+                for (Raca of resultRacas){
+                    let resultEspecies = await controllerEspecie.listarRacasIdEspecie(Raca.id)
                     if(resultEspecies.status_code == 200)
-                    Especie.Especie = resultEspecies.items.EspecieEspecie
+                    Raca.Especie = resultEspecies.items.RacaEspecie
 
                 }
                 MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
                 MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
-                MESSAGES.DEFAULT_HEADER.items.Especies = resultEspecies
+                MESSAGES.DEFAULT_HEADER.items.Racas = resultRacas
 
                 return MESSAGES.DEFAULT_HEADER // 200
             } else {
@@ -48,17 +51,17 @@ const listarEspecies = async function () {
         return MESSAGES.ERROR.INTERNAL.SERVER.CONTROLLER //500
     }
 }
-//Retorna um Especie filtrando pelo ID
-const buscarEspecieID = async function (id) {
+//Retorna um Raca filtrando pelo ID
+const buscarRacaID = async function (id) {
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
     try {
         if (!isNaN(id) && id != '' && id != null && id > 0) {
-            let resultEspecies = await EspecieDAO.getSelectByIdEspecies(Number(id))
+            let resultRacas = await RacaDAO.getSelectByIdRacas(Number(id))
 
-            if (resultEspecies.length > 0) {
+            if (resultRacas.length > 0) {
                 MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
                 MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
-                MESSAGES.DEFAULT_HEADER.items.Especie = resultEspecies
+                MESSAGES.DEFAULT_HEADER.items.Raca = resultRacas
 
                 return MESSAGES.DEFAULT_HEADER
             } else {
@@ -76,53 +79,53 @@ const buscarEspecieID = async function (id) {
 }
 }
 
-//Insere um Especie
-const inserirEspecie = async function (Especie, contentType) {
+//Insere um Raca
+const inserirRaca = async function (Raca, contentType) {
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
     try {
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
-            //Cgana a função de validar todos os dados de Especie
-            let validar = await validarDadosEspecie(Especie)
+            //Cgana a função de validar todos os dados de Raca
+            let validar = await validarDadosRaca(Raca)
             if (!validar) {
 
 
                 //Processamento
-                //Chama a função para inserir um novo Especie no banco de dados
-                let resultEspecies = await EspecieDAO.setInsertEspecies(Especie)
-                if (resultEspecies) {
+                //Chama a função para inserir um novo Raca no banco de dados
+                let resultRacas = await RacaDAO.setInsertRacas(Raca)
+                if (resultRacas) {
                     //Chama a função para receber o ID gerado no banco de dados
-                    let lastID = await EspecieDAO.getSelectLastID()
+                    let lastID = await RacaDAO.getSelectLastID()
                     if(lastID){
-                        //Adiciona o ID no JSON com os dados do Especie
-                    Especie.id = lastID
-                        for(Especie of Especie.Especie){
-                     // Processar a inserção dos dados na tabela de relação entre Especie e Especie
-                    //  Especie.Especie.forEach(async (Especie) => {
-                        let EspecieEspecie = { 
-                            id_Especie: lastID, 
+                        //Adiciona o ID no JSON com os dados do Raca
+                    Raca.id = lastID
+                        for(Especie of Raca.Especie){
+                     // Processar a inserção dos dados na tabela de relação entre Raca e Especie
+                    //  Raca.Especie.forEach(async (Especie) => {
+                        let RacaEspecie = { 
+                            id_Raca: lastID, 
                             id_Especie: Especie.id
                         }
-                        let resultEspeciesEspecie = await controllerEspecie.inserirEspecieEspecie(EspecieEspecie,contentType)
-                        if (resultEspeciesEspecie.status_code != 201)
+                        let resultRacasEspecie = await controllerEspecie.inserirRacaEspecie(RacaEspecie,contentType)
+                        if (resultRacasEspecie.status_code != 201)
                             return MESSAGES.ERROR.ERROR_RELATION_INSERT
                     }
                     
                     
-                    Especie.id = lastID
+                    Raca.id = lastID
                     MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_CREATED_ITEM.status
                     MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_CREATED_ITEM.status_code
                     MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_CREATED_ITEM.message
 
-                    delete Especie.Especie
+                    delete Raca.Especie
 
-                    //Pesquisa no BD todos os gêmeros que foram associados ao Especie
-                    let resultDadosEspecie = await controllerEspecie.listarEspeciesIdEspecie(lastID)
+                    //Pesquisa no BD todos os gêmeros que foram associados ao Raca
+                    let resultDadosEspecie = await controllerEspecie.listarRacasIdEspecie(lastID)
 
 
                     //Cria novamente o atributo Especie e coloca o resultado do BD com os gêneros
-                    Especie.Especie = resultDadosEspecie
+                    Raca.Especie = resultDadosEspecie
 
-                    MESSAGES.DEFAULT_HEADER.items = Especie
+                    MESSAGES.DEFAULT_HEADER.items = Raca
 
                    
 
@@ -152,41 +155,41 @@ const inserirEspecie = async function (Especie, contentType) {
 
 }
 
-//Atualiza um Especie buscando pelo ID
-const atualizarEspecie = async function (Especie, id, contentType) {
+//Atualiza um Raca buscando pelo ID
+const atualizarRaca = async function (Raca, id, contentType) {
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
     try {
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
 
 
-            //Cgana a função de validar todos os dados de Especie
-            let validar = await validarDadosEspecie(Especie)
+            //Cgana a função de validar todos os dados de Raca
+            let validar = await validarDadosRaca(Raca)
             if (!validar) {
 
                 //Validação de ID válido, chama a função da controller que verifica no db se o id existe e valida o ID
-                let validarID = await buscarEspecieID(id)
+                let validarID = await buscarRacaID(id)
 
                 if (validarID.status_code == 200) {
 
-                    Especie.id = Number(id)
+                    Raca.id = Number(id)
                     //Validação do ID, se existe no BD 
 
                     //Validação de ID válido
                     //Processamento
-                    //Chama a função para inserir um novo Especie no banco de dados
-                    let resultEspecies = await EspecieDAO.setUpdateEspecies(Especie)
-                    if (resultEspecies) {
+                    //Chama a função para inserir um novo Raca no banco de dados
+                    let resultRacas = await RacaDAO.setUpdateRacas(Raca)
+                    if (resultRacas) {
                         MESSAGES.DEFAULT_HEADER.status      = MESSAGES.SUCCESS_UPDATED_ITEM.status
                         MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_UPDATED_ITEM.status_code
                         MESSAGES.DEFAULT_HEADER.message     = MESSAGES.SUCCESS_UPDATED_ITEM.message
-                        MESSAGES.DEFAULT_HEADER.items.Especie  = Especie
+                        MESSAGES.DEFAULT_HEADER.items.Raca  = Raca
 
                         return MESSAGES.DEFAULT_HEADER //200
                     } else {
                         return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
                     }
                 } else {
-                    return validarID //A função buscarEspecieID poderá retornar (400 ou 404 ou 500)
+                    return validarID //A função buscarRacaID poderá retornar (400 ou 404 ou 500)
                 }
             } else {
                 return validar //400 referente a validação dos dados
@@ -204,8 +207,8 @@ const atualizarEspecie = async function (Especie, id, contentType) {
 
 }
 
-//Excluir um Especie buscando pelo ID
-const excluirEspecie = async function (id) {
+//Excluir um Raca buscando pelo ID
+const excluirRaca = async function (id) {
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
     try {
@@ -214,18 +217,18 @@ const excluirEspecie = async function (id) {
         if(!isNaN(id) && id != '' && id != null && id > 0){
 
             //Validação de ID válido, chama a função da controller que verifica no BD se o ID existe e valida o ID
-            let validarID = await buscarEspecieID(id)
+            let validarID = await buscarRacaID(id)
 
             if(validarID.status_code == 200){
 
-                let resultEspecies = await EspecieDAO.setDeleteEspecies(Number(id))
+                let resultRacas = await RacaDAO.setDeleteRacas(Number(id))
 
-                if(resultEspecies){
+                if(resultRacas){
                     
                         MESSAGES.DEFAULT_HEADER.status      = MESSAGES.SUCCESS_DELETED_ITEM.status
                         MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_DELETED_ITEM.status_code
                         MESSAGES.DEFAULT_HEADER.message     = MESSAGES.SUCCESS_DELETED_ITEM.message
-                        MESSAGES.DEFAULT_HEADER.items.Especie = resultEspecies
+                        MESSAGES.DEFAULT_HEADER.items.Raca = resultRacas
                         delete MESSAGES.DEFAULT_HEADER.items
                         return MESSAGES.DEFAULT_HEADER //200
             
@@ -246,23 +249,51 @@ const excluirEspecie = async function (id) {
         return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }
-//validação dos dados de cadastro e atualização do Especie
-const validarDadosEspecie = async function (Especie) {
+//validação dos dados de cadastro e atualização do Raca
+//******************************************FALTA ACABAR ISSO, VER QND CHEGAR*****************************************
+const validarDadosRaca = async function (Raca) {
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
     //Validações de todas entradas de dados
 
-    if (Especie.nome == '' || Especie.nome == undefined || Especie.nome == null || Especie.nome.length > 100) {
+    if (Raca.nome == '' || Raca.nome == undefined || Raca.nome == null || Raca.nome.length > 100) {
         MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Nome incorreto]'
         return MESSAGES.ERROR_REQUIRED_FIELDS
 
-    } else if (Especie.habitat == undefined || Especie.habitat == '' || Especie.habitat == null || Especie.habitat.length > 100) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Habitat incorreto]'
+    } else if (Raca.idade == undefined || Raca.idade == null || Raca.idade.length > 40) {
+        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Idade incorreta]'
         return MESSAGES.ERROR_REQUIRED_FIELDS
 
-    } else if (Especie.descricao == undefined || Especie.descricao == '' || Especie.descricao == null || Especie.descricao.length > 100) {   
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[descricao incorreta]'
+    } else if (Raca.Raca == undefined || Raca.Raca == '' || Raca.Raca == null || Raca.Raca.length > 100) {   
+        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Raça incorreta]'
         return MESSAGES.ERROR_REQUIRED_FIELDS
 
+    } else if (Raca.sexo == '' || Raca.sexo == undefined || Raca.sexo == null || Raca.sexo.length > 15) {
+        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Sexo incorreta]'
+        return MESSAGES.ERROR_REQUIRED_FIELDS
+
+    } else if (Raca.tamanho == '' || Raca.tamanho == undefined || Raca.tamanho == null || Raca.tamanho.length > 14) {
+        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[tamanho incorreto]'
+        return MESSAGES.ERROR_REQUIRED_FIELDS
+
+    }    else if (Raca.status_adocao == undefined || Raca.status_adocao == null || Raca.status_adocao.length > 20) {
+        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Status incorreto]'
+        return MESSAGES.ERROR_REQUIRED_FIELDS
+
+    }    else if (Raca.nacionalidade == '' || Raca.nacionalidade == undefined || Raca.nacionalidade == null || Raca.nacionalidade.length > 56) {
+        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Nacionalidade incorreta]'
+        return MESSAGES.ERROR_REQUIRED_FIELDS
+
+    }    else if (Raca.necessidades_especiais == '' || Raca.necessidades_especiais == undefined || Raca.necessidades_especiais == null) {
+        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Necessidades incorretas]'
+        return MESSAGES.ERROR_REQUIRED_FIELDS
+
+    }    else if (Raca.descricao == '' || Raca.descricao == undefined || Raca.descricao == null) {
+        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Descricao incorreta]'
+        return MESSAGES.ERROR_REQUIRED_FIELDS
+
+    } else if (Raca.midia == undefined || Raca.midia == null) {
+        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[midia incorreto]'
+        return MESSAGES.ERROR_REQUIRED_FIELDS
 
     } else {
         return false
@@ -270,9 +301,9 @@ const validarDadosEspecie = async function (Especie) {
 }
 
 module.exports = {
-    listarEspecies,
-    buscarEspecieID,
-    inserirEspecie,
-    atualizarEspecie,
-    excluirEspecie
+    listarRacas,
+    buscarRacaID,
+    inserirRaca,
+    atualizarRaca,
+    excluirRaca
 }
