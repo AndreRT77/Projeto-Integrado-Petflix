@@ -6,7 +6,7 @@
  *******************************************************************************************/
 
 //Import da model do DAO do Pet
-const PetDAO = require('../../model/DAO/pet.js')
+const PetDAO = require('../model/pet')
 const controllerEspecie = require('./especie_controller.js')
 const controllerAbrigo = require('./abrigo_controller.js')
 const controllerOng = require('./ong_controller.js')
