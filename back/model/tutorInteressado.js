@@ -53,8 +53,11 @@ const selectByIdTutorInteressado = async function (id) {
 
 
 
-//POR ENQUANTO NÃO IREI INSERIR NENHUMA FUNÇÃO DE INSERÇÃO, POIS O TUTOR INTERESSADO SERÁ "CRIADO" COM UMA FUNÇÃO DE PROCEDURE
+
+//POR ENQUANTO NÃO IREI INSERIR NENHUMA FUNÇÃO DE INSERÇÃO, 
+//POIS O TUTOR INTERESSADO SERÁ "CRIADO" COM UMA FUNÇÃO DE PROCEDURE
 
 module.exports = {
-    getSelectAllTutorInteressado
+    getSelectAllTutorInteressado,
+    selectByIdTutorInteressado
 }
