@@ -21,7 +21,7 @@ const responsavelController = require('../controller/responsavelController.js')
 // Retorna todos os responsaveis do banco de dados
 router.get('/v1/petflix/responsavel', cors(), async function (request, response) {
     // Chama a função para listar os responsaveis do banco de dados
-    let dadosResponsavel = await responsavelController.listarresponsaveis()
+    let dadosResponsavel = await responsavelController.listarResponsaveis()
 
     response.status(dadosResponsavel.status_code)
     response.json(dadosResponsavel)

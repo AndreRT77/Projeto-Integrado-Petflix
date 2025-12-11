@@ -250,7 +250,6 @@ const excluirPet = async function (id) {
     }
 }
 //validação dos dados de cadastro e atualização do Pet
-//******************************************FALTA ACABAR ISSO, VER QND CHEGAR*****************************************
 const validarDadosPet = async function (Pet) {
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
     //Validações de todas entradas de dados

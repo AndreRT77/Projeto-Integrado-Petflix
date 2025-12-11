@@ -68,8 +68,8 @@ router.put('/v1/petflix/abrigo/:id', cors(), bodyParserJSON, async function (req
     // Chama a função para atualizar o abrigo, e encaminha os dados, o id e o contentType
     let dadosAbrigo = await controller_abrigo.atualizarAbrigo(dadosBody, idAbrigo, contentType)
 
-    response.status(dadosabrigo.status_code)
-    response.json(dadosabrigo)
+    response.status(dadosAbrigo.status_code)
+    response.json(dadosAbrigo)
 })
 
 // Deleta um abrigo existente no banco de dados

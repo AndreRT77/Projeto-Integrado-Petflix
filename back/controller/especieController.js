@@ -6,7 +6,7 @@
  *******************************************************************************************/
 
 //Import da model do DAO do Especie
-const EspecieDAO = require('../../model/DAO/Especie.js')
+const EspecieDAO = require('../../model/DAO/especie.js')
 
 
 //Import do arquivo de mensagens
@@ -95,7 +95,7 @@ const inserirEspecie = async function (Especie, contentType) {
                     if(lastID){
                         //Adiciona o ID no JSON com os dados do Especie
                     Especie.id = lastID
-                        for(Especie of Especie.Especie){
+                        for(especie of especie.especie){
                      // Processar a inserção dos dados na tabela de relação entre Especie e Especie
                     //  Especie.Especie.forEach(async (Especie) => {
                         let EspecieEspecie = { 
