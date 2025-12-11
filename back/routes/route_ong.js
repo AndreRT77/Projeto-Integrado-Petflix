@@ -19,7 +19,7 @@ const ongController = require('../controller/ongController.js')
 // EndPoints para a rota de Ong
 
 // Retorna todos os Ongs do banco de dados
-router.get('/v1/petflix/Ong', cors(), async function (request, response) {
+router.get('/v1/petflix/ong', cors(), async function (request, response) {
     // Chama a função para listar os Ongs do banco de dados
     let dadosOng = await ongController.listarOngs()
 
@@ -28,7 +28,7 @@ router.get('/v1/petflix/Ong', cors(), async function (request, response) {
 })
 
 // Retorna um Ong filtrando pelo seu ID
-router.get('/v1/petflix/Ong/:id', cors(), async function (request, response) {
+router.get('/v1/petflix/ong/:id', cors(), async function (request, response) {
     // Recebe o ID encaminhado via parâmetro na requisição
     let idOng = request.params.id
 
@@ -40,7 +40,7 @@ router.get('/v1/petflix/Ong/:id', cors(), async function (request, response) {
 })
 
 // Insere um novo Ong no banco de dados
-router.post('/v1/petflix/Ong', cors(), bodyParserJSON, async function (request, response) {
+router.post('/v1/petflix/ong', cors(), bodyParserJSON, async function (request, response) {
     // Recebe os dados do body (corpo) da requisição
     let dadosBody = request.body
 
@@ -73,7 +73,7 @@ router.put('/v1/petflix/Ong/:id', cors(), bodyParserJSON, async function (reques
 })
 
 // Deleta um Ong existente no banco de dados
-router.delete('/v1/petflix/Ong/:id', cors(), async function (request, response) {
+router.delete('/v1/petflix/ong/:id', cors(), async function (request, response) {
     // Recebe o id do Ong
     let idOng = request.params.id
 

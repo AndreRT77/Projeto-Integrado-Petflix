@@ -7,9 +7,6 @@
 
 //Import da model do DAO do Pet
 const PetDAO = require('../../model/DAO/pet.js')
-const controllerEspecie = require('./especie_controller.js')
-const controllerAbrigo = require('./abrigo_controller.js')
-const controllerOng = require('./ong_controller.js')
 
 
 //Import do arquivo de mensagens
