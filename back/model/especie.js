@@ -114,34 +114,29 @@ const setDeleteEspecies = async function (id) {
     }
 };
 
-// Funções para a tabela de relação Pet-Especie
-const inserirPetEspecie = async function (dados) {
-    try {
-        let sql = `INSERT INTO tbl_Pet_Especie (id_Pet, id_Especie) VALUES (${Number(dados.id_Pet)}, ${Number(dados.id_Especie)})`;
-        let result = await prisma.$executeRawUnsafe(sql);
-        return !!result;
-    } catch (error) {
-        console.log(error);
-        return false;
-    }
-};
 
-// Busca todas as espécies associadas a um Pet
+// Busca a espécie associada a um Pet 
 const listarEspeciesPorPet = async function (idPet) {
     try {
-        let sql = `
-            SELECT 
+        // Esta query assume que a tabela 'tbl_pet' tem uma coluna 'id_especie'
+        // Usando $queryRaw para passar o parâmetro de forma segura
+        let result = await prisma.$queryRaw`
+            SELECT
                 tbl_especie.id,
                 tbl_especie.nome,
                 tbl_especie.habitat,
                 tbl_especie.descricao
-            FROM tbl_Pet_Especie
-            INNER JOIN tbl_especie 
-                ON tbl_Pet_Especie.id_Especie = tbl_especie.id
-            WHERE tbl_Pet_Especie.id_Pet = ${idPet};
+            FROM tbl_pet
+            INNER JOIN tbl_especie ON tbl_pet.id_especie = tbl_especie.id
+            WHERE tbl_pet.id = ${idPet}
         `;
-        let result = await prisma.$queryRawUnsafe(sql);
-        return result;
+
+        // Como um pet só tem uma espécie, retornamos o primeiro (e único) resultado
+        if (result && result.length > 0) {
+            return result[0];
+        } else {
+            return false;
+        }
     } catch (error) {
         console.log(error);
         return false;
@@ -155,6 +150,5 @@ module.exports = {
     setInsertEspecies,
     setUpdateEspecies,
     setDeleteEspecies,
-    inserirPetEspecie,
     listarEspeciesPorPet
 };
