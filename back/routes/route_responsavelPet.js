@@ -33,26 +33,26 @@ router.get('/v1/petflix/responsavel/:id', cors(), async function (request, respo
     let idResponsavel = request.params.id
 
     // Chama a função para buscar o responsavel pelo ID
-    let dadosResponsavel = await responsavelController.buscarresponsavelId(idResponsavel)
+    let dadosResponsavel = await responsavelController.buscarResponsavelID(idResponsavel)
 
     response.status(dadosResponsavel.status_code)
     response.json(dadosResponsavel)
 })
 
 // Insere um novo responsavel no banco de dados
-router.post('/v1/petflix/responsavel', cors(), bodyParserJSON, async function (request, response) {
-    // Recebe os dados do body (corpo) da requisição
-    let dadosBody = request.body
+// router.post('/v1/petflix/responsavel', cors(), bodyParserJSON, async function (request, response) {
+//     // Recebe os dados do body (corpo) da requisição
+//     let dadosBody = request.body
 
-    // Recebe o content-type da requisição
-    let contentType = request.headers['content-type']
+//     // Recebe o content-type da requisição
+//     let contentType = request.headers['content-type']
 
-    // Chama a função para inserir um novo responsavel
-    let dadosResponsavel = await responsavelController.inserirresponsavel(dadosBody, contentType)
+//     // Chama a função para inserir um novo responsavel
+//     let dadosResponsavel = await responsavelController.inserirResponsavel(dadosBody, contentType)
 
-    response.status(dadosResponsavel.status_code)
-    response.json(dadosResponsavel)
-})
+//     response.status(dadosResponsavel.status_code)
+//     response.json(dadosResponsavel)
+// })
 
 // Atualiza um responsavel existente no banco de dados
 router.put('/v1/petflix/responsavel/:id', cors(), bodyParserJSON, async function (request, response) {
