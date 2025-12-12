@@ -1,7 +1,7 @@
 /*******************************************************************************************
  * Objetivo: Arquivo responsável pela manipulação de dados entre o APP e a model para o CRUD de Responsaveis
  * Data:12/12/2025
- * Autor: Gemini Code Assist
+ * Autor: João Pedro Teodoro Nunes Correias
  * Versão: 1.0
  *******************************************************************************************/
 

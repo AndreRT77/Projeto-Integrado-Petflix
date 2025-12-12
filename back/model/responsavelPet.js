@@ -6,7 +6,7 @@
  *******************************************************************************************/
 
 //Import da dependência do Prisma que permite a execução de script SQL no banco de dados
-const { PrismaClient } = require('../../generated/prisma')
+const { PrismaClient } = require('../../back/node_modules/@prisma/client')
 //Cria um novo objeto baseado na classe do PrismaClient
 const prisma = new PrismaClient()
 
