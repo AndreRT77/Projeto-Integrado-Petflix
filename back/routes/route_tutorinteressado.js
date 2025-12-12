@@ -14,14 +14,14 @@ const bodyParser = require('body-parser')
 const bodyParserJSON = bodyParser.json()
 
 // Import da controller que lida com as regras de negócio para tutores
-const tutorController = require('../controller/tutorController.js')
+const tutorController = require('../controller/novoResponsavelController.js')
 
 // EndPoints para a rota de tutor
 
 // Retorna todos os tutores do banco de dados
 router.get('/v1/petflix/tutor', cors(), async function (request, response) {
     // Chama a função para listar os tutores do banco de dados
-    let dadosTutor = await tutorController.listartutores()
+    let dadosTutor = await tutorController.listarTutoresInteressados()
 
     response.status(dadosTutor.status_code)
     response.json(dadosTutor)
@@ -33,7 +33,7 @@ router.get('/v1/petflix/tutor/:id', cors(), async function (request, response) {
     let idTutor = request.params.id
 
     // Chama a função para buscar o tutor pelo ID
-    let dadosTutor = await tutorController.buscartutorId(idTutor)
+    let dadosTutor = await tutorController.buscarTutorInteressadoPorID(idTutor)
 
     response.status(dadosTutor.status_code)
     response.json(dadosTutor)
@@ -48,7 +48,7 @@ router.post('/v1/petflix/tutor', cors(), bodyParserJSON, async function (request
     let contentType = request.headers['content-type']
 
     // Chama a função para inserir um novo tutor
-    let dadosTutor = await tutorController.inserirtutor(dadosBody, contentType)
+    let dadosTutor = await tutorController.inserirNovoResponsavel(dadosBody, contentType)
 
     response.status(dadosTutor.status_code)
     response.json(dadosTutor)
@@ -66,7 +66,7 @@ router.put('/v1/petflix/tutor/:id', cors(), bodyParserJSON, async function (requ
     let contentType = request.headers['content-type']
 
     // Chama a função para atualizar o tutor, e encaminha os dados, o id e o contentType
-    let dadosTutor = await controller_tutor.atualizartutor(dadosBody, idTutor, contentType)
+    let dadosTutor = await controller_tutor.atualizarNovoResponsavel(dadosBody, idTutor, contentType)
 
     response.status(dadosTutor.status_code)
     response.json(dadosTutor)
@@ -78,7 +78,7 @@ router.delete('/v1/petflix/tutor/:id', cors(), async function (request, response
     let idTutor = request.params.id
 
     // Chama a função para deletar o tutor
-    let dadosTutor = await tutorController.excluirtutor(idTutor)
+    let dadosTutor = await tutorController.deletarNovoResponsavel(idTutor)
 
     response.status(dadosTutor.status_code)
     response.json(dadosTutor)
