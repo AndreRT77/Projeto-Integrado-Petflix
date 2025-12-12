@@ -22,8 +22,10 @@
         background-color: var(--primary-color);
         display: flex;
         flex-direction: column;
+        position: relative;
     }
     header .cabeçalho{
+        position: relative;
         display: flex;
         flex-direction: row;
         width: 100%;
@@ -39,6 +41,26 @@
     img#petflix{
         width: 100px;
         height: 46px;
+    }
+    .menu{
+        width: 50px;
+        height: 200px;
+        display: flex;
+        position: absolute;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+        top: 10px;
+        left: 0px;
+        z-index: 100;
+        background-color: var(--primary-color);
+    }
+    #pesquisa{
+        width: 258px;
+        height: 26px;
+        position: absolute;
+        left: 20%;
+        justify-content: center;
     }
     header .navigation{
         background-color: #565656;
