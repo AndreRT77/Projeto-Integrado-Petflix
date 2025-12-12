@@ -6,10 +6,10 @@
  *******************************************************************************************/
 
 // Import da model de autenticação
-const autenticacaoDAO = require('../model/DAO/autenticacao.js')
+const autenticacaoDAO = require('../model/autenticacao.js')
 
 // Import do arquivo de mensagens
-const DEFAULT_MESSAGES = require('../modulo/config_messages.js')
+const DEFAULT_MESSAGES = require('../module/config_messages.js')
 
 // Função que realiza o login
 const login = async function(dadosLogin, contentType) {

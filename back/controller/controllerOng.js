@@ -7,13 +7,13 @@
 
 //Import da model do DAO do Ong
 const OngDAO = require('../model/ong.js')
-const controllerEspecie = require('./especie_controller.js')
-const controllerAbrigo = require('./abrigo_controller.js')
-const controllerOng = require('./ong_controller.js')
+const controllerEspecie = require('../controller/especieController.js')
+const controllerAbrigo = require('../controller/controllerAbrigos.js')
+const controllerOng = require('../controller/controllerOng.js')
 
 
 //Import do arquivo de mensagens
-const DEFAULT_MESSAGES = require('../modulo/config_messages.js')
+const DEFAULT_MESSAGES = require('../module/config_messages.js')
 
 //Retorna uma lista de todos os Ongs 
 const listarOngs = async function () {
