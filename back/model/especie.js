@@ -6,140 +6,147 @@
  *******************************************************************************************/
 
 //Import da dependencia do Prisma que permite a execução de script sql no banco de dados
-const {PrismaClient} = require('../../generated/prisma')
+const {PrismaClient} = require('@prisma/client')
 
 //Cria uma novo objeto baseado na classe do PrismaClient
 const prisma = new PrismaClient()
 
 //Retorna uma lista de todos os Especies do banco de dados
-const getSelectAllEspecies = async() =>{
+const getSelectAllEspecies = async () => {
+    try {
+        let sql = 'select * from tbl_especie order by id desc';
+        let result = await prisma.$queryRawUnsafe(sql);
 
-    try{
-    //Sricpt SQL
-    let sql =  'select * from tbl_especie order by id desc'
-
-    //Encaminhe para o BD o script SQL
-    let result = await prisma.$queryRawUnsafe(sql)
-
-    if(Array.isArray(result))
-        return result
-    else
-        return false
-}
-catch (error) {
-    console.log(error)
-
-    return false
-}
-
-}
+        if (result) {
+            return result;
+        } else {
+            return false;
+        }
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+};
 
 //Retorna um Especie filtrando pelo id do banco de dados
-const getSelectByIdEspecies = async function(id){
-    try{
-        //Sricpt SQL
-        let sql =  `select * from tbl_Especie where id= ${id}`
-    
-        //Encaminhe para o BD o script SQL
-        let result = await prisma.$queryRawUnsafe(sql)
-    
-        if(Array.isArray(result))
-            return result
-        else
-            return false
-    }
-    catch (error) {
-        console.log(error)
+const getSelectByIdEspecies = async function (id) {
+    try {
+        let sql = `select * from tbl_Especie where id = ${id}`;
+        let result = await prisma.$queryRawUnsafe(sql);
 
-        return false
+        if (result) {
+            return result;
+        } else {
+            return false;
+        }
+    } catch (error) {
+        console.log(error);
+        return false;
     }
-}
+};
+
 //Retorna o último ID gerado no BD
-const getSelectLastID = async function(){
+const getSelectLastID = async function () {
     try {
         //Script SQL para retornar apenas o último ID do BD
-        let sql = `select id from tbl_especie order by id desc limit 1`
-        let result = await prisma.$queryRawUnsafe(sql)
-    
-        if(Array.isArray(result))
-            return Number(result[0].id)
-        else
-            return false
-    } catch (error) {
-        console.log(error)
+        let sql = `select id from tbl_especie order by id desc limit 1`;
+        let result = await prisma.$queryRawUnsafe(sql);
 
-        return false
+        if (result && result.length > 0) {
+            return Number(result[0].id);
+        } else {
+            return false;
+        }
+    } catch (error) {
+        console.log(error);
+        return false;
     }
-}
+};
 
 //Insere um Especie no banco de dados
-const setInsertEspecies = async function(Especie){
+const setInsertEspecies = async function (dadosEspecie) {
     try {
-        let sql = `INSERT INTO tbl_especie (
-           
-        ) VALUES
-        (
-            '${Especie.nome}',
-            ${Especie.habitat},
-            '${Especie.descricao}'
-        )`
-        //executeRawUnsafe() -> Executa o scipt SQL que não tem retorno de valores
-       let result = await prisma.$executeRawUnsafe(sql)
-       if(result) 
-        return true
-       else
-        return false
-    } catch (error) {
-        console.log(error)
+        let sql = `INSERT INTO tbl_especie (nome, habitat, descricao) VALUES ('${dadosEspecie.nome}', '${dadosEspecie.habitat}', '${dadosEspecie.descricao}')`;
+        let result = await prisma.$executeRawUnsafe(sql);
 
-        return false
-        
+        if (result) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (error) {
+        console.log(error);
+        return false;
     }
-}
+};
 
 //Altera uma especie no banco de dados
-const setUpdateEspecies = async function(Especie){
+const setUpdateEspecies = async function (id, dadosEspecie) {
     try {
-        let sql = `UPDATE tbl_Especie SET
-            nome='${Especie.nome}',
-            habitat=${Especie.habitat},
-            descricao='${Especie.descricao}'
-            `
+        let sql = `UPDATE tbl_Especie SET nome='${dadosEspecie.nome}', habitat='${dadosEspecie.habitat}', descricao='${dadosEspecie.descricao}' WHERE id = ${id}`;
+        let result = await prisma.$executeRawUnsafe(sql);
 
-        //executeRawUnsafe() -> Executa o scipt SQL que não tem retorno de valores
-       let result = await prisma.$executeRawUnsafe(sql)
-       if(result) 
-        return true
-       else
-        return false
+        if (result) {
+            return true;
+        } else {
+            return false;
+        }
     } catch (error) {
-        console.log(error)
-
-        return false
-        
+        console.log(error);
+        return false;
     }
-}
+};
 
 //Exclui um Especie pelo ID no banco de dados
-const setDeleteEspecies = async function(id){
+const setDeleteEspecies = async function (id) {
     try {
-        //Script SQL
-        let sql = `delete from tbl_Especie where id=${id}`
-        
-        //Encaminha para o BD o srcipt SQL
-        let result = await prisma.$queryRawUnsafe(sql)
+        let sql = `delete from tbl_Especie where id = ${id}`;
+        let result = await prisma.$executeRawUnsafe(sql);
 
-        //console.log(Array.isArray(result))
-        if(Array.isArray(result))
-            return result
-        else
-            return false
-
+        if (result) {
+            return true;
+        } else {
+            return false;
+        }
     } catch (error) {
-        console.log(error)
-        return false
+        console.log(error);
+        return false;
     }
-}
+};
+
+// Funções para a tabela de relação Pet-Especie
+const inserirPetEspecie = async function (dados) {
+    try {
+        let sql = `INSERT INTO tbl_Pet_Especie (id_Pet, id_Especie) VALUES (${Number(dados.id_Pet)}, ${Number(dados.id_Especie)})`;
+        let result = await prisma.$executeRawUnsafe(sql);
+        return !!result;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+};
+
+// Busca todas as espécies associadas a um Pet
+const listarEspeciesPorPet = async function (idPet) {
+    try {
+        let sql = `
+            SELECT 
+                tbl_especie.id,
+                tbl_especie.nome,
+                tbl_especie.habitat,
+                tbl_especie.descricao
+            FROM tbl_Pet_Especie
+            INNER JOIN tbl_especie 
+                ON tbl_Pet_Especie.id_Especie = tbl_especie.id
+            WHERE tbl_Pet_Especie.id_Pet = ${idPet};
+        `;
+        let result = await prisma.$queryRawUnsafe(sql);
+        return result;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+};
 
 module.exports = {
     getSelectAllEspecies,
@@ -147,5 +154,7 @@ module.exports = {
     getSelectLastID,
     setInsertEspecies,
     setUpdateEspecies,
-    setDeleteEspecies
-}
+    setDeleteEspecies,
+    inserirPetEspecie,
+    listarEspeciesPorPet
+};

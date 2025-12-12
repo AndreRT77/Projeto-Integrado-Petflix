@@ -7,18 +7,18 @@
 
 //Import da model do DAO do Pet
 const PetDAO = require('../model/pet')
-const controllerEspecie = require('./especie_controller.js')
-const controllerAbrigo = require('./abrigo_controller.js')
-const controllerOng = require('./ong_controller.js')
+const especieDAO = require('../model/especie.js')
+// const controllerAbrigo = require('./abrigo_controller.js')
+// const controllerOng = require('./ong_controller.js')
 
 
 //Import do arquivo de mensagens
-const DEFAULT_MESSAGES = require('../modulo/config_messages.js')
+const MESSAGES = require('../module/config_messages.js')
 
 //Retorna uma lista de todos os Pets 
 const listarPets = async function () {
-    //Criando um objeto novo para as mensagens 
-    let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+    //Criando um objeto novo para as mensagens
+    let response = JSON.parse(JSON.stringify(MESSAGES.DEFAULT_HEADER))
     try {
         //Chama a função do DAO para retornar a lista de Pets do BD
         let resultPets = await PetDAO.getSelectAllPets()
@@ -27,49 +27,52 @@ const listarPets = async function () {
 
                 //Processamento para adicionar os gêneros aos Pets 
                 for (Pet of resultPets){
-                    let resultEspecies = await controllerEspecie.listarPetsIdEspecie(Pet.id)
-                    if(resultEspecies.status_code == 200)
-                    Pet.Especie = resultEspecies.items.PetEspecie
 
+                    // Busca as espécies associadas a este pet
+                    let especiesDoPet = await especieDAO.listarEspeciesPorPet(Pet.id);
+                    // Adiciona a lista de espécies ao objeto do pet
+                    Pet.especies = especiesDoPet;
                 }
-                MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
-                MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
-                MESSAGES.DEFAULT_HEADER.items.Pets = resultPets
+                response.status = MESSAGES.SUCCESS_REQUEST.status
+                response.status_code = MESSAGES.SUCCESS_REQUEST.status_code
+                response.items.Pets = resultPets
 
-                return MESSAGES.DEFAULT_HEADER // 200
+                return response // 200
             } else {
                 return MESSAGES.ERROR_NOT_FOUND //404
             }
         } else {
             return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
         }
-
-
     } catch (error) {
         console.log(error)
 
-        return MESSAGES.ERROR.INTERNAL.SERVER.CONTROLLER //500
+        return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }
 //Retorna um Pet filtrando pelo ID
 const buscarPetID = async function (id) {
-    let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+    //Cria uma cópia do header padrão para a resposta
+    let response = JSON.parse(JSON.stringify(MESSAGES.DEFAULT_HEADER))
+
     try {
         if (!isNaN(id) && id != '' && id != null && id > 0) {
             let resultPets = await PetDAO.getSelectByIdPets(Number(id))
 
             if (resultPets.length > 0) {
-                MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
-                MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
-                MESSAGES.DEFAULT_HEADER.items.Pet = resultPets
+                response.status = MESSAGES.SUCCESS_REQUEST.status
+                response.status_code = MESSAGES.SUCCESS_REQUEST.status_code
+                response.items.Pet = resultPets
 
-                return MESSAGES.DEFAULT_HEADER
+                return response
             } else {
                 return MESSAGES.ERROR_NOT_FOUND //404
             }
         } else {
-            MESSAGES.ERROR_REQUIRED_FIELDS.message += '[ID incorreto]'
-            return MESSAGES.ERROR_REQUIRED_FIELDS //400
+            // Retorna uma cópia para não modificar o objeto original
+            let error = JSON.parse(JSON.stringify(MESSAGES.ERROR_REQUIRED_FIELDS));
+            error.message += '[ID incorreto]'
+            return error //400
         }
     
     } catch (error) {
@@ -81,10 +84,12 @@ const buscarPetID = async function (id) {
 
 //Insere um Pet
 const inserirPet = async function (Pet, contentType) {
-    let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+    //Cria uma cópia do header padrão para a resposta
+    let response = JSON.parse(JSON.stringify(MESSAGES.DEFAULT_HEADER))
+
     try {
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
-            //Cgana a função de validar todos os dados de Pet
+            //Chama a função de validar todos os dados de Pet
             let validar = await validarDadosPet(Pet)
             if (!validar) {
 
@@ -98,47 +103,39 @@ const inserirPet = async function (Pet, contentType) {
                     if(lastID){
                         //Adiciona o ID no JSON com os dados do Pet
                     Pet.id = lastID
-                        for(Especie of Pet.Especie){
+                        for(const Especie of Pet.Especie){
                      // Processar a inserção dos dados na tabela de relação entre Pet e Especie
-                    //  Pet.Especie.forEach(async (Especie) => {
                         let PetEspecie = { 
                             id_Pet: lastID, 
                             id_Especie: Especie.id
                         }
-                        let resultPetsEspecie = await controllerEspecie.inserirPetEspecie(PetEspecie,contentType)
-                        if (resultPetsEspecie.status_code != 201)
-                            return MESSAGES.ERROR.ERROR_RELATION_INSERT
+                        let resultPetsEspecie = await especieDAO.inserirPetEspecie(PetEspecie);
+                        if (!resultPetsEspecie)
+                            return MESSAGES.ERROR_RELATION_INSERT
                     }
                     
                     
                     Pet.id = lastID
-                    MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_CREATED_ITEM.status
-                    MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_CREATED_ITEM.status_code
-                    MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_CREATED_ITEM.message
+                    response.status = MESSAGES.SUCCESS_CREATED_ITEM.status
+                    response.status_code = MESSAGES.SUCCESS_CREATED_ITEM.status_code
+                    response.message = MESSAGES.SUCCESS_CREATED_ITEM.message
 
                     delete Pet.Especie
 
-                    //Pesquisa no BD todos os gêmeros que foram associados ao Pet
-                    let resultDadosEspecie = await controllerEspecie.listarPetsIdEspecie(lastID)
+                    //Pesquisa no BD todos os gêneros que foram associados ao Pet
+                    let resultDadosEspecie = await especieDAO.listarEspeciesPorPet(lastID)
 
 
                     //Cria novamente o atributo Especie e coloca o resultado do BD com os gêneros
-                    Pet.Especie = resultDadosEspecie
+                    Pet.especies = resultDadosEspecie
 
-                    MESSAGES.DEFAULT_HEADER.items = Pet
+                    response.items = Pet
 
-                   
-
-                    return MESSAGES.DEFAULT_HEADER //201
+                    return response //201
 
                     }else{
                         return MESSAGES.ERROR_INTERNAL_SERVER_MODEL
                     }
-                    MESSAGES.DEFAULT_SEADER.status = MESSAGES.SUCCESS_CREATED_ITEM.status
-                    MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_CREATED_ITEM.status_code
-                    MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_CREATED_ITEM.message
-
-                    return MESSAGES.DEFAULT_HEADER //201
                 } else {
                     return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
                 }
@@ -157,12 +154,14 @@ const inserirPet = async function (Pet, contentType) {
 
 //Atualiza um Pet buscando pelo ID
 const atualizarPet = async function (Pet, id, contentType) {
-    let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+    //Cria uma cópia do header padrão para a resposta
+    let response = JSON.parse(JSON.stringify(MESSAGES.DEFAULT_HEADER))
+
     try {
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
 
 
-            //Cgana a função de validar todos os dados de Pet
+            //Chama a função de validar todos os dados de Pet
             let validar = await validarDadosPet(Pet)
             if (!validar) {
 
@@ -171,20 +170,17 @@ const atualizarPet = async function (Pet, id, contentType) {
 
                 if (validarID.status_code == 200) {
 
-                    Pet.id = Number(id)
-                    //Validação do ID, se existe no BD 
-
-                    //Validação de ID válido
                     //Processamento
                     //Chama a função para inserir um novo Pet no banco de dados
-                    let resultPets = await PetDAO.setUpdatePets(Pet)
+                    let resultPets = await PetDAO.setUpdatePets(id, Pet)
                     if (resultPets) {
-                        MESSAGES.DEFAULT_HEADER.status      = MESSAGES.SUCCESS_UPDATED_ITEM.status
-                        MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_UPDATED_ITEM.status_code
-                        MESSAGES.DEFAULT_HEADER.message     = MESSAGES.SUCCESS_UPDATED_ITEM.message
-                        MESSAGES.DEFAULT_HEADER.items.Pet  = Pet
+                        Pet.id = Number(id)
+                        response.status      = MESSAGES.SUCCESS_UPDATED_ITEM.status
+                        response.status_code = MESSAGES.SUCCESS_UPDATED_ITEM.status_code
+                        response.message     = MESSAGES.SUCCESS_UPDATED_ITEM.message
+                        response.items.Pet  = Pet
 
-                        return MESSAGES.DEFAULT_HEADER //200
+                        return response //200
                     } else {
                         return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
                     }
@@ -209,7 +205,8 @@ const atualizarPet = async function (Pet, id, contentType) {
 
 //Excluir um Pet buscando pelo ID
 const excluirPet = async function (id) {
-    let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+    //Cria uma cópia do header padrão para a resposta
+    let response = JSON.parse(JSON.stringify(MESSAGES.DEFAULT_HEADER))
 
     try {
 
@@ -225,22 +222,23 @@ const excluirPet = async function (id) {
 
                 if(resultPets){
                     
-                        MESSAGES.DEFAULT_HEADER.status      = MESSAGES.SUCCESS_DELETED_ITEM.status
-                        MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_DELETED_ITEM.status_code
-                        MESSAGES.DEFAULT_HEADER.message     = MESSAGES.SUCCESS_DELETED_ITEM.message
-                        MESSAGES.DEFAULT_HEADER.items.Pet = resultPets
-                        delete MESSAGES.DEFAULT_HEADER.items
-                        return MESSAGES.DEFAULT_HEADER //200
+                        response.status      = MESSAGES.SUCCESS_DELETED_ITEM.status
+                        response.status_code = MESSAGES.SUCCESS_DELETED_ITEM.status_code
+                        response.message     = MESSAGES.SUCCESS_DELETED_ITEM.message
+                        delete response.items
+                        return response //200
             
                 }else{
                     return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
                 }
             }else{
-                return MESSAGES.ERROR_NOT_FOUND //404
+                // O erro original era not found, mas o buscarPetID pode retornar outros erros
+                return validarID
             }
         }else{
-            MESSAGES.ERROR_REQUIRED_FIELDS.message += ' [ID incorreto]'
-            return MESSAGES.ERROR_REQUIRED_FIELDS //400
+            let error = JSON.parse(JSON.stringify(MESSAGES.ERROR_REQUIRED_FIELDS));
+            error.message += ' [ID incorreto]'
+            return error //400
         }
 
     } catch (error) {
@@ -251,51 +249,43 @@ const excluirPet = async function (id) {
 }
 //validação dos dados de cadastro e atualização do Pet
 const validarDadosPet = async function (Pet) {
-    let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+    let error = JSON.parse(JSON.stringify(MESSAGES.ERROR_REQUIRED_FIELDS))
+    let hasError = false;
+
     //Validações de todas entradas de dados
-
     if (Pet.nome == '' || Pet.nome == undefined || Pet.nome == null || Pet.nome.length > 100) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Nome incorreto]'
-        return MESSAGES.ERROR_REQUIRED_FIELDS
-
-    } else if (Pet.idade == undefined || Pet.idade == null || Pet.idade.length > 40) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Idade incorreta]'
-        return MESSAGES.ERROR_REQUIRED_FIELDS
-
-    } else if (Pet.raca == undefined || Pet.raca == '' || Pet.raca == null || Pet.raca.length > 100) {   
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Raça incorreta]'
-        return MESSAGES.ERROR_REQUIRED_FIELDS
-
+        error.message += '[Nome incorreto]'
+        hasError = true;
+    } else if (Pet.idade === undefined || Pet.idade === null || isNaN(Pet.idade)) {
+        error.message += '[Idade incorreta]'
+        hasError = true;
     } else if (Pet.sexo == '' || Pet.sexo == undefined || Pet.sexo == null || Pet.sexo.length > 15) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Sexo incorreta]'
-        return MESSAGES.ERROR_REQUIRED_FIELDS
-
-    } else if (Pet.tamanho == '' || Pet.tamanho == undefined || Pet.tamanho == null || Pet.tamanho.length > 14) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[tamanho incorreto]'
-        return MESSAGES.ERROR_REQUIRED_FIELDS
-
-    }    else if (Pet.status_adocao == undefined || Pet.status_adocao == null || Pet.status_adocao.length > 20) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Status incorreto]'
-        return MESSAGES.ERROR_REQUIRED_FIELDS
-
+        error.message += '[Sexo incorreto]'
+        hasError = true;
+    } else if (Pet.tamanho == '' || Pet.tamanho == undefined || Pet.tamanho == null || Pet.tamanho.length > 20) {
+        error.message += '[tamanho incorreto]'
+        hasError = true;
+    }    else if (Pet.status_adocao == undefined || Pet.status_adocao == null || Pet.status_adocao.length > 50) {
+        error.message += '[Status incorreto]'
+        hasError = true;
     }    else if (Pet.nacionalidade == '' || Pet.nacionalidade == undefined || Pet.nacionalidade == null || Pet.nacionalidade.length > 56) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Nacionalidade incorreta]'
-        return MESSAGES.ERROR_REQUIRED_FIELDS
-
-    }    else if (Pet.necessidades_especiais == '' || Pet.necessidades_especiais == undefined || Pet.necessidades_especiais == null) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Necessidades incorretas]'
-        return MESSAGES.ERROR_REQUIRED_FIELDS
-
+        error.message += '[Nacionalidade incorreta]'
+        hasError = true;
+    }    else if (Pet.necessidades_especiais === undefined || Pet.necessidades_especiais === null) {
+        error.message += '[Necessidades incorretas]'
+        hasError = true;
     }    else if (Pet.descricao == '' || Pet.descricao == undefined || Pet.descricao == null) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Descricao incorreta]'
-        return MESSAGES.ERROR_REQUIRED_FIELDS
+        error.message += '[Descricao incorreta]'
+        hasError = true;
+    } else if (Pet.midia === undefined || Pet.midia === null) {
+        error.message += '[midia incorreto]'
+        hasError = true;
+    }
 
-    } else if (Pet.midia == undefined || Pet.midia == null) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[midia incorreto]'
-        return MESSAGES.ERROR_REQUIRED_FIELDS
-
+    if (hasError) {
+        return error;
     } else {
-        return false
+        return false;
     }
 }
 

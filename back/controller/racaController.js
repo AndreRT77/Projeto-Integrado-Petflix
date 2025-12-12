@@ -6,36 +6,36 @@
  *******************************************************************************************/
 
 //Import da model do DAO do Raca
-const RacaDAO = require('../../model/DAO/Raca.js')
-const controllerraca = require('./raca_controller.js')
+const racaDAO = require('../model/raca.js')
+// const controllerraca = require('./raca_controller.js') // Removido para evitar dependência circular
 
 
 
 //Import do arquivo de mensagens
-const DEFAULT_MESSAGES = require('../modulo/config_messages.js')
+const MESSAGES = require('../module/config_messages.js');
 
 //Retorna uma lista de todos os Racas 
 const listarRacas = async function () {
-    //Criando um objeto novo para as mensagens 
-    let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+    //Cria uma cópia do header padrão para a resposta
+    let response = JSON.parse(JSON.stringify(MESSAGES.DEFAULT_HEADER))
     try {
         //Chama a função do DAO para retornar a lista de Racas do BD
-        let resultRacas = await RacaDAO.getSelectAllRacas()
+        let resultRacas = await racaDAO.getSelectAllRacas()
         if (resultRacas) {
             if (resultRacas.length > 0) {
 
                 //Processamento para adicionar os gêneros aos Racas 
                 for (Raca of resultRacas){
-                    let resultracas = await controllerraca.listarRacasIdraca(Raca.id)
-                    if(resultracas.status_code == 200)
-                    Raca.raca = resultracas.items.Racaraca
+                    // let resultracas = await controllerraca.listarRacasIdraca(Raca.id) // Lógica com erro, comentada por enquanto
+                    // if(resultracas.status_code == 200)
+                    // Raca.raca = resultracas.items.Racaraca
 
                 }
-                MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
-                MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
-                MESSAGES.DEFAULT_HEADER.items.Racas = resultRacas
+                response.status = MESSAGES.SUCCESS_REQUEST.status
+                response.status_code = MESSAGES.SUCCESS_REQUEST.status_code
+                response.items.racas = resultRacas
 
-                return MESSAGES.DEFAULT_HEADER // 200
+                return response // 200
             } else {
                 return MESSAGES.ERROR_NOT_FOUND //404
             }
@@ -47,28 +47,29 @@ const listarRacas = async function () {
     } catch (error) {
         console.log(error)
 
-        return MESSAGES.ERROR.INTERNAL.SERVER.CONTROLLER //500
+        return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }
 //Retorna um Raca filtrando pelo ID
 const buscarRacaID = async function (id) {
-    let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+    let response = JSON.parse(JSON.stringify(MESSAGES.DEFAULT_HEADER))
     try {
         if (!isNaN(id) && id != '' && id != null && id > 0) {
-            let resultRacas = await RacaDAO.getSelectByIdRacas(Number(id))
+            let resultRacas = await racaDAO.getSelectByIdRacas(Number(id))
 
             if (resultRacas.length > 0) {
-                MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
-                MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
-                MESSAGES.DEFAULT_HEADER.items.Raca = resultRacas
+                response.status = MESSAGES.SUCCESS_REQUEST.status
+                response.status_code = MESSAGES.SUCCESS_REQUEST.status_code
+                response.items.raca = resultRacas
 
-                return MESSAGES.DEFAULT_HEADER
+                return response
             } else {
                 return MESSAGES.ERROR_NOT_FOUND //404
             }
         } else {
-            MESSAGES.ERROR_REQUIRED_FIELDS.message += '[ID incorreto]'
-            return MESSAGES.ERROR_REQUIRED_FIELDS //400
+            let error = JSON.parse(JSON.stringify(MESSAGES.ERROR_REQUIRED_FIELDS));
+            error.message += '[ID incorreto]';
+            return error; //400
         }
     
     } catch (error) {
@@ -80,7 +81,7 @@ const buscarRacaID = async function (id) {
 
 //Insere um Raca
 const inserirRaca = async function (Raca, contentType) {
-    let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+    let response = JSON.parse(JSON.stringify(MESSAGES.DEFAULT_HEADER))
     try {
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
             //Cgana a função de validar todos os dados de Raca
@@ -90,10 +91,10 @@ const inserirRaca = async function (Raca, contentType) {
 
                 //Processamento
                 //Chama a função para inserir um novo Raca no banco de dados
-                let resultRacas = await RacaDAO.setInsertRacas(Raca)
+                let resultRacas = await racaDAO.setInsertRacas(Raca)
                 if (resultRacas) {
                     //Chama a função para receber o ID gerado no banco de dados
-                    let lastID = await RacaDAO.getSelectLastID()
+                    let lastID = await racaDAO.getSelectLastID()
                     if(lastID){
                         //Adiciona o ID no JSON com os dados do Raca
                     Raca.id = lastID
@@ -104,40 +105,33 @@ const inserirRaca = async function (Raca, contentType) {
                             id_Raca: lastID, 
                             id_raca: raca.id
                         }
-                        let resultRacasraca = await controllerraca.inserirRacaraca(Racaraca,contentType)
-                        if (resultRacasraca.status_code != 201)
-                            return MESSAGES.ERROR.ERROR_RELATION_INSERT
+                        // let resultRacasraca = await controllerraca.inserirRacaraca(Racaraca,contentType) // Lógica com erro, comentada por enquanto
+                        // if (resultRacasraca.status_code != 201)
+                        //     return MESSAGES.ERROR.ERROR_RELATION_INSERT
                     }
                     
                     
                     Raca.id = lastID
-                    MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_CREATED_ITEM.status
-                    MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_CREATED_ITEM.status_code
-                    MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_CREATED_ITEM.message
+                    response.status = MESSAGES.SUCCESS_CREATED_ITEM.status
+                    response.status_code = MESSAGES.SUCCESS_CREATED_ITEM.status_code
+                    response.message = MESSAGES.SUCCESS_CREATED_ITEM.message
 
                     delete Raca.raca
 
                     //Pesquisa no BD todos os gêmeros que foram associados ao Raca
-                    let resultDadosraca = await controllerraca.listarRacasIdraca(lastID)
+                    // let resultDadosraca = await controllerraca.listarRacasIdraca(lastID) // Lógica com erro, comentada por enquanto
 
 
                     //Cria novamente o atributo raca e coloca o resultado do BD com os gêneros
                     Raca.raca = resultDadosraca
 
-                    MESSAGES.DEFAULT_HEADER.items = Raca
+                    response.items = Raca
 
-                   
-
-                    return MESSAGES.DEFAULT_HEADER //201
+                    return response //201
 
                     }else{
                         return MESSAGES.ERROR_INTERNAL_SERVER_MODEL
                     }
-                    MESSAGES.DEFAULT_SEADER.status = MESSAGES.SUCCESS_CREATED_ITEM.status
-                    MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_CREATED_ITEM.status_code
-                    MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_CREATED_ITEM.message
-
-                    return MESSAGES.DEFAULT_HEADER //201
                 } else {
                     return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
                 }
@@ -156,7 +150,7 @@ const inserirRaca = async function (Raca, contentType) {
 
 //Atualiza um Raca buscando pelo ID
 const atualizarRaca = async function (Raca, id, contentType) {
-    let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+    let response = JSON.parse(JSON.stringify(MESSAGES.DEFAULT_HEADER))
     try {
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
 
@@ -176,14 +170,14 @@ const atualizarRaca = async function (Raca, id, contentType) {
                     //Validação de ID válido
                     //Processamento
                     //Chama a função para inserir um novo Raca no banco de dados
-                    let resultRacas = await RacaDAO.setUpdateRacas(Raca)
+                    let resultRacas = await racaDAO.setUpdateRacas(Raca)
                     if (resultRacas) {
-                        MESSAGES.DEFAULT_HEADER.status      = MESSAGES.SUCCESS_UPDATED_ITEM.status
-                        MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_UPDATED_ITEM.status_code
-                        MESSAGES.DEFAULT_HEADER.message     = MESSAGES.SUCCESS_UPDATED_ITEM.message
-                        MESSAGES.DEFAULT_HEADER.items.Raca  = Raca
+                        response.status      = MESSAGES.SUCCESS_UPDATED_ITEM.status
+                        response.status_code = MESSAGES.SUCCESS_UPDATED_ITEM.status_code
+                        response.message     = MESSAGES.SUCCESS_UPDATED_ITEM.message
+                        response.items.raca  = Raca
 
-                        return MESSAGES.DEFAULT_HEADER //200
+                        return response //200
                     } else {
                         return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
                     }
@@ -208,7 +202,7 @@ const atualizarRaca = async function (Raca, id, contentType) {
 
 //Excluir um Raca buscando pelo ID
 const excluirRaca = async function (id) {
-    let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+    let response = JSON.parse(JSON.stringify(MESSAGES.DEFAULT_HEADER))
 
     try {
 
@@ -220,26 +214,26 @@ const excluirRaca = async function (id) {
 
             if(validarID.status_code == 200){
 
-                let resultRacas = await RacaDAO.setDeleteRacas(Number(id))
+                let resultRacas = await racaDAO.setDeleteRacas(Number(id))
 
                 if(resultRacas){
                     
-                        MESSAGES.DEFAULT_HEADER.status      = MESSAGES.SUCCESS_DELETED_ITEM.status
-                        MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_DELETED_ITEM.status_code
-                        MESSAGES.DEFAULT_HEADER.message     = MESSAGES.SUCCESS_DELETED_ITEM.message
-                        MESSAGES.DEFAULT_HEADER.items.Raca = resultRacas
-                        delete MESSAGES.DEFAULT_HEADER.items
-                        return MESSAGES.DEFAULT_HEADER //200
+                        response.status      = MESSAGES.SUCCESS_DELETED_ITEM.status
+                        response.status_code = MESSAGES.SUCCESS_DELETED_ITEM.status_code
+                        response.message     = MESSAGES.SUCCESS_DELETED_ITEM.message
+                        delete response.items
+                        return response //200
             
                 }else{
                     return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
                 }
             }else{
-                return MESSAGES.ERROR_NOT_FOUND //404
+                return validarID; //404 ou 400
             }
         }else{
-            MESSAGES.ERROR_REQUIRED_FIELDS.message += ' [ID incorreto]'
-            return MESSAGES.ERROR_REQUIRED_FIELDS //400
+            let error = JSON.parse(JSON.stringify(MESSAGES.ERROR_REQUIRED_FIELDS));
+            error.message += ' [ID incorreto]';
+            return error; //400
         }
 
     } catch (error) {
@@ -250,39 +244,43 @@ const excluirRaca = async function (id) {
 }
 //validação dos dados de cadastro e atualização do Raca
 const validarDadosRaca = async function (Raca) {
-    let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES));
+    let error = JSON.parse(JSON.stringify(MESSAGES.ERROR_REQUIRED_FIELDS));
+    let hasError = false;
     // Validações de todas entradas de dados
 
     if (Raca.nome == '' || Raca.nome == undefined || Raca.nome == null || Raca.nome.length > 100) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Nome incorreto]';
-        return MESSAGES.ERROR_REQUIRED_FIELDS;
+        error.message += '[Nome incorreto]';
+        hasError = true;
 
     } else if (Raca.expectativa_de_vida == undefined || Raca.expectativa_de_vida == null || isNaN(Raca.expectativa_de_vida) || Raca.expectativa_de_vida <= 0) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Expectativa de vida incorreta]';
-        return MESSAGES.ERROR_REQUIRED_FIELDS;
+        error.message += '[Expectativa de vida incorreta]';
+        hasError = true;
 
     } else if (Raca.saude == '' || Raca.saude == undefined || Raca.saude == null) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Saúde incorreta]';
-        return MESSAGES.ERROR_REQUIRED_FIELDS;
+        error.message += '[Saúde incorreta]';
+        hasError = true;
 
     } else if (Raca.peso_medio == undefined || Raca.peso_medio == null || isNaN(Raca.peso_medio) || Raca.peso_medio <= 0) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Peso médio incorreto]';
-        return MESSAGES.ERROR_REQUIRED_FIELDS;
+        error.message += '[Peso médio incorreto]';
+        hasError = true;
 
     } else if (Raca.porte == '' || Raca.porte == undefined || Raca.porte == null || !['Pequeno', 'Médio', 'Grande', 'Gigante'].includes(Raca.porte)) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Porte incorreto]';
-        return MESSAGES.ERROR_REQUIRED_FIELDS;
+        error.message += '[Porte incorreto]';
+        hasError = true;
 
     } else if (Raca.capacidades == '' || Raca.capacidades == undefined || Raca.capacidades == null) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Capacidades incorretas]';
-        return MESSAGES.ERROR_REQUIRED_FIELDS;
+        error.message += '[Capacidades incorretas]';
+        hasError = true;
 
     } else if (Raca.id_especie == undefined || Raca.id_especie == null || isNaN(Raca.id_especie) || Raca.id_especie <= 0) {
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[ID da espécie incorreto]';
-        return MESSAGES.ERROR_REQUIRED_FIELDS;
+        error.message += '[ID da espécie incorreto]';
+        hasError = true;
+    }
 
+    if (hasError) {
+        return error;
     } else {
-        return false; // Dados válidos
+        return false;
     }
 };
 

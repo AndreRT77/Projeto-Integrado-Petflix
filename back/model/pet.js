@@ -73,32 +73,25 @@ const getSelectLastID = async function(){
 }
 
 //Insere um Pet no banco de dados
-const setInsertPets = async function(Pet){
+const setInsertPets = async function(dadosPet){
     try {
-        let sql = `INSERT INTO tbl_Pet (
-            nome,
-            idade,
-            sexo,
-            tamanho,
-            status_adocao,
-            nacionalidade,
-            necessidades_especiais,
-            descricao,
-            midia
-        ) VALUES
-        (
-            '${Pet.nome}',
-            ${Pet.idade},
-            '${Pet.sexo}',
-            '${Pet.tamanho}',
-            '${Pet.status_adocao}',
-            '${Pet.nacionalidade}',
-            '${Pet.necessidades_especiais}',
-            '${Pet.descricao}',
-            '${Pet.midia}'
-        )`
-        //executeRawUnsafe() -> Executa o scipt SQL que não tem retorno de valores
-       let result = await prisma.$executeRawUnsafe(sql)
+        const novoPet = await prisma.tbl_Pet.create({
+            data: {
+                nome: dadosPet.nome,
+                idade: dadosPet.idade,
+                sexo: dadosPet.sexo,
+                tamanho: dadosPet.tamanho,
+                status_adocao: dadosPet.status_adocao,
+                nacionalidade: dadosPet.nacionalidade,
+                necessidades_especiais: dadosPet.necessidades_especiais,
+                descricao: dadosPet.descricao,
+                midia: dadosPet.midia
+            }
+        });
+
+        // Se a criação deu certo, o novo pet vai existir
+        // checa se ele existe pra retornar se a operação foi um sucesso
+       let result = !!novoPet;
        if(result) 
         return true
        else
@@ -112,26 +105,28 @@ const setInsertPets = async function(Pet){
 }
 
 //Altera um Pet no banco de dados
-const setUpdatePets = async function(Pet){
+const setUpdatePets = async function(id, dadosPet){
     try {
-        let sql = `UPDATE tbl_Pet SET
-            nome='${Pet.nome}',
-            idade=${Pet.idade},
-            sexo='${Pet.sexo}',
-            tamanho='${Pet.tamanho}',
-            nacionalidade='${Pet.nacionalidade}',
-            necessidades_especiais=${Pet.necessidades_especiais},
-            descricao='${Pet.descricao}',
-            midia='${Pet.midia}'
-            WHERE id=${Pet.id};
-            `
+        const petAtualizado = await prisma.tbl_Pet.update({
+            where: {
+                id: Number(id)
+            },
+            data: {
+                nome: dadosPet.nome,
+                idade: dadosPet.idade,
+                sexo: dadosPet.sexo,
+                tamanho: dadosPet.tamanho,
+                nacionalidade: dadosPet.nacionalidade,
+                necessidades_especiais: dadosPet.necessidades_especiais,
+                descricao: dadosPet.descricao,
+                midia: dadosPet.midia
+            }
+        });
 
-        //executeRawUnsafe() -> Executa o scipt SQL que não tem retorno de valores
-       let result = await prisma.$executeRawUnsafe(sql)
-       if(result) 
-        return true
-       else
-        return false
+        // O método update retorna o objeto atualizado se tiver sucesso
+        // A gente checa se ele existe pra confirmar que a operação deu certo
+        return !!petAtualizado;
+
     } catch (error) {
         console.log(error)
 
@@ -143,18 +138,13 @@ const setUpdatePets = async function(Pet){
 //Exclui um Pet pelo ID no banco de dados
 const setDeletePets = async function(id){
     try {
-        //Script SQL
-        let sql = `delete from tbl_Pet where id=${id}`
-        
-        //Encaminha para o BD o srcipt SQL
-        let result = await prisma.$queryRawUnsafe(sql)
-
-        //console.log(Array.isArray(result))
-        if(Array.isArray(result))
-            return result
-        else
-            return false
-
+        // Usa o método 'delete' do Prisma, que é seguro contra SQL Injection
+        const petDeletado = await prisma.tbl_Pet.delete({
+            where: {
+                id: Number(id)
+            }
+        });
+        return !!petDeletado;
     } catch (error) {
         console.log(error)
         return false

@@ -1,92 +1,80 @@
 /*******************************************************************************************
- * Objetivo: Arquivo responsável pelo CRUD de dados no MySQL referente ao Raca
- * Data:03/12/2025
+ * Objetivo: Arquivo responsável pelo CRUD de dados no MySQL referente a Raca
+ * Data:09/12/2025
  * Autor: André Roberto Tavares
  * Versão: 1.0
  *******************************************************************************************/
 
 //Import da dependencia do Prisma que permite a execução de script sql no banco de dados
-const {PrismaClient} = require('../../generated/prisma')
+const {PrismaClient} = require('@prisma/client')
 
 //Cria uma novo objeto baseado na classe do PrismaClient
 const prisma = new PrismaClient()
 
 //Retorna uma lista de todos os Racas do banco de dados
 const getSelectAllRacas = async() =>{
-
     try{
-    //Sricpt SQL
-    let sql =  'select * from tbl_Raca order by id desc'
+        let sql =  'select * from tbl_raca order by id desc'
+        let result = await prisma.$queryRawUnsafe(sql)
 
-    //Encaminhe para o BD o script SQL
-    let result = await prisma.$queryRawUnsafe(sql)
-
-    if(Array.isArray(result))
-        return result
-    else
+        if(result)
+            return result
+        else
+            return false
+    } catch (error) {
+        console.log(error)
         return false
-}
-catch (error) {
-    console.log(error)
-
-    return false
-}
-
+    }
 }
 
 //Retorna um Raca filtrando pelo id do banco de dados
 const getSelectByIdRacas = async function(id){
     try{
-        //Sricpt SQL
-        let sql =  `select * from tbl_Raca where id= ${id}`
-    
-        //Encaminhe para o BD o script SQL
+        let sql =  `select * from tbl_raca where id = ${id}`
         let result = await prisma.$queryRawUnsafe(sql)
     
-        if(Array.isArray(result))
+        if(result)
             return result
         else
             return false
-    }
-    catch (error) {
+    } catch (error) {
         console.log(error)
-
         return false
     }
 }
+
 //Retorna o último ID gerado no BD
 const getSelectLastID = async function(){
     try {
-        //Script SQL para retornar apenas o último ID do BD
-        let sql = `select id from tbl_Raca order by id desc limit 1`
+        let sql = `select id from tbl_raca order by id desc limit 1`
         let result = await prisma.$queryRawUnsafe(sql)
     
-        if(Array.isArray(result))
+        if(result && result.length > 0)
             return Number(result[0].id)
         else
             return false
     } catch (error) {
         console.log(error)
-
         return false
     }
 }
 
 //Insere um Raca no banco de dados
-const setInsertRacas = async function(Raca){
+const setInsertRacas = async function(dadosRaca){
     try {
-        let sql = `INSERT INTO tbl_Raca (
-           
-        ) VALUES
-        (
-            '${Raca.nome}',
-            ${Raca.expectativa_de_vida},
-            '${Raca.saude}',
-            ${Raca.peso_medio},
-            '${Raca.porte}',
-            '${Raca.capacidades}'
-        )`
-        //executeRawUnsafe() -> Executa o scipt SQL que não tem retorno de valores
+        let sql = `
+            INSERT INTO tbl_raca (
+                nome, expectativa_de_vida, saude, peso_medio, porte, capacidades, id_especie
+            ) VALUES (
+                '${dadosRaca.nome}',
+                ${dadosRaca.expectativa_de_vida},
+                '${dadosRaca.saude}',
+                ${dadosRaca.peso_medio},
+                '${dadosRaca.porte}',
+                '${dadosRaca.capacidades}',
+                ${dadosRaca.id_especie}
+            );
+        `
        let result = await prisma.$executeRawUnsafe(sql)
        if(result) 
         return true
@@ -94,25 +82,24 @@ const setInsertRacas = async function(Raca){
         return false
     } catch (error) {
         console.log(error)
-
         return false
-        
     }
 }
 
 //Altera um Raca no banco de dados
-const setUpdateRacas = async function(Raca){
+const setUpdateRacas = async function(id, dadosRaca){
     try {
-        let sql = `UPDATE tbl_Raca SET
-            nome='${Raca.nome}',
-            expectativa_de_vida =${Raca.expectativa_de_vida},
-            saude='${Raca.saude}',
-            peso_medio= ${Raca.peso_medio},
-            porte='${Raca.porte}',
-            capacidades=${Raca.capacidades}
-            `
-
-        //executeRawUnsafe() -> Executa o scipt SQL que não tem retorno de valores
+        let sql = `
+            UPDATE tbl_raca SET
+                nome = '${dadosRaca.nome}',
+                expectativa_de_vida = ${dadosRaca.expectativa_de_vida},
+                saude = '${dadosRaca.saude}',
+                peso_medio = ${dadosRaca.peso_medio},
+                porte = '${dadosRaca.porte}',
+                capacidades = '${dadosRaca.capacidades}',
+                id_especie = ${dadosRaca.id_especie}
+            WHERE id = ${id};
+        `
        let result = await prisma.$executeRawUnsafe(sql)
        if(result) 
         return true
@@ -120,27 +107,20 @@ const setUpdateRacas = async function(Raca){
         return false
     } catch (error) {
         console.log(error)
-
         return false
-        
     }
 }
 
 //Exclui um Raca pelo ID no banco de dados
 const setDeleteRacas = async function(id){
     try {
-        //Script SQL
-        let sql = `delete from tbl_Raca where id=${id}`
-        
-        //Encaminha para o BD o srcipt SQL
-        let result = await prisma.$queryRawUnsafe(sql)
+        let sql = `delete from tbl_raca where id = ${id}`
+        let result = await prisma.$executeRawUnsafe(sql)
 
-        //console.log(Array.isArray(result))
-        if(Array.isArray(result))
-            return result
+        if(result)
+            return true
         else
             return false
-
     } catch (error) {
         console.log(error)
         return false

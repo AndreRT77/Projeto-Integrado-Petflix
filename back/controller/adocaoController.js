@@ -9,7 +9,7 @@
 const adocaoDAO = require('../model/DAO/adocao.js');
 
 // Import do arquivo de mensagens
-const MESSAGES = require('../modulo/messages.js');
+const MESSAGES = require('../modulo/config_messages.js');
 
 //Função que retorna uma lista de pedidos de adoção
 const listarPedidosAdocao = async function(){
