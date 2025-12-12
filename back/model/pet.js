@@ -16,7 +16,7 @@ const getSelectAllPets = async() =>{
 
     try{
     //Sricpt SQL
-    let sql =  'select * from tbl_Pet order by id desc'
+    let sql =  'select * from tbl_pet order by id desc'
 
     //Encaminhe para o BD o script SQL
     let result = await prisma.$queryRawUnsafe(sql)
@@ -38,7 +38,7 @@ catch (error) {
 const getSelectByIdPets = async function(id){
     try{
         //Sricpt SQL
-        let sql =  `select * from tbl_Pet where id= ${id}`
+        let sql =  `select * from tbl_pet where id= ${id}`
     
         //Encaminhe para o BD o script SQL
         let result = await prisma.$queryRawUnsafe(sql)
@@ -58,7 +58,7 @@ const getSelectByIdPets = async function(id){
 const getSelectLastID = async function(){
     try {
         //Script SQL para retornar apenas o último ID do BD
-        let sql = `select id from tbl_Pet order by id desc limit 1`
+        let sql = `select id from tbl_pet order by id desc limit 1`
         let result = await prisma.$queryRawUnsafe(sql)
     
         if(Array.isArray(result))
@@ -75,39 +75,39 @@ const getSelectLastID = async function(){
 //Insere um Pet no banco de dados
 const setInsertPets = async function(dadosPet){
     try {
-        const novoPet = await prisma.tbl_Pet.create({
-            data: {
-                nome: dadosPet.nome,
-                idade: dadosPet.idade,
-                sexo: dadosPet.sexo,
-                tamanho: dadosPet.tamanho,
-                status_adocao: dadosPet.status_adocao,
-                nacionalidade: dadosPet.nacionalidade,
-                necessidades_especiais: dadosPet.necessidades_especiais,
-                descricao: dadosPet.descricao,
-                midia: dadosPet.midia
-            }
-        });
+        let sql = `
+        INSERT INTO tbl_pet (
+            nome, idade, sexo, tamanho, status_adocao, nacionalidade, necessidades_especiais, descricao, midia, id_especie, id_responsavel_pet, id_abrigo
+        ) VALUES (
+            '${dadosPet.nome}',
+            ${dadosPet.idade},
+            '${dadosPet.sexo}',
+            ${dadosPet.tamanho},
+            '${dadosPet.status_adocao}',
+            '${dadosPet.nacionalidade}',
+            '${dadosPet.necessidades_especiais}',
+            '${dadosPet.descricao}',
+            '${dadosPet.midia}',
+            ${dadosPet.id_especie},
+            ${dadosPet.id_responsavel_pet},
+            ${dadosPet.id_abrigo}
+        );
+        `
+        let result = await prisma.$executeRawUnsafe(sql)
 
-        // Se a criação deu certo, o novo pet vai existir
-        // checa se ele existe pra retornar se a operação foi um sucesso
-       let result = !!novoPet;
-       if(result) 
-        return true
-       else
-        return false
+        return result ? true : false
+
     } catch (error) {
         console.log(error)
-
         return false
-        
     }
 }
+
 
 //Altera um Pet no banco de dados
 const setUpdatePets = async function(id, dadosPet){
     try {
-        const petAtualizado = await prisma.tbl_Pet.update({
+        const petAtualizado = await prisma.tbl_pet.update({
             where: {
                 id: Number(id)
             },
@@ -139,7 +139,7 @@ const setUpdatePets = async function(id, dadosPet){
 const setDeletePets = async function(id){
     try {
         // Usa o método 'delete' do Prisma, que é seguro contra SQL Injection
-        const petDeletado = await prisma.tbl_Pet.delete({
+        const petDeletado = await prisma.tbl_pet.delete({
             where: {
                 id: Number(id)
             }

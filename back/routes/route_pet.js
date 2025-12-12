@@ -34,7 +34,7 @@ router.get('/v1/petflix/pet/:id', cors(), async function (request, response) {
     let idPet = request.params.id
 
     // Chama a função para buscar o pet pelo ID
-    let dadosPet = await petController.buscarPetId(idPet)
+    let dadosPet = await petController.buscarPetID(idPet)
 
     response.status(dadosPet.status_code)
     response.json(dadosPet)
