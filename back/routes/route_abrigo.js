@@ -14,7 +14,7 @@ const bodyParser = require('body-parser')
 const bodyParserJSON = bodyParser.json()
 
 // Import da controller que lida com as regras de negócio para abrigos
-const abrigoController = require('../controller/abrigoController.js')
+const abrigoController = require('../controller/controllerAbrigos.js')
 
 // EndPoints para a rota de abrigo
 

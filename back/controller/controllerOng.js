@@ -6,7 +6,7 @@
  *******************************************************************************************/
 
 //Import da model do DAO do Ong
-const OngDAO = require('../../model/DAO/Ong.js')
+const OngDAO = require('../model/ong.js')
 const controllerEspecie = require('./especie_controller.js')
 const controllerAbrigo = require('./abrigo_controller.js')
 const controllerOng = require('./ong_controller.js')
