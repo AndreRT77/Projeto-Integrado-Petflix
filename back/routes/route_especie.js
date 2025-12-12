@@ -33,7 +33,7 @@ router.get('/v1/petflix/especie/:id', cors(), async function (request, response)
     let idEspecie = request.params.id
 
     // Chama a função para buscar o especie pelo ID
-    let dadosEspecie = await especieController.buscarespecieId(idEspecie)
+    let dadosEspecie = await especieController.buscarEspecieID(idEspecie)
 
     response.status(dadosEspecie.status_code)
     response.json(dadosEspecie)
@@ -48,10 +48,12 @@ router.post('/v1/petflix/especie', cors(), bodyParserJSON, async function (reque
     let contentType = request.headers['content-type']
 
     // Chama a função para inserir um novo especie
-    let dadosEspecie = await especieController.inserirespecie(dadosBody, contentType)
+    let dadosEspecie = await especieController.inserirEspecie(dadosBody, contentType)
 
     response.status(dadosEspecie.status_code)
     response.json(dadosEspecie)
+
+    
 })
 
 // Atualiza um especie existente no banco de dados
@@ -66,7 +68,7 @@ router.put('/v1/petflix/especie/:id', cors(), bodyParserJSON, async function (re
     let contentType = request.headers['content-type']
 
     // Chama a função para atualizar o especie, e encaminha os dados, o id e o contentType
-    let dadosEspecie = await controller_especie.atualizarespecie(dadosBody, idEspecie, contentType)
+    let dadosEspecie = await especieController.atualizarEspecie(dadosBody, idEspecie, contentType)
 
     response.status(dadosEspecie.status_code)
     response.json(dadosEspecie)
@@ -78,7 +80,7 @@ router.delete('/v1/petflix/especie/:id', cors(), async function (request, respon
     let idEspecie = request.params.id
 
     // Chama a função para deletar o especie
-    let dadosEspecie = await especieController.excluirespecie(idEspecie)
+    let dadosEspecie = await especieController.excluirEspecie(idEspecie)
 
     response.status(dadosEspecie.status_code)
     response.json(dadosEspecie)
