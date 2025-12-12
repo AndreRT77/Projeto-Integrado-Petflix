@@ -30,6 +30,46 @@ const listarResponsaveis = async function () {
     }
 };
 
+//buscar responsavel por seu ID
+const buscarResponsavelID = async function (id) {
+
+    //cria um objeto de resposta padronizado
+    let response = JSON.parse(JSON.stringify(MESSAGES.DEFAULT_HEADER))
+
+    try {
+        
+        if (!isNaN(id) && id != '' && id != null && id > 0) {
+
+            let resultResponsavel = await responsavelDAO.selectByIdResponsavel(Number(id))
+
+            if (resultResponsavel && resultResponsavel.length > 0) {
+                response.status = MESSAGES.SUCCESS_REQUEST.status
+                response.status_code = MESSAGES.SUCCESS_REQUEST.status_code
+                response.items.responsavel = resultResponsavel
+                return response
+            } else {
+                return MESSAGES.ERROR_NOT_FOUND // 404
+            }
+
+        } else {
+
+            let error = JSON.parse(JSON.stringify(MESSAGES.ERROR_INVALID_ID))
+            error.message += '[ID do responsável inválido]'
+            return error //400
+
+        }
+
+    } catch (error) {
+        
+        console.log(error)
+        return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER // 500
+
+    }
+
+
+
+}
+
 // Validação dos dados de cadastro e atualização do Responsavel
 const validarDadosResponsavel = async function (dadosResponsavel) {
     let error = JSON.parse(JSON.stringify(MESSAGES.ERROR_REQUIRED_FIELDS));
