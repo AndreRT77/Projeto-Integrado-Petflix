@@ -10,6 +10,7 @@ const ERROR_NOT_FOUND = { status: false, status_code: 404, message: 'Nenhum item
 const ERROR_INTERNAL_SERVER = { status: false, status_code: 500, message: 'Ocorreram erros no processamento de dados no servidor. Contate o administrador da API.' };
 const ERROR_INVALID_CONTENT_TYPE = { status: false, status_code: 415, message: 'O tipo de mídia (Content-Type) da requisição não é compatível com o servidor. Esperado: application/json' };
 const ERROR_REQUIRED_FIELDS = { status: false, status_code: 400, message: 'Existem campos obrigatórios que não foram preenchidos ou foram preenchidos incorretamente.' };
+const ERROR_UNAUTHORIZED = { status: false, status_code: 401, message: 'Acesso não autorizado. Verifique suas credenciais.' };
 
 const SUCCESS_CREATED_ITEM = { status: true, status_code: 201, message: 'Item criado com sucesso.' };
 const SUCCESS_UPDATED_ITEM = { status: true, status_code: 200, message: 'Item atualizado com sucesso.' };
@@ -20,6 +21,7 @@ module.exports = {
     ERROR_NOT_FOUND,
     ERROR_INTERNAL_SERVER,
     ERROR_INVALID_CONTENT_TYPE,
+    ERROR_UNAUTHORIZED,
     ERROR_REQUIRED_FIELDS,
     SUCCESS_CREATED_ITEM,
     SUCCESS_UPDATED_ITEM,

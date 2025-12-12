@@ -40,6 +40,7 @@ const route_tutorinteressado = require('./routes/route_tutorinteressado.js');
 const route_adocao = require('./routes/route_adocao.js');
 const route_abrigo = require('./routes/route_abrigo.js');
 const route_ong = require('./routes/route_ong.js');
+const route_autenticacao = require('./routes/route_autenticacao.js');
 
 app.use(route_pet);
 app.use(route_raca);
@@ -49,6 +50,7 @@ app.use(route_tutorinteressado);
 app.use(route_adocao);
 app.use(route_abrigo);
 app.use(route_ong);
+app.use(route_autenticacao);
 
 // Inicializa o servidor e o faz escutar na porta definida
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`))
