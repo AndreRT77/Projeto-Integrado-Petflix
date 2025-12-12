@@ -96,5 +96,6 @@ const validarDadosResponsavel = async function (dadosResponsavel) {
 };
 
 module.exports = {
-    listarResponsaveis
+    listarResponsaveis,
+    buscarResponsavelID
 };
