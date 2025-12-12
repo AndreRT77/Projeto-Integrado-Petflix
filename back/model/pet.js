@@ -107,44 +107,42 @@ const setInsertPets = async function(dadosPet){
 //Altera um Pet no banco de dados
 const setUpdatePets = async function(id, dadosPet){
     try {
-        const petAtualizado = await prisma.tbl_pet.update({
-            where: {
-                id: Number(id)
-            },
-            data: {
-                nome: dadosPet.nome,
-                idade: dadosPet.idade,
-                sexo: dadosPet.sexo,
-                tamanho: dadosPet.tamanho,
-                nacionalidade: dadosPet.nacionalidade,
-                necessidades_especiais: dadosPet.necessidades_especiais,
-                descricao: dadosPet.descricao,
-                midia: dadosPet.midia
-            }
-        });
+        
+        let sql = `
+            UPDATE tbl_pet SET
+                nome = '${dadosPet.nome}',
+                idade = ${dadosPet.idade},
+                sexo = '${dadosPet.sexo}',
+                tamanho = ${dadosPet.tamanho},
+                status_adocao = '${dadosPet.status_adocao}',
+                nacionalidade = '${dadosPet.nacionalidade}',
+                necessidades_especiais = '${dadosPet.necessidades_especiais}',
+                descricao = '${dadosPet.descricao}',
+                midia = '${dadosPet.midia}',
+                id_especie = ${dadosPet.id_especie},
+                id_responsavel_pet = ${dadosPet.id_responsavel_pet},
+                id_abrigo = ${dadosPet.id_abrigo}
+            WHERE id = ${id};
+        `;
 
-        // O método update retorna o objeto atualizado se tiver sucesso
-        // A gente checa se ele existe pra confirmar que a operação deu certo
-        return !!petAtualizado;
+        let result = await prisma.$executeRawUnsafe(sql);
+
+        return result ? true : false;
 
     } catch (error) {
-        console.log(error)
-
-        return false
-        
+        console.log(error);
+        return false;
     }
 }
 
 //Exclui um Pet pelo ID no banco de dados
 const setDeletePets = async function(id){
     try {
-        // Usa o método 'delete' do Prisma, que é seguro contra SQL Injection
-        const petDeletado = await prisma.tbl_pet.delete({
-            where: {
-                id: Number(id)
-            }
-        });
-        return !!petDeletado;
+        // ATENÇÃO: Esta query é vulnerável a SQL Injection.
+        let sql = `DELETE FROM tbl_pet WHERE id = ${id}`;
+        let result = await prisma.$executeRawUnsafe(sql);
+
+        return result ? true : false;
     } catch (error) {
         console.log(error)
         return false

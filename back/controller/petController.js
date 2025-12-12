@@ -110,7 +110,7 @@ const inserirPet = async function (Pet, contentType) {
                             id_Pet: lastID, 
                             id_Especie: Especie.id
                         }
-                        let resultPetsEspecie = await especieDAO.inserirPetEspecie(PetEspecie);
+                        let resultPetsEspecie = await especieDAO.setInsertEspecies(PetEspecie);
                         if (!resultPetsEspecie)
                             return MESSAGES.ERROR_RELATION_INSERT
                     }
