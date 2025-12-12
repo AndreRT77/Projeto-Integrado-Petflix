@@ -6,10 +6,10 @@
  *******************************************************************************************/
 
 //import da model do dao do tutor
-const tutorDAO = require('../model/DAO/tutorInteressado.js')
+const tutorDAO = require('../model/tutorInteressado.js')
 
 //import dos arquivos de mensagens
-const MESSAGES = require('../modulo/messages')
+const MESSAGES = require('../module/config_messages.js')
 
 //listar novo(s) responsavel(is) (tutores interessados) pelo pet
 const listarTutoresInteressados = async function () {

@@ -6,10 +6,10 @@
  *******************************************************************************************************/
 
 // Import do DAO para interagir com o banco de dados
-const adocaoDAO = require('../model/DAO/adocao.js');
+const adocaoDAO = require('../model/adocao.js');
 
 // Import do arquivo de mensagens
-const MESSAGES = require('../modulo/config_messages.js');
+const MESSAGES = require('../module/config_messages.js');
 
 //Função que retorna uma lista de pedidos de adoção
 const listarPedidosAdocao = async function(){

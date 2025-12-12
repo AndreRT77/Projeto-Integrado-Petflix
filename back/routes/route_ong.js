@@ -14,7 +14,7 @@ const bodyParser = require('body-parser')
 const bodyParserJSON = bodyParser.json()
 
 // Import da controller que lida com as regras de negócio para Ongs
-const ongController = require('../controller/ongController.js')
+const ongController = require('../controller/controllerOng.js')
 
 // EndPoints para a rota de Ong
 

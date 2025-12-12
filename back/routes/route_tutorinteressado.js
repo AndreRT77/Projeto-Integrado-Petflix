@@ -14,7 +14,7 @@ const bodyParser = require('body-parser')
 const bodyParserJSON = bodyParser.json()
 
 // Import da controller que lida com as regras de negócio para tutores
-const tutorController = require('../controller/tutorController.js')
+const tutorController = require('../controller/novoResponsavelController.js')
 
 // EndPoints para a rota de tutor
 
