@@ -149,7 +149,7 @@ const atualizarResponsavel = async function (dadosResponsavel, id, contentType) 
                         response.status = MESSAGES.SUCCESS_UPDATED_ITEM.status;
                         response.status_code = MESSAGES.SUCCESS_UPDATED_ITEM.status_code;
                         response.message = MESSAGES.SUCCESS_UPDATED_ITEM.message;
-                        response.items.responsavel = dadosResponsavel;
+                        response.items.responsavel = dadosResponsavel;otas
                         return response; // 200
                     } else {
                         return MESSAGES.ERROR_INTERNAL_SERVER_MODEL; // 500
