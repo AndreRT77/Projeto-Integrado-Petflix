@@ -1,7 +1,7 @@
 /*********************************************************************************************** 
 * Objetivo: Arquivo responsável por definir as rotas da API para a entidade Pet
 * Data: 06/12/2025
-* Autor: João Pedro Teodoro Nunes Correia
+* Autor: João Pedro Teodoro Nunes Correia / André Roberto Tavares
 * Versão: 1.0
 ************************************************************************************************/
 
@@ -14,7 +14,7 @@ const bodyParser = require('body-parser')
 const bodyParserJSON = bodyParser.json()
 
 // Import da controller que lida com as regras de negócio para Pets
-const controller_pet = require('../controller/controller_pet.js')
+const petController = require('../controller/petController.js')
 
 
 // EndPoints para a rota de Pet
@@ -22,7 +22,7 @@ const controller_pet = require('../controller/controller_pet.js')
 // Retorna todos os pets do banco de dados
 router.get('/v1/petflix/pet', cors(), async function (request, response) {
     // Chama a função para listar os pets do banco de dados
-    let dadosPet = await controller_pet.listarPets()
+    let dadosPet = await petController.listarPets()
 
     response.status(dadosPet.status_code)
     response.json(dadosPet)
@@ -34,7 +34,7 @@ router.get('/v1/petflix/pet/:id', cors(), async function (request, response) {
     let idPet = request.params.id
 
     // Chama a função para buscar o pet pelo ID
-    let dadosPet = await controller_pet.buscarPetId(idPet)
+    let dadosPet = await petController.buscarPetID(idPet)
 
     response.status(dadosPet.status_code)
     response.json(dadosPet)
@@ -49,7 +49,7 @@ router.post('/v1/petflix/pet', cors(), bodyParserJSON, async function (request, 
     let contentType = request.headers['content-type']
 
     // Chama a função para inserir um novo pet
-    let dadosPet = await controller_pet.inserirPet(dadosBody, contentType)
+    let dadosPet = await petController.inserirPet(dadosBody, contentType)
 
     response.status(dadosPet.status_code)
     response.json(dadosPet)
@@ -67,7 +67,7 @@ router.put('/v1/petflix/pet/:id', cors(), bodyParserJSON, async function (reques
     let contentType = request.headers['content-type']
 
     // Chama a função para atualizar o pet, e encaminha os dados, o id e o contentType
-    let dadosPet = await controller_pet.atualizarPet(dadosBody, idPet, contentType)
+    let dadosPet = await petController.atualizarPet(dadosBody, idPet, contentType)
 
     response.status(dadosPet.status_code)
     response.json(dadosPet)
@@ -79,7 +79,7 @@ router.delete('/v1/petflix/pet/:id', cors(), async function (request, response) 
     let idPet = request.params.id
 
     // Chama a função para deletar o pet
-    let dadosPet = await controller_pet.excluirPet(idPet)
+    let dadosPet = await petController.excluirPet(idPet)
 
     response.status(dadosPet.status_code)
     response.json(dadosPet)

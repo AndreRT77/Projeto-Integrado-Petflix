@@ -6,7 +6,7 @@
  *******************************************************************************************/
 
 //Import da dependência do Prisma que permite a execução de script SQL no banco de dados
-const { PrismaClient } = require('../../generated/prisma')
+const { PrismaClient } = require('../../back/node_modules/@prisma/client')
 //Cria um novo objeto baseado na classe do PrismaClient
 const prisma = new PrismaClient()
 
@@ -36,7 +36,7 @@ const selectByIdResponsavel = async function (id) {
     try {
         //script sql
         //utilizando o método seguro $queryRaw
-        let result = await prisma.$queryRaw`SELECT * FROM tbl_responsavel_pet WHERE id_responsavel_pet = ${id}`
+        let result = await prisma.$queryRaw`SELECT * FROM tbl_responsavel_pet WHERE id = ${id}`
 
         if (result.length > 0)
             return result
@@ -61,12 +61,13 @@ const selectLastID = async function () {
         //encaminha para o bd com o script
         let result = await prisma.$queryRawUnsafe(sql)
 
-        if(Array.isArray(result))
+        if(Array.isArray(result) && result.length > 0)
             return Number(result[0].id)
         else
             return false
 
     } catch (error) {
+        console.log(error)
         return false
     }
 
@@ -117,7 +118,7 @@ const setUpdateResponsavel = async function (dadosResponsavel) {
             cpf = ${dadosResponsavel.cpf},
             contato = ${dadosResponsavel.contato},
             email = ${dadosResponsavel.email}
-        WHERE id_responsavel_pet = ${dadosResponsavel.id_responsavel_pet}
+        WHERE id = ${dadosResponsavel.id}
         `;
 
         if (result)
@@ -138,7 +139,7 @@ const setDeleteResponsavel = async function(id) {
 
     try {
         //usando metodo seguro para delete
-        let result = await prisma.$executeRaw`DELETE FROM tbl_responsavel_pet WHERE id_responsavel_pet = ${id}`
+        let result = await prisma.$executeRaw`DELETE FROM tbl_responsavel_pet WHERE id = ${id}`
 
         if (result)
             return true

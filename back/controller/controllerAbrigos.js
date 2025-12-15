@@ -6,7 +6,7 @@
 ************************************************************************************************/
 
 // Import do arquivo de mensagens
-const message = require('../utils/messages.js')
+const message = require('../module/config_messages.js')
 
 // Função para listar todos os Abrigos
 const listarAbrigos = async function() {
