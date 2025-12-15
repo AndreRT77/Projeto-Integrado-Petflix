@@ -19,7 +19,7 @@ const responsavelController = require('../controller/responsavelController.js')
 // EndPoints para a rota de responsavel
 
 // Retorna todos os responsaveis do banco de dados
-router.get('/v1/petflix/responsavel', cors(), async function (request, response) {
+router.get('/v1/petflix/responsaveis', cors(), async function (request, response) {
     // Chama a função para listar os responsaveis do banco de dados
     let dadosResponsavel = await responsavelController.listarResponsaveis()
 
@@ -40,19 +40,19 @@ router.get('/v1/petflix/responsavel/:id', cors(), async function (request, respo
 })
 
 // Insere um novo responsavel no banco de dados
-// router.post('/v1/petflix/responsavel', cors(), bodyParserJSON, async function (request, response) {
-//     // Recebe os dados do body (corpo) da requisição
-//     let dadosBody = request.body
+router.post('/v1/petflix/responsavel', cors(), bodyParserJSON, async function (request, response) {
+    // Recebe os dados do body (corpo) da requisição
+    let dadosBody = request.body
 
-//     // Recebe o content-type da requisição
-//     let contentType = request.headers['content-type']
+    // Recebe o content-type da requisição
+    let contentType = request.headers['content-type']
 
-//     // Chama a função para inserir um novo responsavel
-//     let dadosResponsavel = await responsavelController.inserirResponsavel(dadosBody, contentType)
+    // Chama a função para inserir um novo responsavel
+    let dadosResponsavel = await responsavelController.inserirResponsavel(dadosBody, contentType)
 
-//     response.status(dadosResponsavel.status_code)
-//     response.json(dadosResponsavel)
-// })
+    response.status(dadosResponsavel.status_code)
+    response.json(dadosResponsavel)
+})
 
 // Atualiza um responsavel existente no banco de dados
 router.put('/v1/petflix/responsavel/:id', cors(), bodyParserJSON, async function (request, response) {
@@ -66,7 +66,7 @@ router.put('/v1/petflix/responsavel/:id', cors(), bodyParserJSON, async function
     let contentType = request.headers['content-type']
 
     // Chama a função para atualizar o responsavel, e encaminha os dados, o id e o contentType
-    let dadosResponsavel = await controller_responsavel.atualizarresponsavel(dadosBody, idResponsavel, contentType)
+    let dadosResponsavel = await responsavelController.atualizarResponsavel(dadosBody, idResponsavel, contentType)
 
     response.status(dadosResponsavel.status_code)
     response.json(dadosResponsavel)
@@ -78,7 +78,7 @@ router.delete('/v1/petflix/responsavel/:id', cors(), async function (request, re
     let idResponsavel = request.params.id
 
     // Chama a função para deletar o responsavel
-    let dadosResponsavel = await responsavelController.excluirresponsavel(idResponsavel)
+    let dadosResponsavel = await responsavelController.excluirResponsavel(idResponsavel)
 
     response.status(dadosResponsavel.status_code)
     response.json(dadosResponsavel)

@@ -9,7 +9,7 @@
 const data_atual = new Date();
 
 /**************************************MENSAGENS PADRONIZADAS*******************************/
-const DEFAULT_HEADER = {development: 'André Roberto Tavares', 
+const DEFAULT_HEADER = {development: 'André Roberto Tavares / João Pedro Teodoro Nunes Correia', 
                         api_description: 'API para um aplicativo de adoção de pets',
                         status: Boolean,
                         status_code: Number,
