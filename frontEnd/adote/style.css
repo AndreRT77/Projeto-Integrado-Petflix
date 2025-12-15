@@ -146,6 +146,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: space-around;
         width: 356px;
         height: 460px;
         border: 2px solid #727272;
@@ -156,9 +157,21 @@
         width: 222px;
         height: 148px;
     }
+    .imagescroll{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+    img.seta{
+        width: 50px;
+        height: 50px;
+    }
     .card-aberto .favoritar{
         height: 50px;
         width: 50px;
+        position: absolute;
+        top: 1px;
+        right: 1px;
     }
     .card-aberto h3{
         font-size: 24px;
@@ -168,10 +181,22 @@
         font-size: 15px;
     }
     .informacao{
-        display: flex;
-        justify-content: start;
+        width: 100%;
+        align-items: start;
     }
-    
+    .adotar{
+        width: 106px;
+        background-color: var(--secondary-color);
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        border-radius: 5px;
+        align-items: center;
+    }
+    .adotar img{
+        width: 30px;
+        height: 30px;
+    }
     footer {
         background-color: var(--primary-color);
         height: 85px;
