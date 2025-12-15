@@ -1,29 +1,33 @@
-
-@media screen and (min-width: 393px){
+@media screen and (min-width: 393px) {
     html {
         height: 100%;
     }
-    :root{
-    --primary-color: #2C2C2C;
-    --secondary-color: #ACDEAA;  
+
+    :root {
+        --primary-color: #2C2C2C;
+        --secondary-color: #ACDEAA;
     }
+
     * {
         padding: 0;
         margin: 0;
         box-sizing: border-box;
     }
+
     body {
         display: flex;
         flex-direction: column;
         min-height: 100vh;
         background-color: #ffffff;
     }
+
     header {
         background-color: var(--primary-color);
         display: flex;
         flex-direction: column;
     }
-    header .cabeçalho{
+
+    header .cabeçalho {
         display: flex;
         flex-direction: row;
         width: 100%;
@@ -32,15 +36,20 @@
         padding-right: 10px;
         align-items: center;
     }
-    img#menu,#search,#seta{
+
+    img#menu,
+    #search,
+    #seta {
         width: 30px;
         height: 30px;
     }
-    img#petflix{
+
+    img#petflix {
         width: 100px;
         height: 46px;
     }
-    header .navigation{
+
+    header .navigation {
         background-color: #565656;
         width: 100%;
         height: 25px;
@@ -51,17 +60,108 @@
         padding-right: 30px;
         align-items: center;
     }
-    header a{
+
+    header a {
         color: #ACDEAA;
         font-size: 13px;
         font-family: Arial, Helvetica, sans-serif;
     }
-    main{
+
+    .fundo {
+        position: absolute;
+        z-index: -1111;
+        top: 8.5%;
+    }
+
+    main {
         display: flex;
         flex-direction: column;
         align-items: center;
         flex-grow: 1;
         padding-top: 10px;
+        background: linear-gradient(145deg, #acdeaabd, #767676de);
+        justify-content: space-around;
+    }
+    h2{
+        color: #ffffff;
+    }
+    .inputinvisivel {
+        border: none;
+        border-bottom: 2px solid #ffffff;
+        outline: none;
+        background-color: transparent;
+        width: 315px;
+        padding: 10px 0;
+        font-size: 16px;
+        color: #ffffff;
+        text-align: center;
+    }
+    ::placeholder{
+        color: #ffffff;
+        /* font-family: Arial, Helvetica, sans-serif; */
+        align-items: center;
+    }
+    div.especie{
+        width: 315px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .selectinvisivel {
+        border: none;
+        border-bottom: 2px solid #ffffff;
+        outline: none;
+        background-color: transparent;
+        width: 134px;
+        padding: 10px 0;
+        font-size: 16px;
+        color: #ffffff;
+        align-items: center;
+    }
+    option{
+        color: #000000;
+    }
+    .voltar{
+        width: 100px;
+        height: 26px;
+        align-items: center;
+        border-radius: 50px;
+        background-color: #FFB7B7;
+    }
+    .cadastrar{
+        width: 100px;
+        height: 26px;
+        align-items: center;
+        border-radius: 50px;
+        background-color: #767676;
+        color: #ffffff;
+    }
+    div.inseririmagem{
+        position: absolute;
+        bottom: 1px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        height: 283px;
+        border-radius: 10px;
+        background: linear-gradient(145deg, #acdeaac5, #767676ab);
+    }
+    .inseririmagem h3{
+        color: #ffffff;
+    }
+    .inseririmagem input{
+        width: 336px;
+        height: 28px;
+        background-color: #d9d9d9;
+        border-radius: 5px;
+    }
+    .inseririmagem input::placeholder{
+        background: linear-gradient(145deg, #acdeaa, #767676);
+        background-clip: text;
+        font-weight: bold;
+        color: transparent;
     }
     footer {
         background-color: var(--primary-color);
@@ -71,21 +171,30 @@
         justify-content: space-between;
         align-items: center;
     }
-    
-    img#p{
+
+    img#p {
         height: 57px;
     }
-    footer h3{
+
+    footer p {
+        font-size: 8px;
+    }
+
+    footer h3 {
         font-size: 13px;
     }
-    footer h3, footer p{
+
+    footer h3,
+    footer p {
         color: var(--secondary-color);
     }
-    div.siteInfo{
+
+    div.siteInfo {
         display: flex;
         flex-direction: column;
     }
-    div.info{
+
+    div.info {
         display: flex;
         flex-direction: row;
     }
