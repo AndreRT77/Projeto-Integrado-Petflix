@@ -5,6 +5,58 @@
  * Versão: 1.0
  *******************************************************************************************/
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//IMPLEMENTAÇÃO FUTURA (MAS TEM COISA PRA BAIXO)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //Import da dependencia do Prisma que permite a execução de script sql no banco de dados
 const { PrismaClient } = require('../../back/node_modules/@prisma/client')
 

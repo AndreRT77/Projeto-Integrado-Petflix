@@ -5,6 +5,59 @@
  * Versão: 1.0
  *******************************************************************************************/
 
+
+
+
+
+
+
+
+//IMPLEMENTAÇÃO FUTURA (MAS TEM COISA PRA BAIXO)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //Import da model do DAO do Ong
 const OngDAO = require('../model/ong.js')
 const controllerEspecie = require('../controller/especieController.js')

@@ -14,7 +14,7 @@ const MESSAGES = require('../module/config_messages.js')
 //listar novo(s) responsavel(is) (tutores interessados) pelo pet
 const listarTutoresInteressados = async function () {
     //chama a função do DAO para retornar a lista de tutores interessados no BD
-    let resultTutores = await tutorDAO.getSelectAllTutoresInteressados()
+    let resultTutores = await tutorDAO.getSelectAllTutorInteressado()
 
     //criando um objeto para as mensagens
     let tutoresMESSAGES = JSON.parse(JSON.stringify(MESSAGES.DEFAULT_HEADER))
@@ -104,10 +104,12 @@ const inserirNovoResponsavel = async function (dadosTutor, contentType) {
             }
 
         } else {
+            
             return MESSAGES.ERROR_CONTENT_TYPE //415
         }
 
     } catch (error) {
+        // console.log(error)
         return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 

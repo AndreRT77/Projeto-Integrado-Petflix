@@ -36,7 +36,7 @@ const selectByIdTutorInteressado = async function (id) {
     try {
         //script sql
         //utilizando o método seguro $queryRaw
-        let result = await prisma.$queryRaw`SELECT * FROM tbl_tutor_interessado WHERE id_tutor_interessado = ${id}`
+        let result = await prisma.$queryRaw`SELECT * FROM tbl_tutor_interessado WHERE id = ${id}`
 
         if (result.length > 0)
             return result
@@ -45,7 +45,7 @@ const selectByIdTutorInteressado = async function (id) {
 
     } catch (error) {
         //console log abaixo feito para debugar em caso de erro
-        //console.log(error)
+        // console.log(error)
         return false
     }
 
