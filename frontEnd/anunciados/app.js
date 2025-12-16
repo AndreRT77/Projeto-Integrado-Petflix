@@ -53,6 +53,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
         menuOverlay.addEventListener('click', closeMenu);
     }
+    const menuBt = document.getElementById('menu-bt');
+    const menuLateral = document.getElementById('menu-lateral');
+    const closeMenu = document.querySelector('.close-menu');
+    // ===== MENU LATERAL =====
+    if (menuBt) {
+        menuBt.addEventListener('click', function(e) {
+            e.preventDefault();
+            menuLateral.classList.add('active');
+        });
+    }
+
+    if (closeMenu) {
+        closeMenu.addEventListener('click', function(e) {
+            e.preventDefault();
+            menuLateral.classList.remove('active');
+        });
+    }
+
+    // Fechar menu ao clicar fora
+    document.addEventListener('click', function(e) {
+        if (menuLateral && menuLateral.classList.contains('active')) {
+            if (!menuLateral.contains(e.target) && !menuBt.contains(e.target)) {
+                menuLateral.classList.remove('active');
+            }
+        }
+    });
 
     // Lógica para mudar a cor do select de status (opcional, mas melhora a UI)
     const statusSelects = document.querySelectorAll('.status-select');

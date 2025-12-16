@@ -165,10 +165,27 @@
         display: flex;
         flex-direction: column;
         align-items: end;
+        position: relative;
     }
     a.mais{
         color: #656565;
         font-size: 8px;
+    }
+    .maisfiltros{
+        z-index: 11111;
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        width: 149px;
+        height: 183px;
+        background: linear-gradient(145grad, #acdeaacb, #656565be);
+        border-radius: 20px;
+        top: 30px;
+    }
+    .maisfiltros h3{
+        color: #ffffff;
     }
     section.sugestoes {
         width: 393px;
