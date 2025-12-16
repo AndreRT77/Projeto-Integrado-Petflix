@@ -13,15 +13,25 @@
 <body>
     <header>
         <div class="cabeçalho">
-            <img src="../img/Menu.png" id="menu">
-            <a href="../principal/index.html"><img src="../img/petflix.png" id="petflix"></a>
-            <img src="../img/Search.png" id="search">
+            <a href="#" id="menu-btn"><img src="../img/Menu.svg" id="menu"></a>
+            <div class="menu-lateral" id="menu-lateral">
+                <a href="#" class="close-menu">&times;</a>
+                <a href="../principal/index.html"><img src="../img/conta.svg" alt="Conta"> Minha Conta</a>
+                <a href="../anunciados/index.html"><img src="../img/Pets.svg" alt="Pets"> Meus Pets</a>
+                <a href="../favoritos/index.html"><img src="../img/favorito.svg" alt="Favoritos"> Favoritos</a>
+                <a href="#"><img src="../img/sair.svg" alt="Sair"> Sair</a>
+            </div>
+            <a href="../principal/index.html"><img src="../img/petflix.svg" id="petflix"></a>
+            <div class="search-container">
+                <input type="search" name="search" id="pesquisa" placeholder="Busque seu futuro pet :)">
+                <img src="../img/Search.svg" id="search">
+            </div>
         </div>
         <div class="navigation">
-            <a href="./index.html">Adote</a>
-            <a href="#">ONGs</a>
-            <a href="#">Unidades</a>
-            <a href="#">Anuncie</a>
+            <a href="../adote/index.html">Adote</a>
+            <a href="../ONGs/index.html">ONGs</a>
+            <a href="../unidades/index.html">Unidades</a>
+            <a href="../cadastroPet/index.html">Anuncie</a>
         </div>
     </header>
     <main>
