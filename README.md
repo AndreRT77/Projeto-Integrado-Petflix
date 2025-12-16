@@ -8,3 +8,5 @@
 <img width="1090" height="795" alt="image" src="https://github.com/user-attachments/assets/731b4f8e-2220-4299-a6d6-ca326ecacf5a" />
 
 ## Protótipo de alta fidelidade
+<img width="994" height="836" alt="image" src="https://github.com/user-attachments/assets/50299c18-5303-4d94-838b-48020911013f" />
+
