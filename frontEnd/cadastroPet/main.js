@@ -12,14 +12,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const inputImagem = document.getElementById('input-imagem');
     const previewContainer = document.querySelector('.preview-container');
 
-    // Preview de imagem
     if (inputImagem) {
         inputImagem.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    // Limpa preview anterior
                     previewContainer.innerHTML = '';
                     
                     const img = document.createElement('img');
@@ -38,21 +36,18 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const formData = new FormData(form);
             
-            // Aqui você pode converter para JSON se sua API esperar JSON, 
-            // ou enviar formData diretamente se for multipart/form-data (para arquivos)
+    
             const dados = Object.fromEntries(formData);
 
             try {
                 console.log('Dados do Pet:', dados);
-                // Simulação de delay de rede
                 await new Promise(r => setTimeout(r, 1000));
                 
                 mostrarNotificacao('Pet cadastrado com sucesso!', 'success');
                 form.reset();
-                previewContainer.innerHTML = ''; // Limpa o preview
+                previewContainer.innerHTML = '';
                 
-                // Redirecionamento comentado para teste
-                // setTimeout(() => window.location.href = '../adote/index.html', 2000);
+
             } catch (error) {
                 console.error(error);
                 mostrarNotificacao('Erro ao cadastrar pet', 'error');

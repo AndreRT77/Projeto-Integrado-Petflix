@@ -7,32 +7,36 @@
     <link rel="shortcut icon" href="../img/p.svg" />
     <link rel="stylesheet" href="style.css">
     <script src="app.js"></script>
+    <link rel="shortcut icon" href="../img/p.svg" />    
+    <script src="main.js" defer></script>
     <title>PetFlix</title>
 </head>
 
 <body>
+    <div class="menu-overlay"></div>
     <header>
         <div class="cabeçalho">
             <a href=""><img src="../img/Menu.svg" id="menu"></a>
             <div class="menu">
-                <a href=""><img src="../img/Menu.svg" id="menu-lateral"></a>
-                <a href=""><img src="../img/conta.svg" alt="Ícone de conta"></a>
+                <a href="#" id="close-menu"><img src="../img/close.svg" alt="Fechar Menu"></a>
+                <a href="../perfil/index.html"><img src="../img/icone.svg" alt="Ícone de conta"></a>
                 <a href="../anunciados/index.html"><img src="../img/Pets.svg" alt="Ícone de pets"></a>
                 <a href="../favoritos/index.html"><img src="../img/favorito.svg" alt="Ícone de favoritos"></a>
-                <a href=""><img src="../img/sair.svg" alt="Ícone de sair"></a>
+                <a href="../login/index.html"><img src="../img/sair.svg" alt="Ícone de sair"></a>
             </div>
-
-            <a href="./index.html"><img src="../img/petflix.svg" id="petflix"></a>
+            <div class="logo-container">
+                <a href="./index.html"><img src="../img/petflix.svg" id="petflix"></a>
+            </div>
             <div class="search-container">
                 <input type="search" name="search" id="pesquisa" placeholder="Busque seu futuro pet :)">
                 <img src="../img/Search.svg" id="search">
             </div>
         </div>
         <div class="navigation">
-            <a href="../favoritos/index.html">Adote</a>
-            <a href="#">ONGs</a>
-            <a href="#">Unidades</a>
-            <a href="#">Anuncie</a>
+            <a href="../principal/index.html" class="active">Adote</a>
+            <a href="../ONGs/index.html">ONGs</a>
+            <a href="../unidades/index.html">Unidades</a>
+            <a href="../cadastroPet/index.html">Anuncie</a>
         </div>
     </header>
     <main>
@@ -103,7 +107,7 @@
                         <h3>Instituto Caramelo</h3>
                         <p>O Instituto Caramelo é uma ONG brasileira sem fins lucrativos de proteção animal e meio ambiente, que atua principalmente no resgate de animais feridos ou em situação de risco, recuperação e adoção.</p>
                     </div>
-                    <img src="../img/seta.svg" id="seta-parcerias">
+                    <!-- <img src="../img/seta.svg" id="seta-parcerias"> -->
                 </div>
             </section>
         </div>
@@ -129,6 +133,7 @@
             </div>
         </div>
     </footer>
+    <!-- O conteúdo será gerado pelo main.js -->
 </body>
 
 </html>

@@ -4,91 +4,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="./img/p.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="../img/p.svg" />
     <link rel="stylesheet" href="style.css">
     <script src="app.js"></script>
     <title>Petflix Anunciados</title>
 </head>
 
 <body>
+    <div class="menu-overlay"></div>
     <header>
         <div class="cabeçalho">
-            <img src="../img/Menu.png" id="menu">
-            <a href="../principal/index.html"><img src="../img/petflix.png" id="petflix"></a>
-            <img src="../img/Search.png" id="search">
+            <a href="#" id="menu-btn"><img src="../img/Menu.svg" id="menu"></a>
+            <div class="menu">
+                <a href="#" id="close-menu"><img src="../img/close.svg" alt="Fechar Menu"></a>
+                <a href="../perfil/index.html"><img src="../img/icone.svg" alt="Ícone de conta"></a>
+                <a href="../anunciados/index.html"><img src="../img/Pets.svg" alt="Ícone de pets"></a>
+                <a href="../favoritos/index.html"><img src="../img/favorito.svg" alt="Ícone de favoritos"></a>
+                <a href="../login/index.html"><img src="../img/sair.svg" alt="Ícone de sair"></a>
+            </div>
+            <a href="../principal/index.html"><img src="../img/petflix.svg" id="petflix"></a>
+            <img src="../img/Search.svg" id="search">
         </div>
         <div class="navigation">
-            <a href="#">Adote</a>
-            <a href="#">ONGs</a>
-            <a href="#">Unidades</a>
-            <a href="#">Anuncie</a>
+            <a href="../principal/index.html">Adote</a>
+            <a href="../ONGs/index.html">ONGs</a>
+            <a href="../unidades/index.html">Unidades</a>
+            <a href="../cadastroPet/index.html">Anuncie</a>
         </div>
     </header>
     <main>
-        <div class="titulo">
-            <h3>Seus pets anunciados para adoção</h3>
-            <div class="pedidos">
-                <a href="">Ver pedidos</a>
+        <div class="main-header">
+            <h1>Seus pets anunciados</h1>
+            <button class="btn-pedidos" id="ver-pedidos">Ver pedidos de adoção</button>
+        </div>
+
+        <!-- Modal de Pedidos (escondido por padrão) -->
+        <div class="requests-overlay">
+            <div class="requests">
+                <button class="close-btn" id="fechar-pedidos">&times;</button>
+                <h2>Pedidos de Adoção</h2>
+                <div class="pedidos-lista">
+                    <div class="card-pedido">
+                        <div class="perfil">
+                            <img src="../img/icone.svg" alt="Avatar do adotante">
+                            <a href="#">Ver perfil</a>
+                        </div>
+                        <div class="info-pedido">
+                            <h3>Jonas</h3>
+                            <div class="detalhes">
+                                <p>Pinheiros - SP</p>
+                                <p>Adotou em: 27/11/2025</p>
+                            </div>
+                            <div class="status-pedido">
+                                <p class="para">Para: Jimmy</p>
+                                <p class="status-label aprovado">Status: Aprovado</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Outros cards de pedido aqui -->
+                </div>
             </div>
         </div>
-        <div class="requests">
-            <h2>Pedidos:</h2>
-            <div class="cardPedido">
-                <div class="perfil">
-                    <img src="../img/icone.png" alt="">
-                    <a href="#">Ver perfil</a>
-                </div>
-                <div class="informação">
-                    <h3>Jonas</h3>
-                    <div>
-                        <p>Pinheiros - SP</p>
-                        <p>Adotou em: 27/11/2025</p>
+
+        <!-- Grid de Pets Anunciados -->
+        <div class="cards-container">
+            <div class="card">
+                <img src="../img/clara.png" class="pet-img" alt="Foto do pet Clara">
+                <div class="informacao">
+                    <h3>Clara</h3>
+                    <div class="pet-details">
+                        <p>Ouriço Pigmeu Africano</p>
+                        <p>5 meses de idade</p>
+                        <p>Tímida e Inteligente</p>
                     </div>
                     <div class="status">
-                        <p class="para">Para: Jimmy</p>
-                        <p>Status: Aprovado</p>
+                        <label for="status-clara">Status:</label>
+                        <select name="status" id="status-clara" class="status-select disponivel">
+                            <option value="disponivel">Disponível</option>
+                            <option value="em-andamento">Em andamento</option>
+                            <option value="adotado">Adotado</option>
+                        </select>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="card">
-            <img src="../img/clara.png" id="pet">
-            <div class="informação">
-                <h3>Clara</h3>
-                <div>
-                    <p>Ouriço Pigmeu Africano</p>
-                    <p>5 meses de idade</p>
-                    <p>Tímida e Inteligente</p>
-                </div>
-                <div class="status">
-                    <label for="status">Status:</label>
-                    <select name="status" id="status">
-                        <option value="disponivel" class="verde">Disponivel</option>
-                        <option value="em andamento" class="amarelo">Em andamento</option>
-                        <option value="adotado" class="vermelho">Adotado</option>
-                    </select>
+            <!-- Adicione mais cards de pets aqui -->
+            <div class="card">
+                <img src="../img/jimmy.svg" class="pet-img" alt="Foto do pet Jimmy">
+                <div class="informacao">
+                    <h3>Jimmy</h3>
+                    <div class="pet-details">
+                        <p>Chinchila Lanigera</p>
+                        <p>1 ano de idade</p>
+                        <p>Dócil e brincalhão</p>
+                    </div>
+                    <div class="status">
+                        <label for="status-jimmy">Status:</label>
+                        <select name="status" id="status-jimmy" class="status-select em-andamento">
+                            <option value="disponivel">Disponível</option>
+                            <option value="em-andamento" selected>Em andamento</option>
+                            <option value="adotado">Adotado</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
     <footer>
-        <img src="../img/p.png" id="p">
-        <h3>@Instituto PetFlix</h3>
-        <div class="siteInfo">
-            <div class="info">
-                <img src="../img/Email.png" id="email">
-                <p>InstitutoPetFlix@gmail.com</p>
+        <div class="footer-content">
+            <img src="../img/p_petflix.svg" id="p">
+            <h3>@Instituto PetFlix</h3>
+            <div class="siteInfo">
+                <div class="info">
+                    <img src="../img/Email.svg" id="email">
+                    <p>InstitutoPetFlix@gmail.com</p>
+                </div>
+                <div class="info">
+                    <img src="../img/Phone.svg" id="phone">
+                    <p>+55 (11) 97358 - 0002</p>
+                </div>
+                <div class="info">
+                    <img src="../img/Place.svg" id="place">
+                    <p>Rua Zumbi dos Palmares, 47, Madureira, Rio de Janeiro</p>
+                </div>
             </div>
-            <div class="info">
-                <img src="../img/Phone.png" id="phone">
-                <p>+55 (11) 97358 - 0002</p>
-            </div>
-            <div class="info">
-                <img src="../img/Place.png" id="place">
-                <p>Rua Zumbi dos Palmares,</p>
-            </div>
-            <p>47, Madureira,</p>
-            <p>Rio de Janeiro</p>
         </div>
     </footer>
 </body>
