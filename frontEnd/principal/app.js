@@ -22,4 +22,20 @@ document.addEventListener('DOMContentLoaded', () => {
         closeIcon.addEventListener('click', (e) => { e.preventDefault(); closeMenu(); });
         overlay.addEventListener('click', closeMenu);
     }
+
+    // Lógica para favoritar o pet
+    const favoriteButtons = document.querySelectorAll('.favorite-btn');
+
+    favoriteButtons.forEach(button => {
+        button.addEventListener('click', (event) => {
+            // Impede que outros eventos de clique sejam acionados
+            event.preventDefault();
+            event.stopPropagation();
+
+            const petName = button.dataset.petName;
+            alert(`${petName} foi adicionado à sua lista de interesses!`);
+
+            // Futuramente, aqui você pode adicionar a lógica para salvar o pet
+        });
+    });
 });
