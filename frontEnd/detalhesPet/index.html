@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../img/p.svg" />
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js" defer></script>
+    <title>PetFlix - Detalhes do Pet</title>
+</head>
+
+<body>
+    <header>
+        <div class="cabeçalho">
+            <a href="#" id="menu-btn"><img src="../img/Menu.svg" id="menu"></a>
+            <div class="menu-lateral" id="menu-lateral">
+                <a href="#" class="close-menu">&times;</a>
+                <a href="../principal/index.html"><img src="../img/conta.svg" alt="Conta"> Minha Conta</a>
+                <a href="../anunciados/index.html"><img src="../img/Pets.svg" alt="Pets"> Meus Pets</a>
+                <a href="../favoritos/index.html"><img src="../img/favorito.svg" alt="Favoritos"> Favoritos</a>
+                <a href="#"><img src="../img/sair.svg" alt="Sair"> Sair</a>
+            </div>
+            <a href="../principal/index.html"><img src="../img/petflix.svg" id="petflix"></a>
+            <div class="search-container">
+                <input type="search" name="search" id="pesquisa" placeholder="Busque seu futuro pet :)">
+                <img src="../img/Search.svg" id="search">
+            </div>
+        </div>
+        <div class="navigation">
+            <a href="../adote/index.html">Adote</a>
+            <a href="../ONGs/index.html">ONGs</a>
+            <a href="../unidades/index.html">Unidades</a>
+            <a href="../cadastroPet/index.html">Anuncie</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="voltar">
+            <a href="../adote/index.html">
+                <img src="../img/setaEsquerda.png" alt="Voltar">
+                <span>Voltar para listagem</span>
+            </a>
+        </div>
+
+        <div class="pet-container">
+            <div class="pet-galeria">
+                <div class="galeria-principal">
+                    <img src="../img/setaEsquerda.png" class="seta seta-esquerda" id="seta-esquerda">
+                    <img src="../img/jimmy.svg" alt="Foto do Pet" id="foto-principal">
+                    <img src="../img/seta.png" class="seta seta-direita" id="seta-direita">
+                </div>
+                <div class="galeria-miniaturas" id="miniaturas">
+                    <img src="../img/jimmy.svg" alt="Miniatura 1" class="miniatura active">
+                    <img src="../img/jimmy.png" alt="Miniatura 2" class="miniatura">
+                    <img src="../img/jimmy.svg" alt="Miniatura 3" class="miniatura">
+                </div>
+            </div>
+
+            <div class="pet-info">
+                <div class="pet-header">
+                    <h1 id="pet-nome">Jimmy</h1>
+                    <button class="btn-favorito" id="btn-favorito">
+                        <img src="../img/emptyFavorite.png" alt="Favoritar" id="icone-favorito">
+                    </button>
+                </div>
+
+                <div class="pet-status" id="pet-status">
+                    <span class="status-badge disponivel">Disponível</span>
+                </div>
+
+                <div class="pet-detalhes">
+                    <div class="detalhe-item">
+                        <span class="detalhe-label">Espécie:</span>
+                        <span class="detalhe-valor" id="pet-especie">Chinchila</span>
+                    </div>
+                    <div class="detalhe-item">
+                        <span class="detalhe-label">Raça:</span>
+                        <span class="detalhe-valor" id="pet-raca">Chinchila Lanigera</span>
+                    </div>
+                    <div class="detalhe-item">
+                        <span class="detalhe-label">Idade:</span>
+                        <span class="detalhe-valor" id="pet-idade">1 ano</span>
+                    </div>
+                    <div class="detalhe-item">
+                        <span class="detalhe-label">Sexo:</span>
+                        <span class="detalhe-valor" id="pet-sexo">Masculino</span>
+                    </div>
+                    <div class="detalhe-item">
+                        <span class="detalhe-label">Tamanho:</span>
+                        <span class="detalhe-valor" id="pet-tamanho">10 cm</span>
+                    </div>
+                    <div class="detalhe-item">
+                        <span class="detalhe-label">Localização:</span>
+                        <span class="detalhe-valor" id="pet-localizacao">Rio de Janeiro, RJ</span>
+                    </div>
+                </div>
+
+                <div class="pet-personalidade">
+                    <h3>Personalidade</h3>
+                    <p id="pet-personalidade">Dócil, brincalhão e tímido</p>
+                </div>
+
+                <div class="pet-necessidades">
+                    <h3>Necessidades Especiais</h3>
+                    <p id="pet-necessidades">Dieta rica em fibras, banhos de pó e ambiente fresco e seguro.</p>
+                </div>
+
+                <div class="pet-descricao">
+                    <h3>Descrição</h3>
+                    <p id="pet-descricao">Jimmy é um chinchila muito carinhoso que está procurando um lar amoroso. Ele adora brincar durante a noite e é muito curioso. Precisa de um ambiente tranquilo e uma família que possa dedicar tempo e atenção a ele.</p>
+                </div>
+
+                <div class="pet-saude">
+                    <h3>Saúde</h3>
+                    <div class="saude-badges">
+                        <span class="saude-badge vacinado" id="badge-vacinado">✓ Vacinado</span>
+                        <span class="saude-badge castrado" id="badge-castrado">✓ Castrado</span>
+                        <span class="saude-badge vermifugado" id="badge-vermifugado">✓ Vermifugado</span>
+                    </div>
+                </div>
+
+                <div class="pet-responsavel">
+                    <h3>Responsável</h3>
+                    <div class="responsavel-info">
+                        <p><strong>Nome:</strong> <span id="responsavel-nome">Instituto Caramelo</span></p>
+                        <p><strong>Contato:</strong> <span id="responsavel-contato">(11) 99999-9999</span></p>
+                        <p><strong>Email:</strong> <span id="responsavel-email">contato@institutocaramelo.org</span></p>
+                    </div>
+                </div>
+
+                <div class="pet-acoes">
+                    <button class="btn-adotar" id="btn-adotar">
+                        QUERO ADOTAR
+                    </button>
+                    <button class="btn-contato" id="btn-contato">
+                        ENTRAR EM CONTATO
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Adoção -->
+        <div class="modal" id="modal-adocao">
+            <div class="modal-content">
+                <span class="modal-close" id="modal-close">&times;</span>
+                <h2>Solicitar Adoção</h2>
+                <p>Preencha o formulário abaixo para solicitar a adoção de <strong id="modal-pet-nome">Jimmy</strong></p>
+                
+                <form id="form-adocao">
+                    <div class="form-group">
+                        <label for="adotante-nome">Seu Nome *</label>
+                        <input type="text" id="adotante-nome" name="nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="adotante-email">Seu Email *</label>
+                        <input type="email" id="adotante-email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="adotante-telefone">Seu Telefone *</label>
+                        <input type="tel" id="adotante-telefone" name="telefone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="adotante-mensagem">Por que você quer adotar este pet?</label>
+                        <textarea id="adotante-mensagem" name="mensagem" rows="4" placeholder="Conte um pouco sobre você e por que deseja adotar..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-enviar">ENVIAR SOLICITAÇÃO</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <img src="../img/p_petflix.svg" id="p">
+            <h3>@Instituto PetFlix</h3>
+            <div class="siteInfo">
+                <div class="info">
+                    <img src="../img/Email.svg" id="email">
+                    <p>InstitutoPetFlix@gmail.com</p>
+                </div>
+                <div class="info">
+                    <img src="../img/Phone.svg" id="phone">
+                    <p>+55 (11) 97358 - 0002</p>
+                </div>
+                <div class="info">
+                    <img src="../img/Place.svg" id="place">
+                    <p>Rua Zumbi dos Palmares,</p>
+                </div>
+                <p>47, Madureira,</p>
+                <p>Rio de Janeiro</p>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

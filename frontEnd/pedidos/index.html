@@ -1,0 +1,88 @@
+<!-- /*******************************************************************************************
+ * Objetivo: Arquivo responsável pelo html dos pedidos
+ * Data:15/12/2025
+ * Autor: André Roberto Tavares
+ * Versão: 1.0
+ *******************************************************************************************/ -->
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../img/p.svg" />
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js" defer></script>
+    <title>PetFlix - Meus Pedidos</title>
+</head>
+
+<body>
+    <header>
+        <div class="cabeçalho">
+            <a href="#" id="menu-btn"><img src="../img/Menu.svg" id="menu"></a>
+            <a href="../principal/index.html"><img src="../img/petflix.svg" id="petflix"></a>
+            <div class="search-container">
+                <input type="search" name="search" id="pesquisa" placeholder="Busque seu futuro pet :)">
+                <img src="../img/Search.svg" id="search">
+            </div>
+        </div>
+        <div class="navigation">
+            <a href="../adote/index.html">Adote</a>
+            <a href="../ONGs/index.html">ONGs</a>
+            <a href="../unidades/index.html">Unidades</a>
+            <a href="../cadastroPet/index.html">Anuncie</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="page-header">
+                <h1>Meus Pedidos de Adoção</h1>
+                <p>Acompanhe o status dos seus pedidos</p>
+            </div>
+
+            <div class="filtros-status">
+                <button class="filtro-btn active" data-status="todos">Todos</button>
+                <button class="filtro-btn" data-status="analise">Em Análise</button>
+                <button class="filtro-btn" data-status="aprovado">Aprovados</button>
+                <button class="filtro-btn" data-status="negado">Negados</button>
+            </div>
+
+            <div class="pedidos-container" id="pedidos-container">
+            </div>
+
+            <div class="empty-state" id="empty-state" style="display: none;">
+                <img src="../img/emptyFavorite.png" alt="Sem pedidos">
+                <h3>Nenhum pedido encontrado</h3>
+                <p>Você ainda não fez nenhum pedido de adoção</p>
+                <a href="../adote/index.html" class="btn-explorar">Explorar Pets</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <img src="../img/p_petflix.svg" id="p">
+            <h3>@Instituto PetFlix</h3>
+            <div class="siteInfo">
+                <div class="info">
+                    <img src="../img/Email.svg" id="email">
+                    <p>InstitutoPetFlix@gmail.com</p>
+                </div>
+                <div class="info">
+                    <img src="../img/Phone.svg" id="phone">
+                    <p>+55 (11) 97358 - 0002</p>
+                </div>
+                <div class="info">
+                    <img src="../img/Place.svg" id="place">
+                    <p>Rua Zumbi dos Palmares,</p>
+                </div>
+                <p>47, Madureira,</p>
+                <p>Rio de Janeiro</p>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

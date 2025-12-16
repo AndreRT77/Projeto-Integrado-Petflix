@@ -1,0 +1,687 @@
+:root {
+    --primary-color: #2C2C2C;
+    --secondary-color: #ACDEAA;
+    --accent-color: #4D5B24;
+    --text-color: #333;
+    --light-bg: #F3F3F3;
+    --white: #ffffff;
+    --shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--white);
+}
+
+/* Header */
+header {
+    background-color: var(--primary-color);
+    display: flex;
+    flex-direction: column;
+}
+
+header .cabeçalho {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    padding: 10px 15px;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.search-container {
+    display: flex;
+    position: relative;
+    align-items: center;
+}
+
+#pesquisa {
+    display: none;
+}
+
+img#menu, #search {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+img#petflix {
+    width: 100px;
+    height: 46px;
+}
+
+header .navigation {
+    background-color: #565656;
+    width: 100%;
+    height: 35px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+header a {
+    color: var(--secondary-color);
+    font-size: 14px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+header a:hover {
+    color: var(--white);
+}
+
+/* Menu Lateral */
+.menu-lateral {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 280px;
+    height: 100vh;
+    background-color: var(--primary-color);
+    z-index: 1000;
+    transition: left 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.menu-lateral.active {
+    left: 0;
+}
+
+.menu-lateral .close-menu {
+    color: var(--white);
+    font-size: 30px;
+    align-self: flex-end;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.menu-lateral a {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 10px;
+    color: var(--secondary-color);
+    text-decoration: none;
+    border-bottom: 1px solid #444;
+    transition: background-color 0.3s ease;
+}
+
+.menu-lateral a:hover {
+    background-color: #444;
+}
+
+.menu-lateral a img {
+    width: 24px;
+    height: 24px;
+}
+
+/* Main */
+main {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 15px;
+}
+
+/* Voltar */
+.voltar {
+    margin-bottom: 20px;
+}
+
+.voltar a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+.voltar a:hover {
+    color: var(--accent-color);
+}
+
+.voltar img {
+    width: 20px;
+    height: 20px;
+}
+
+/* Pet Container */
+.pet-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* Galeria */
+.pet-galeria {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.galeria-principal {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--light-bg);
+    border-radius: 15px;
+    padding: 20px;
+    min-height: 300px;
+}
+
+.galeria-principal #foto-principal {
+    max-width: 100%;
+    max-height: 350px;
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+.galeria-principal .seta {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.galeria-principal .seta:hover {
+    opacity: 1;
+}
+
+.seta-esquerda {
+    left: 10px;
+}
+
+.seta-direita {
+    right: 10px;
+}
+
+.galeria-miniaturas {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.miniatura {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.miniatura:hover {
+    transform: scale(1.05);
+}
+
+.miniatura.active {
+    border-color: var(--accent-color);
+}
+
+/* Pet Info */
+.pet-info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.pet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pet-header h1 {
+    font-size: 2rem;
+    color: var(--text-color);
+}
+
+.btn-favorito {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    transition: transform 0.3s ease;
+}
+
+.btn-favorito:hover {
+    transform: scale(1.1);
+}
+
+.btn-favorito img {
+    width: 30px;
+    height: 30px;
+}
+
+/* Status */
+.pet-status {
+    display: flex;
+    gap: 10px;
+}
+
+.status-badge {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.status-badge.disponivel {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-badge.em-adocao {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-badge.adotado {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Detalhes */
+.pet-detalhes {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    background-color: var(--light-bg);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.detalhe-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.detalhe-label {
+    font-size: 12px;
+    color: #666;
+    text-transform: uppercase;
+}
+
+.detalhe-valor {
+    font-size: 16px;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+/* Seções de texto */
+.pet-personalidade,
+.pet-necessidades,
+.pet-descricao,
+.pet-saude,
+.pet-responsavel {
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.pet-personalidade h3,
+.pet-necessidades h3,
+.pet-descricao h3,
+.pet-saude h3,
+.pet-responsavel h3 {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    margin-bottom: 10px;
+}
+
+.pet-personalidade p,
+.pet-necessidades p,
+.pet-descricao p {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.6;
+}
+
+/* Saúde Badges */
+.saude-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.saude-badge {
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 13px;
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+/* Responsável */
+.responsavel-info p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+/* Ações */
+.pet-acoes {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.btn-adotar,
+.btn-contato {
+    padding: 15px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-adotar {
+    background-color: var(--accent-color);
+    color: var(--white);
+}
+
+.btn-adotar:hover {
+    background-color: #3d4a1c;
+}
+
+.btn-contato {
+    background-color: var(--white);
+    color: var(--accent-color);
+    border: 2px solid var(--accent-color);
+}
+
+.btn-contato:hover {
+    background-color: var(--accent-color);
+    color: var(--white);
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background-color: var(--white);
+    padding: 30px;
+    border-radius: 15px;
+    max-width: 500px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 30px;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.3s ease;
+}
+
+.modal-close:hover {
+    color: var(--text-color);
+}
+
+.modal-content h2 {
+    margin-bottom: 10px;
+    color: var(--text-color);
+}
+
+.modal-content > p {
+    margin-bottom: 20px;
+    color: #666;
+    font-size: 14px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+.btn-enviar {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--accent-color);
+    color: var(--white);
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-enviar:hover {
+    background-color: #3d4a1c;
+}
+
+/* Footer */
+footer {
+    background-color: var(--primary-color);
+    padding: 30px 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: auto;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 15px;
+    width: 100%;
+    max-width: 1200px;
+}
+
+img#p {
+    height: 57px;
+}
+
+footer h3 {
+    font-size: 1rem;
+}
+
+footer h3, footer p {
+    color: var(--secondary-color);
+}
+
+div.siteInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+div.siteInfo p {
+    color: var(--secondary-color);
+    font-size: 14px;
+}
+
+div.info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    justify-content: center;
+}
+
+div.info img {
+    width: 16px;
+    height: 16px;
+}
+
+/* Responsivo - Tablet */
+@media screen and (min-width: 768px) {
+    header .cabeçalho {
+        padding: 10px 30px;
+    }
+
+    #pesquisa {
+        display: block;
+        width: 250px;
+        height: 35px;
+        padding: 0 40px 0 15px;
+        border-radius: 20px;
+        border: none;
+        background-color: var(--accent-color);
+        color: var(--white);
+    }
+
+    #pesquisa::placeholder {
+        color: #c7d1ab;
+    }
+
+    #search {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .pet-container {
+        flex-direction: row;
+        gap: 40px;
+    }
+
+    .pet-galeria {
+        flex: 1;
+        max-width: 50%;
+    }
+
+    .pet-info {
+        flex: 1;
+    }
+
+    .galeria-principal {
+        min-height: 400px;
+    }
+
+    .pet-detalhes {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .pet-acoes {
+        flex-direction: row;
+    }
+
+    .btn-adotar,
+    .btn-contato {
+        flex: 1;
+    }
+
+    .footer-content {
+        flex-direction: row;
+        justify-content: space-between;
+        text-align: left;
+    }
+
+    div.info {
+        justify-content: flex-start;
+    }
+}
+
+/* Responsivo - Desktop */
+@media screen and (min-width: 1024px) {
+    img#menu {
+        display: none;
+    }
+
+    #pesquisa {
+        width: 300px;
+    }
+
+    header a {
+        font-size: 1rem;
+    }
+
+    .galeria-principal {
+        min-height: 450px;
+    }
+
+    .galeria-principal #foto-principal {
+        max-height: 400px;
+    }
+
+    .miniatura {
+        width: 80px;
+        height: 80px;
+    }
+
+    .pet-header h1 {
+        font-size: 2.5rem;
+    }
+}

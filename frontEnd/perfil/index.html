@@ -1,0 +1,153 @@
+<!-- /*******************************************************************************************
+ * Objetivo: Arquivo responsável pelo html do perfil
+ * Data:15/12/2025
+ * Autor: André Roberto Tavares
+ * Versão: 1.0
+ *******************************************************************************************/ -->
+
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../img/p.svg" />
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js" defer></script>
+    <title>PetFlix - Meu Perfil</title>
+</head>
+
+<body>
+    <header>
+        <div class="cabeçalho">
+            <a href="#" id="menu-btn"><img src="../img/Menu.svg" id="menu"></a>
+            <a href="../principal/index.html"><img src="../img/petflix.svg" id="petflix"></a>
+            <div class="search-container">
+                <input type="search" name="search" id="pesquisa" placeholder="Busque seu futuro pet :)">
+                <img src="../img/Search.svg" id="search">
+            </div>
+        </div>
+        <div class="navigation">
+            <a href="../adote/index.html">Adote</a>
+            <a href="../ONGs/index.html">ONGs</a>
+            <a href="../unidades/index.html">Unidades</a>
+            <a href="../cadastroPet/index.html">Anuncie</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="perfil-container">
+            <aside class="perfil-sidebar">
+                <div class="perfil-avatar">
+                    <img src="../img/avatar-default.png" alt="Avatar" id="avatar-img">
+                    <button class="btn-trocar-foto" id="btn-trocar-foto">Trocar foto</button>
+                    <input type="file" id="input-foto" accept="image/*" hidden>
+                </div>
+                <h2 id="usuario-nome">Carregando...</h2>
+                <p class="usuario-tipo" id="usuario-tipo">Tutor</p>
+                
+                <nav class="perfil-menu">
+                    <a href="#" class="menu-item active" data-section="dados">
+                        <img src="../img/conta.svg" alt=""> Meus Dados
+                    </a>
+                    <a href="#" class="menu-item" data-section="favoritos">
+                        <img src="../img/favorito.svg" alt=""> Favoritos
+                    </a>
+                    <a href="#" class="menu-item" data-section="pedidos">
+                        <img src="../img/pedidos.svg" alt=""> Meus Pedidos
+                    </a>
+                    <a href="#" class="menu-item" data-section="pets">
+                        <img src="../img/Pets.svg" alt=""> Meus Pets
+                    </a>
+                    <a href="#" class="menu-item logout" id="btn-logout">
+                        <img src="../img/sair.svg" alt=""> Sair
+                    </a>
+                </nav>
+            </aside>
+
+            <div class="perfil-content">
+                <section class="section-content active" id="section-dados">
+                    <h3>Meus Dados</h3>
+                    <form id="form-dados">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="dados-nome">Nome Completo</label>
+                                <input type="text" id="dados-nome" name="nome" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="dados-email">Email</label>
+                                <input type="email" id="dados-email" name="email" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="dados-telefone">Telefone</label>
+                                <input type="tel" id="dados-telefone" name="telefone">
+                            </div>
+                            <div class="form-group">
+                                <label for="dados-cpf">CPF</label>
+                                <input type="text" id="dados-cpf" name="cpf">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="dados-endereco">Endereço</label>
+                                <input type="text" id="dados-endereco" name="endereco">
+                            </div>
+                            <div class="form-group">
+                                <label for="dados-cidade">Cidade</label>
+                                <input type="text" id="dados-cidade" name="cidade">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-salvar">Salvar Alterações</button>
+                    </form>
+                </section>
+
+                <section class="section-content" id="section-favoritos">
+                    <h3>Meus Favoritos</h3>
+                    <div class="favoritos-grid" id="favoritos-grid">
+                    </div>
+                </section>
+
+                <section class="section-content" id="section-pedidos">
+                    <h3>Meus Pedidos de Adoção</h3>
+                    <div class="pedidos-lista" id="pedidos-lista">
+                    </div>
+                </section>
+
+                <section class="section-content" id="section-pets">
+                    <h3>Meus Pets Anunciados</h3>
+                    <a href="../cadastroPet/index.html" class="btn-novo-pet">+ Anunciar Novo Pet</a>
+                    <div class="pets-grid" id="pets-grid">
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <img src="../img/p_petflix.svg" id="p">
+            <h3>@Instituto PetFlix</h3>
+            <div class="siteInfo">
+                <div class="info">
+                    <img src="../img/Email.svg" id="email">
+                    <p>InstitutoPetFlix@gmail.com</p>
+                </div>
+                <div class="info">
+                    <img src="../img/Phone.svg" id="phone">
+                    <p>+55 (11) 97358 - 0002</p>
+                </div>
+                <div class="info">
+                    <img src="../img/Place.svg" id="place">
+                    <p>Rua Zumbi dos Palmares,</p>
+                </div>
+                <p>47, Madureira,</p>
+                <p>Rio de Janeiro</p>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
