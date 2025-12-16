@@ -47,7 +47,8 @@ header {
 }
 
 .logo-top {
-    height: 30px;
+    width: 100px;
+    height: 46px;
 }
 
 .top-bar i {
@@ -71,7 +72,6 @@ header {
     text-transform: uppercase;
     letter-spacing: 1px;
 }
-
 main {
     flex: 1;
     display: flex;

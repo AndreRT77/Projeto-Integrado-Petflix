@@ -28,13 +28,71 @@
         flex-direction: row;
         width: 100%;
         justify-content: space-between;
-        padding-left: 10px;
-        padding-right: 10px;
+        padding: 10px;
         align-items: center;
     }
-    img#menu,#search,#seta{
+    .logo-container {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    
+    .menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 250px;
+        height: 100vh;
+        background-color: var(--primary-color);
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        gap: 25px;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-in-out;
+        z-index: 1000;
+    }
+    
+    #close-menu {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+    }
+    
+    .menu.active {
+        transform: translateX(0);
+    }
+    
+    .menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease-in-out;
+    }
+    
+    .menu-overlay.active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+    
+    .search-container {
+        display: flex;
+        position: relative;
+        align-items: center;
+    }
+    #pesquisa {
+        display: none;
+    }
+    img#menu, #search, #seta{
         width: 30px;
         height: 30px;
+        cursor: pointer;
     }
     img#petflix{
         width: 100px;
@@ -46,15 +104,17 @@
         height: 25px;
         display: flex;
         flex-direction: row;
-        justify-content: space-between;
-        padding-left: 30px;
-        padding-right: 30px;
+        justify-content: space-around;
         align-items: center;
     }
     header a{
         color: #ACDEAA;
         font-size: 13px;
-        font-family: Arial, Helvetica, sans-serif;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    header a:hover {
+        color: #ffffff;
     }
     main{
         display: flex;
