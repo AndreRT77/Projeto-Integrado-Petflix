@@ -1,24 +1,25 @@
-// ===== CONFIGURAÇÃO DA API =====
-const API_BASE_URL = 'http://localhost:3001';
+/*******************************************************************************************
+ * Objetivo: Arquivo responsável pelo java script do detalhes do pet
+ * Data:15/12/2025
+ * Autor: André Roberto Tavares
+ * Versão: 1.0
+ *******************************************************************************************/
 
-// ===== ELEMENTOS DO DOM =====
+const API_BASE_URL = 'http://localhost:8080';
+
 document.addEventListener('DOMContentLoaded', function() {
-    // Menu lateral
     const menuBtn = document.getElementById('menu-btn');
     const menuLateral = document.getElementById('menu-lateral');
     const closeMenu = document.querySelector('.close-menu');
 
-    // Galeria
     const fotoPrincipal = document.getElementById('foto-principal');
     const miniaturas = document.querySelectorAll('.miniatura');
     const setaEsquerda = document.getElementById('seta-esquerda');
     const setaDireita = document.getElementById('seta-direita');
 
-    // Favorito
     const btnFavorito = document.getElementById('btn-favorito');
     const iconeFavorito = document.getElementById('icone-favorito');
 
-    // Modal
     const btnAdotar = document.getElementById('btn-adotar');
     const btnContato = document.getElementById('btn-contato');
     const modalAdocao = document.getElementById('modal-adocao');
@@ -169,12 +170,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Simular envio para API
                 console.log('Enviando solicitação de adoção:', formData);
                 
-                // Aqui você pode fazer a chamada real para a API
-                // const response = await fetch(`${API_BASE_URL}/adocao`, {
-                //     method: 'POST',
-                //     headers: { 'Content-Type': 'application/json' },
-                //     body: JSON.stringify(formData)
-                // });
 
                 mostrarNotificacao('Solicitação enviada com sucesso! Entraremos em contato em breve.', 'success');
                 

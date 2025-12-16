@@ -13,43 +13,42 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model tbl_Pet {
+model tbl_pet {
   id                     Int     @id @default(autoincrement())
   nome                   String  @db.VarChar(100)
   idade                  Int
-  sexo                   String  @db.VarChar(10)
-  tamanho                String  @db.VarChar(20)
-  status_adocao          String  @db.VarChar(50)
-  nacionalidade          String  @db.VarChar(50)
-  necessidades_especiais Boolean
-  descricao              String  @db.Text
-  midia                  String? @db.Text
+  sexo                   String  @db.Enum("Macho", "Fêmea")
+  tamanho                Float   @db.Double // Mudado para Float para bater com double(4,2)
+  status_adocao          String  @db.Enum("Disponível", "Em processo de adoção", "Já foi Adotado")
+  nacionalidade          String  @db.VarChar(200)
+  necessidades_especiais String? @db.Text // Mudado para String conforme SQL (text)
+  descricao              String? @db.Text
+  midia                  String  @db.VarChar(255)
+  id_especie             Int
+  id_responsavel_pet     Int
+  id_abrigo              Int
 
-  @@map("tbl_Pet")
+  @@map("tbl_pet")
 }
 
-model tbl_Especie {
-  id        Int    @id @default(autoincrement())
-  nome      String @db.VarChar(100)
-  habitat   String @db.VarChar(100)
-  descricao String @db.Text
+model tbl_especie {
+  id        Int     @id @default(autoincrement())
+  nome      String  @db.VarChar(100)
+  habitat   String  @db.VarChar(100)
+  descricao String? @db.Text
 
-  @@map("tbl_Especie")
+  @@map("tbl_especie")
 }
 
-model tbl_Pet_Especie {
-  id         Int @id @default(autoincrement())
-  id_Pet     Int
-  id_Especie Int
-  @@map("tbl_Pet_Especie")
-}
+model tbl_raca {
+  id                  Int     @id @default(autoincrement())
+  nome                String  @db.VarChar(100)
+  expectativa_de_vida Int
+  saude               String  @db.Text
+  peso_medio          Int?
+  porte               String  @db.Enum("Pequeno", "Médio", "Grande", "Gigante")
+  capacidades         String? @db.Text
+  id_especie          Int
 
-model tbl_Responsavel {
-  id       Int    @id @default(autoincrement())
-  nome     String @db.VarChar(100)
-  email    String @unique @db.VarChar(255)
-  telefone String @db.VarChar(20)
-  senha    String @db.VarChar(255)
-
-  @@map("tbl_Responsavel")
+  @@map("tbl_raca")
 }
