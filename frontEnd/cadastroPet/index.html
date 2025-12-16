@@ -6,81 +6,105 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="./img/p.png" />
     <link rel="stylesheet" href="style.css">
-    <script src="app.js"></script>
-    <title>Petflix Anunciados</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="app.js" defer></script>
+    <title>Petflix - Cadastro</title>
 </head>
 
 <body>
     <header>
-        <div class="cabeçalho">
-            <img src="../img/Menu.png" id="menu">
-            <a href="../principal/index.html"><img src="../img/petflix.png" id="petflix"></a>
-            <img src="../img/Search.png" id="search">
+        <div class="top-bar">
+            <i class="fas fa-bars"></i>
+            <img src="../img/petflix.png" alt="Petflix" class="logo-top">
+            <i class="fas fa-search"></i>
         </div>
-        <div class="navigation">
-            <a href="./index.html">Adote</a>
+        <nav class="navigation">
+            <a href="./index.html" class="active">Adote</a>
             <a href="#">ONGs</a>
             <a href="#">Unidades</a>
             <a href="#">Anuncie</a>
-        </div>
+        </nav>
     </header>
-    <img src="../img/fundo.png" class="fundo">
-    <main>
-        <h2>Faça cadastro do seu pet</h2>
-        <input type="text" class="inputinvisivel" id="nome" placeholder="Nome">
-        <input type="text" class="inputinvisivel" id="idade" placeholder="Idade">
-        <input type="text" class="inputinvisivel" id="sexo" placeholder="Sexo">
-        <input type="text" class="inputinvisivel" id="tamanho" placeholder="Tamanho">
-        <div class="especie">
-            <select class="selectinvisivel" id="especie">
-                <option value="">Especie</option>
-                <option value="">Especie</option>
-                <option value="">Especie</option>
-                <option value="">Especie</option>
-                <option value="">Especie</option>
-            </select>
-            <select class="selectinvisivel" id="raca">
-                <option value="">Raça</option>
-                <option value="">Raça</option>
-                <option value="">Raça</option>
-                <option value="">Raça</option>
-                <option value="">Raça</option>
-            </select>
-        </div>
-        <input type="text" class="inputinvisivel" id="descricao" placeholder="Descrição">
-        <input type="text" class="inputinvisivel" id="necessidades" placeholder="Necessidades Especiais">
-        <input type="url" class="inputinvisivel" id="imagem" placeholder="Insira uma imagem">
-        <div class="butoes">
-            <button type="button" class="voltar">Voltar</button>
-            <button type="button" class="cadastrar">Cadastrar</button>
-        </div>
-        <div class="inseririmagem">
-            <h3>Insira uma imagem</h3>
-            <input type="url" class="imagem" id="imagem" placeholder="Coloque o url da imagem">
-            <h3>Ou arraste uma imagem para aqui</h3>
-            <img src="../img/jorge.png" alt="">
-        </div>
-    </main>
-    <footer>
-        <img src="../img/p.png" id="p">
-        <h3>@Instituto PetFlix</h3>
-        <div class="siteInfo">
-            <div class="info">
-                <img src="../img/Email.png" id="email">
-                <p>InstitutoPetFlix@gmail.com</p>
-            </div>
-            <div class="info">
-                <img src="../img/Phone.png" id="phone">
-                <p>+55 (11) 97358 - 0002</p>
-            </div>
-            <div class="info">
-                <img src="../img/Place.png" id="place">
-                <p>Rua Zumbi dos Palmares,</p>
-            </div>
-            <p>47, Madureira,</p>
-            <p>Rio de Janeiro</p>
-        </div>
-    </footer>
-</body>
 
-</html>
+    <main>
+        <h2>Faça cadastro do seu Pet</h2>
+
+        <form id="form-cadastro">
+            <div class="campo-linha">
+                <input type="text" name="nome" placeholder="Nome" required>
+            </div>
+            
+            <div class="campo-linha">
+                <input type="number" name="idade" placeholder="Idade" required>
+            </div>
+
+            <div class="campo-linha">
+                <input type="text" name="sexo" placeholder="Sexo" list="lista-sexo">
+                <datalist id="lista-sexo">
+                    <option value="Macho">
+                    <option value="Fêmea">
+                </datalist>
+            </div>
+
+            <div class="campo-linha">
+                <input type="text" name="tamanho" placeholder="Tamanho" list="lista-tamanho">
+                <datalist id="lista-tamanho">
+                    <option value="Pequeno">
+                    <option value="Médio">
+                    <option value="Grande">
+                </datalist>
+            </div>
+
+            <div class="dupla-campos">
+                <div class="campo-linha metade">
+                    <select name="especie">
+                        <option value="" disabled selected>Espécie</option>
+                        <option value="Cachorro">Cachorro</option>
+                        <option value="Gato">Gato</option>
+                    </select>
+                </div>
+                <div class="campo-linha metade">
+                    <select name="raca">
+                        <option value="" disabled selected>Raça</option>
+                        <option value="SRD">SRD</option>
+                        <option value="Golden">Golden</option>
+                        <option value="Poodle">Poodle</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="campo-linha">
+                <input type="text" name="descricao" placeholder="Descrição">
+            </div>
+
+            <div class="campo-linha">
+                <input type="text" name="necessidades" placeholder="Necessidades Especiais">
+            </div>
+
+            <div class="campo-linha upload-wrapper">
+                <label for="input-imagem" class="upload-label">
+                    <span>Insira uma imagem</span>
+                    <i class="far fa-image"></i>
+                </label>
+                <input type="file" id="input-imagem" name="imagem" accept="image/*">
+            </div>
+            
+            <div class="preview-container"></div>
+
+            <div class="botoes">
+                <button type="button" class="btn-voltar" onclick="history.back()">Voltar</button>
+                <button type="submit" class="btn-cadastrar">Fazer Cadastro</button>
+            </div>
+        </form>
+    </main>
+
+    <footer>
+        <div class="footer-left">
+            <img src="../img/p.png" alt="Logo P">
+        </div>
+        
+        <div class="footer-center">
+            <h3>@Instituto PetFlix</h3>
+        </div>
+
+        <div class="footer
