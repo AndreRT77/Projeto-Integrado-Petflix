@@ -1,0 +1,589 @@
+document.addEventListener('DOMContentLoaded', () => {
+    
+    const styles = `
+        :root{
+            --primary-color: #2C2C2C;
+            --secondary-color: #ACDEAA;  
+        }
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        html {
+            height: 100%;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #ffffff;
+        }
+        header {
+            background-color: var(--primary-color);
+            display: flex;
+            flex-direction: column;
+        }
+        header .cabeçalho{
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            justify-content: space-between;
+            padding: 10px;
+            align-items: center;
+        }
+        .logo-container {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 100vh;
+            background-color: var(--primary-color);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            gap: 25px;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+            z-index: 1000;
+        }
+
+        #close-menu {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .menu.active {
+            transform: translateX(0);
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .menu-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .search-container {
+            display: flex;
+            position: relative;
+            align-items: center;
+        }
+        #pesquisa {
+            display: none;
+        }
+        img#menu, #search, #seta{
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+        }
+        img#petflix{
+            width: 100px;
+            height: 46px;
+        }
+        header .navigation{
+            background-color: #565656;
+            width: 100%;
+            height: 25px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+        }
+        header a{
+            color: #ACDEAA;
+            font-size: 13px;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        header a:hover {
+            color: #ffffff;
+        }
+        main{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-grow: 1;
+            width: 100%;
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+        }
+        section.ad {
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        img#propaganda{
+            width: 100%;
+            height: 40vh;
+            min-height: 250px;
+            object-fit: cover;
+        }
+        section.ad .ad-content {
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        section.ad .ad-content h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        div.ad-content p {
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+        section.ad button {
+            background-color: #4D5B24;
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            position: absolute;
+            bottom: 10%;
+            left: 10%;
+            transition: background-color 0.3s ease;
+        }
+        section.ad button:hover {
+            background-color: #687d30;
+        }
+        section.sugestoes, section.parcerias {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+            gap: 15px;
+        }
+        section.sugestoes {
+            background-color: #F3F3F3;
+        }
+        section.parcerias {
+            background-color: #ffffff;
+        }
+        section h3 {
+            font-size: 1.5rem;
+            text-align: left;
+            padding: 0 20px;
+        }
+        div.cards {
+            display: flex;
+            flex-direction: row;
+            gap: 15px;
+            align-items: flex-start;
+            overflow-x: auto;
+            padding: 0 20px 10px 20px;
+        }
+        div.cardpet, div.cardong {
+            background-color: #ffffff;
+            min-width: 150px;
+            max-width: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        div.cardpet:hover, div.cardong:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        div.cardpet img, div.cardong img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        div.cardpet h3, div.cardong h3 {
+            margin: 10px 0 5px 0;
+            font-size: 1rem;
+        }
+        div.status{
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+        div.status img {
+            width: 20px;
+            height: 20px;
+        }
+        p{
+            font-size: 0.8rem;
+            color: #555;
+        }
+        footer {
+            background-color: var(--primary-color);
+            padding: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            gap: 15px;
+            width: 100%;
+        }
+        img#p{
+            height: 57px;
+        }
+        footer h3{
+            font-size: 1rem;
+        }
+        footer h3, footer p{
+            color: var(--secondary-color);
+        }
+        div.siteInfo{
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        div.siteInfo p {
+            color: var(--secondary-color);
+        }
+        div.info{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            justify-content: center;
+        }
+        div.info img {
+            width: 16px;
+            height: 16px;
+        }
+        div.siteInfo > p {
+            margin: 0;
+            line-height: 1;
+        }
+
+        @media screen and (min-width: 768px) {
+            header .cabeçalho {
+                padding: 10px 20px;
+            }
+            section.ad .ad-content {
+                top: 20%;
+                left: 10%;
+            }
+            section.ad .ad-content h1 {
+                font-size: 2rem;
+            }
+            div.ad-content p {
+                font-size: 1rem;
+            }
+            section.ad button {
+                bottom: 20%;
+                left: 10%;
+            }
+            section h3 {
+                padding: 0 20px;
+            }
+            section.ad .ad-content {
+                left: 5%;
+            }
+            div.cards {
+                overflow-x: visible;
+                flex-wrap: wrap;
+                padding: 0 20px 10px 20px;
+                justify-content: center;
+            }
+            div.cardpet, div.cardong {
+                flex-grow: 1;
+                max-width: calc(50% - 10px);
+            }
+            #seta {
+                margin-left: 5px;
+            }
+            div.info{
+                justify-content: flex-start;
+            }
+            .footer-content {
+                align-items: flex-start;
+                text-align: left;
+            }
+            div.siteInfo > p {
+                padding-left: 24px;
+                margin-top: -5px;
+            }
+        }
+
+        @media screen and (min-width: 1024px) {
+            header .cabeçalho {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 10px 20px;
+            }
+            #pesquisa {
+                display: block;
+                width: 300px;
+                height: 35px;
+                padding: 0 40px 0 15px;
+                border-radius: 20px;
+                border: none;
+                background-color: #4D5B24;
+                color: #fff;
+            }
+            #pesquisa::placeholder {
+                color: #c7d1ab;
+            }
+            #search {
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+            header .navigation {
+                height: 35px;
+            }
+            header a {
+                font-size: 1rem;
+            }
+            section.ad .ad-content {
+                top: 25%;
+                left: 15%;
+            }
+            section.ad .ad-content h1 {
+                font-size: 2.5rem;
+            }
+            div.ad-content p {
+                font-size: 1.2rem;
+            }
+            section.ad button {
+                bottom: 25%;
+                left: 15%;
+            }
+            section.ad .ad-content {
+                left: 10%;
+            }
+            section h3 {
+                padding: 0 20px;
+            }
+            div.cards {
+                overflow-x: visible;
+                gap: 20px;
+                padding: 0 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            div.cardpet, div.cardong {
+                min-width: 0;
+                flex-grow: 1;
+                max-width: calc(33.333% - (40px / 3));
+            }
+            #seta {
+                display: none;
+            }
+            footer .footer-content {
+                flex-direction: row;
+                justify-content: space-around;
+                text-align: left;
+                max-width: 1200px;
+                padding: 0 20px;
+            }
+            div.siteInfo{
+                text-align: left;
+            }
+            div.info{
+                justify-content: flex-start;
+            }
+            div.siteInfo > p {
+                padding-left: 24px;
+                margin-top: -5px;
+            }
+        }
+    `;
+    const styleSheet = document.createElement("style");
+    styleSheet.innerText = styles;
+    document.head.appendChild(styleSheet);
+
+    
+    const bodyContent = `
+        <div class="menu-overlay"></div>
+        <header>
+            <div class="cabeçalho">
+                <a href=""><img src="../img/Menu.svg" id="menu"></a>
+                <div class="menu">
+                    <a href="#" id="close-menu"><img src="../img/close.svg" alt="Fechar Menu"></a>
+                    <a href="../perfil/index.html"><img src="../img/icone.svg" alt="Ícone de conta"></a>
+                    <a href="../anunciados/index.html"><img src="../img/Pets.svg" alt="Ícone de pets"></a>
+                    <a href="../favoritos/index.html"><img src="../img/favorito.svg" alt="Ícone de favoritos"></a>
+                    <a href="../login/index.html"><img src="../img/sair.svg" alt="Ícone de sair"></a>
+                </div>
+                <div class="logo-container">
+                    <a href="./index.html"><img src="../img/petflix.svg" id="petflix"></a>
+                </div>
+                <div class="search-container">
+                    <input type="search" name="search" id="pesquisa" placeholder="Busque seu futuro pet :)">
+                    <img src="../img/Search.svg" id="search">
+                </div>
+            </div>
+            <div class="navigation">
+                <a href="../principal/index.html" class="active">Adote</a>
+                <a href="../ONGs/index.html">ONGs</a>
+                <a href="../unidades/index.html">Unidades</a>
+                <a href="../cadastroPet/index.html">Anuncie</a>
+            </div>
+        </header>
+        <main>
+            <section class="ad">
+                <img src="../img/criando novos.svg" id="propaganda">
+                <div class="ad-content">
+                    <h1>Criando novos lares</h1>
+                    <p>Dê uma chance para os pets amarem um lar novamente</p>
+                </div>
+                <button type="button">ADOTE HOJE!</button>
+            </section>
+
+            <div class="container">
+                <section class="sugestoes">
+                    <h3>Principais sugestões</h3>
+                    <div class="cards">
+                        <div class="cardpet">
+                            <img src="../img/jimmy.svg" alt="">
+                            <h3>Jimmy</h3>
+                            <p>Chinchila Lanigera
+                                1 ano de idade
+                                Dócil, brincalhão e tímido</p>
+                            <div class="status">
+                                <p>Status: Disponivel</p>
+                                <img src="../img/like.svg" alt="">
+                            </div>
+                        </div>
+                        <div class="cardpet">
+                            <img src="../img/jimmy.svg" alt="">
+                            <h3>Jimmy</h3>
+                            <p>Chinchila Lanigera
+                                1 ano de idade
+                                Dócil, brincalhão e tímido</p>
+                            <div class="status">
+                                <p>Status: Disponivel</p>
+                                <img src="../img/like.svg" alt="">
+                            </div>
+                        </div>
+                        <div class="cardpet">
+                            <img src="../img/jimmy.svg" alt="">
+                            <h3>Jimmy</h3>
+                            <p>Chinchila Lanigera
+                                1 ano de idade
+                                Dócil, brincalhão e tímido</p>
+                            <div class="status">
+                                <p>Status: Disponivel</p>
+                                <img src="../img/like.svg" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="parcerias">
+                    <h3>Parcerias</h3>
+                    <div class="cards">
+                        <div class="cardong">
+                            <img src="../img/caramelo.svg" alt="">
+                            <h3>Instituto Caramelo</h3>
+                            <p>O Instituto Caramelo é uma ONG brasileira sem fins lucrativos de proteção animal e meio ambiente, que atua principalmente no resgate de animais feridos ou em situação de risco, recuperação e adoção.</p>
+                        </div>
+                        <div class="cardong">
+                            <img src="../img/caramelo.svg" alt="">
+                            <h3>Instituto Caramelo</h3>
+                            <p>O Instituto Caramelo é uma ONG brasileira sem fins lucrativos de proteção animal e meio ambiente, que atua principalmente no resgate de animais feridos ou em situação de risco, recuperação e adoção.</p>
+                        </div>
+                        <div class="cardong">
+                            <img src="../img/caramelo.svg" alt="">
+                            <h3>Instituto Caramelo</h3>
+                            <p>O Instituto Caramelo é uma ONG brasileira sem fins lucrativos de proteção animal e meio ambiente, que atua principalmente no resgate de animais feridos ou em situação de risco, recuperação e adoção.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+        <footer>
+            <div class="footer-content">
+                <img src="../img/p_petflix.svg" id="p">
+                <h3>@Instituto PetFlix</h3>
+                <div class="siteInfo">
+                    <div class="info">
+                        <img src="../img/Email.svg" id="email">
+                        <p>InstitutoPetFlix@gmail.com</p>
+                    </div>
+                    <div class="info">
+                        <img src="../img/Phone.svg" id="phone">
+                        <p>+55 (11) 97358 - 0002</p>
+                    </div>
+                    <div class="info">
+                        <img src="../img/Place.svg" id="place">
+                        <p>Rua Zumbi dos Palmares,</p>
+                    </div>
+                    <p>47, Madureira,</p> <p>Rio de Janeiro</p>
+                </div>
+            </div>
+        </footer>
+    `;
+    document.body.innerHTML = bodyContent;
+
+    
+    const menuIcon = document.getElementById('menu');
+    const closeIcon = document.getElementById('close-menu');
+    const menuDropdown = document.querySelector('.menu');
+    const overlay = document.querySelector('.menu-overlay');
+
+    const openMenu = () => {
+        menuDropdown.classList.add('active');
+        overlay.classList.add('active');
+    };
+
+    const closeMenu = () => {
+        menuDropdown.classList.remove('active');
+        overlay.classList.remove('active');
+    };
+
+    if (menuIcon && menuDropdown && overlay && closeIcon) {
+        menuIcon.addEventListener('click', (event) => {
+            event.preventDefault();
+            openMenu();
+        });
+        closeIcon.addEventListener('click', (e) => { 
+            e.preventDefault(); 
+            closeMenu(); 
+        });
+        overlay.addEventListener('click', closeMenu);
+    }
+});
