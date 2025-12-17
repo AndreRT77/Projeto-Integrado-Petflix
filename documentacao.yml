@@ -1,0 +1,448 @@
+openapi: 3.0.3
+info:
+  title: Petflix - API de Adoção de Pets
+  description: |-
+    API completa para o projeto Petflix, gerenciando ONGs, pets, doadores e o processo de adoção.
+    Este documento descreve todos os endpoints disponíveis no backend.
+  contact:
+    email: api-support@petflix.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/v1/petflix
+    description: Servidor de Desenvolvimento Local
+tags:
+  - name: Autenticação
+    description: Operações de login e gerenciamento de sessão
+  - name: ONGs
+    description: Gerenciamento de Organizações Não Governamentais
+  - name: Pets
+    description: Gerenciamento de pets para adoção
+  - name: Doadores
+    description: Gerenciamento de usuários/doadores
+  - name: Interesse
+    description: Operações relacionadas ao interesse em adotar um pet
+  - name: Relatórios
+    description: Endpoints para dados agregados e estatísticas
+
+paths:
+  /login:
+    post:
+      tags:
+        - Autenticação
+      summary: Autentica um usuário
+      description: Recebe email e senha e retorna um token JWT em caso de sucesso.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Autenticação bem-sucedida.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          description: Dados de entrada inválidos (email ou senha faltando).
+        '401':
+          description: Credenciais inválidas.
+
+  /ongs:
+    get:
+      tags:
+        - ONGs
+      summary: Lista todas as ONGs
+      description: Retorna uma lista de todas as ONGs cadastradas.
+      responses:
+        '200':
+          description: Lista de ONGs retornada com sucesso.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ong'
+    post:
+      tags:
+        - ONGs
+      summary: Cria uma nova ONG
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OngCreate'
+      responses:
+        '201':
+          description: ONG criada com sucesso.
+        '400':
+          description: Dados de entrada inválidos.
+        '401':
+          description: Não autorizado.
+        '409':
+          description: Conflito (email ou CNPJ já existem).
+
+  /ongs/{id}:
+    get:
+      tags:
+        - ONGs
+      summary: Busca uma ONG pelo ID
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      responses:
+        '200':
+          description: ONG encontrada.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ong'
+        '404':
+          description: ONG não encontrada.
+    put:
+      tags:
+        - ONGs
+      summary: Atualiza uma ONG existente
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OngUpdate'
+      responses:
+        '200':
+          description: ONG atualizada com sucesso.
+        '400':
+          description: Dados de entrada inválidos.
+        '404':
+          description: ONG não encontrada.
+    delete:
+      tags:
+        - ONGs
+      summary: Deleta uma ONG
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      responses:
+        '200':
+          description: ONG deletada com sucesso.
+        '404':
+          description: ONG não encontrada.
+
+  /pets:
+    get:
+      tags:
+        - Pets
+      summary: Lista todos os pets
+      responses:
+        '200':
+          description: Lista de pets retornada com sucesso.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+    post:
+      tags:
+        - Pets
+      summary: Adiciona um novo pet
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PetCreate'
+      responses:
+        '201':
+          description: Pet criado com sucesso.
+        '400':
+          description: Dados de entrada inválidos.
+
+  /pets/{id}:
+    get:
+      tags:
+        - Pets
+      summary: Busca um pet pelo ID
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      responses:
+        '200':
+          description: Pet encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+        '404':
+          description: Pet não encontrado.
+    put:
+      tags:
+        - Pets
+      summary: Atualiza um pet existente
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PetUpdate'
+      responses:
+        '200':
+          description: Pet atualizado com sucesso.
+        '404':
+          description: Pet não encontrado.
+    delete:
+      tags:
+        - Pets
+      summary: Deleta um pet
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      responses:
+        '200':
+          description: Pet deletado com sucesso.
+        '404':
+          description: Pet não encontrado.
+
+  /pets/{id_pet}/interesse:
+    post:
+      tags:
+        - Interesse
+      summary: Registra interesse em um pet
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id_pet
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InteresseCreate'
+      responses:
+        '201':
+          description: Interesse registrado com sucesso.
+        '404':
+          description: Pet não encontrado.
+        '409':
+          description: Interesse já registrado por este usuário.
+    get:
+      tags:
+        - Interesse
+      summary: Lista os interessados em um pet
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id_pet
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de interesses.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InteresseAdocao'
+        '404':
+          description: Pet não encontrado.
+
+  /ongs/{id_ong}/estatisticas:
+    get:
+      tags:
+        - Relatórios
+      summary: Gera estatísticas para uma ONG
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id_ong
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Estatísticas da ONG.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OngStats'
+        '404':
+          description: ONG não encontrada.
+
+components:
+  parameters:
+    IdPath:
+      name: id
+      in: path
+      required: true
+      description: ID do recurso a ser operado.
+      schema:
+        type: integer
+        format: int64
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    LoginRequest:
+      type: object
+      required: [email, senha]
+      properties:
+        email:
+          type: string
+          format: email
+        senha:
+          type: string
+          format: password
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Token JWT para ser usado em requisições autenticadas.
+    
+    Ong:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        email:
+          type: string
+          format: email
+        cnpj:
+          type: string
+    OngCreate:
+      type: object
+      required: [nome, email, cnpj]
+      properties:
+        nome:
+          type: string
+        email:
+          type: string
+          format: email
+        cnpj:
+          type: string
+    OngUpdate:
+      type: object
+      properties:
+        nome:
+          type: string
+        email:
+          type: string
+          format: email
+        cnpj:
+          type: string
+
+    Pet:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        idade:
+          type: integer
+        genero:
+          type: string
+        disponibilidade:
+          type: boolean
+        id_ong:
+          type: integer
+    PetCreate:
+      type: object
+      required: [nome, idade, genero, id_ong]
+      properties:
+        nome:
+          type: string
+        idade:
+          type: integer
+        genero:
+          type: string
+        id_ong:
+          type: integer
+    PetUpdate:
+      type: object
+      properties:
+        nome:
+          type: string
+        idade:
+          type: integer
+        genero:
+          type: string
+        disponibilidade:
+          type: boolean
+        id_ong:
+          type: integer
+
+    Doador:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        email:
+          type: string
+          format: email
+        celular:
+          type: string
+
+    InteresseCreate:
+      type: object
+      properties:
+        mensagem:
+          type: string
+          description: Mensagem opcional do interessado.
+    InteresseAdocao:
+      type: object
+      properties:
+        data_interesse:
+          type: string
+          format: date-time
+        status:
+          type: string
+        mensagem:
+          type: string
+        doador:
+          $ref: '#/components/schemas/Doador'
+    
+    OngStats:
+      type: object
+      properties:
+        total_pets:
+          type: integer
+        pets_disponiveis:
+          type: integer
+        pets_adotados:
+          type: integer
+        total_doadores_unicos:
+          type: integer

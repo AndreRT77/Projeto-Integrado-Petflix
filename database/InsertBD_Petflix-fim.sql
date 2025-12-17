@@ -1,3 +1,8 @@
+-- INSERTS 
+
+INSERT INTO tbl_usuário (nome, cpf, contato, email, data_nascimento, lista_de_interesse, preferencias) VALUES 
+('Beatriz Mendes', '111.222.333-44', '11955554444', 'bia.mendes@email.com', '1995-05-20', 'Cães médios', 'Animais agitados');
+
 INSERT INTO tbl_responsavel_pet (nome, cpf, contato, email) VALUES 
 ('Ana Souza', '123.456.789-00', '11999998888', 'ana.souza@email.com'),     -- ID 1
 ('Carlos Lima', '987.654.321-11', '11988887777', 'carlos.lima@email.com'); -- ID 2
@@ -27,6 +32,8 @@ VALUES ('Husky Siberiano', 15, 'Saudável', 27, 'Grande', 'Carregar trenó, fica
 
 INSERT INTO tbl_pet (nome, idade, sexo, tamanho, status_adocao, nacionalidade, descricao, midia, id_especie, id_responsavel_pet, id_abrigo)
 VALUES ('Aenocyon', 3, 'Macho', 60, 'Disponível', 'Brasil', 'Amigável e agitado', 'https://www.petz.com.br/blog/wp-content/uploads/2023/07/husky-siberiano-e-bravo.jpg', 1, 1, 1 );
+INSERT INTO tbl_pet (nome, idade, sexo, tamanho, status_adocao, nacionalidade, descricao, midia, id_especie, id_responsavel_pet, id_abrigo)
+VALUES ('Cleito', 2, 'Macho', 40, 'Disponível', 'Brasil', 'Inteligente, antipático e reservado', 'https://upload.wikimedia.org/wikipedia/commons/9/9b/Photograph_of_Socks_the_Cat-_07-13-1994_%286461517483%29.jpg', 8, 4, 4 );
 
 INSERT INTO tbl_endereco_abrigo (logradouro, numero, bairro, cidade, uf, cep, id_abrigo)
 VALUES (' R Benedito Pereira Leite', 14,'Centro', 'Jandira', 'SP', '06600055', 1);
@@ -41,8 +48,16 @@ INSERT INTO tbl_endereco_tutor_interessado (logradouro, numero, bairro, cidade, 
 VALUES ('Rua Serra de Bragança', 391,'Vila Gomes Cardim', 'São Paulo', 'SP', '03318000', 1);
 
 INSERT INTO tbl_pedido_adocao (status_processo, informacoes, data_pedido, id_tutor_interessado, id_responsavel_pet, id_pet)
-VALUES ('Aprovado', 'Cachorro adotado', 20/11/2025, 1, 1, 1);
+VALUES ('Em análise', 'Cachorro adotado', 20/11/2025, 4, 4, 16);
 
 INSERT INTO tbl_historico_adocao (pet, informacoes, data_adocao, observacoes, id_tutor_interessado)
-VALUES ('Lunos', 'Corvo adotado', 07/09/2017, 'Está até hoje com a Ave', 1)
+VALUES ('Lunos', 'Corvo adotado', 07/09/2017, 'Está até hoje com a Ave', 1);
 
+INSERT INTO tbl_pedido_adocao (status_processo, informacoes, data_pedido, id_tutor_interessado, id_responsavel_pet, id_pet )
+VALUES ('Em análise', 'Pedido para adoção do gato Ludwig', 09/12/2025, 2, 2, 17)
+
+UPDATE tbl_pedido_adocao
+SET status_processo = 'Aprovado',
+    informacoes = 'O pedido foi aprovado com sucesso',
+    data_pedido = current_date()
+    WHERE  id = 11
