@@ -1,448 +1,498 @@
-openapi: 3.0.3
-info:
-  title: Petflix - API de Adoção de Pets
-  description: |-
-    API completa para o projeto Petflix, gerenciando ONGs, pets, doadores e o processo de adoção.
-    Este documento descreve todos os endpoints disponíveis no backend.
-  contact:
-    email: api-support@petflix.com
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 1.0.0
-servers:
-  - url: http://localhost:8080/v1/petflix
-    description: Servidor de Desenvolvimento Local
-tags:
-  - name: Autenticação
-    description: Operações de login e gerenciamento de sessão
-  - name: ONGs
-    description: Gerenciamento de Organizações Não Governamentais
-  - name: Pets
-    description: Gerenciamento de pets para adoção
-  - name: Doadores
-    description: Gerenciamento de usuários/doadores
-  - name: Interesse
-    description: Operações relacionadas ao interesse em adotar um pet
-  - name: Relatórios
-    description: Endpoints para dados agregados e estatísticas
-
-paths:
-  /login:
-    post:
-      tags:
-        - Autenticação
-      summary: Autentica um usuário
-      description: Recebe email e senha e retorna um token JWT em caso de sucesso.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/LoginRequest'
-      responses:
-        '200':
-          description: Autenticação bem-sucedida.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LoginResponse'
-        '400':
-          description: Dados de entrada inválidos (email ou senha faltando).
-        '401':
-          description: Credenciais inválidas.
-
-  /ongs:
-    get:
-      tags:
-        - ONGs
-      summary: Lista todas as ONGs
-      description: Retorna uma lista de todas as ONGs cadastradas.
-      responses:
-        '200':
-          description: Lista de ONGs retornada com sucesso.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Ong'
-    post:
-      tags:
-        - ONGs
-      summary: Cria uma nova ONG
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/OngCreate'
-      responses:
-        '201':
-          description: ONG criada com sucesso.
-        '400':
-          description: Dados de entrada inválidos.
-        '401':
-          description: Não autorizado.
-        '409':
-          description: Conflito (email ou CNPJ já existem).
-
-  /ongs/{id}:
-    get:
-      tags:
-        - ONGs
-      summary: Busca uma ONG pelo ID
-      parameters:
-        - $ref: '#/components/parameters/IdPath'
-      responses:
-        '200':
-          description: ONG encontrada.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Ong'
-        '404':
-          description: ONG não encontrada.
-    put:
-      tags:
-        - ONGs
-      summary: Atualiza uma ONG existente
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '#/components/parameters/IdPath'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/OngUpdate'
-      responses:
-        '200':
-          description: ONG atualizada com sucesso.
-        '400':
-          description: Dados de entrada inválidos.
-        '404':
-          description: ONG não encontrada.
-    delete:
-      tags:
-        - ONGs
-      summary: Deleta uma ONG
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '#/components/parameters/IdPath'
-      responses:
-        '200':
-          description: ONG deletada com sucesso.
-        '404':
-          description: ONG não encontrada.
-
-  /pets:
-    get:
-      tags:
-        - Pets
-      summary: Lista todos os pets
-      responses:
-        '200':
-          description: Lista de pets retornada com sucesso.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Pet'
-    post:
-      tags:
-        - Pets
-      summary: Adiciona um novo pet
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PetCreate'
-      responses:
-        '201':
-          description: Pet criado com sucesso.
-        '400':
-          description: Dados de entrada inválidos.
-
-  /pets/{id}:
-    get:
-      tags:
-        - Pets
-      summary: Busca um pet pelo ID
-      parameters:
-        - $ref: '#/components/parameters/IdPath'
-      responses:
-        '200':
-          description: Pet encontrado.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-        '404':
-          description: Pet não encontrado.
-    put:
-      tags:
-        - Pets
-      summary: Atualiza um pet existente
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '#/components/parameters/IdPath'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PetUpdate'
-      responses:
-        '200':
-          description: Pet atualizado com sucesso.
-        '404':
-          description: Pet não encontrado.
-    delete:
-      tags:
-        - Pets
-      summary: Deleta um pet
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '#/components/parameters/IdPath'
-      responses:
-        '200':
-          description: Pet deletado com sucesso.
-        '404':
-          description: Pet não encontrado.
-
-  /pets/{id_pet}/interesse:
-    post:
-      tags:
-        - Interesse
-      summary: Registra interesse em um pet
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: id_pet
-          in: path
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/InteresseCreate'
-      responses:
-        '201':
-          description: Interesse registrado com sucesso.
-        '404':
-          description: Pet não encontrado.
-        '409':
-          description: Interesse já registrado por este usuário.
-    get:
-      tags:
-        - Interesse
-      summary: Lista os interessados em um pet
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: id_pet
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Lista de interesses.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/InteresseAdocao'
-        '404':
-          description: Pet não encontrado.
-
-  /ongs/{id_ong}/estatisticas:
-    get:
-      tags:
-        - Relatórios
-      summary: Gera estatísticas para uma ONG
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: id_ong
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Estatísticas da ONG.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OngStats'
-        '404':
-          description: ONG não encontrada.
-
-components:
-  parameters:
-    IdPath:
-      name: id
-      in: path
-      required: true
-      description: ID do recurso a ser operado.
-      schema:
-        type: integer
-        format: int64
-
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-
-  schemas:
-    LoginRequest:
-      type: object
-      required: [email, senha]
-      properties:
-        email:
-          type: string
-          format: email
-        senha:
-          type: string
-          format: password
-    LoginResponse:
-      type: object
-      properties:
-        token:
-          type: string
-          description: Token JWT para ser usado em requisições autenticadas.
-    
-    Ong:
-      type: object
-      properties:
-        id:
-          type: integer
-        nome:
-          type: string
-        email:
-          type: string
-          format: email
-        cnpj:
-          type: string
-    OngCreate:
-      type: object
-      required: [nome, email, cnpj]
-      properties:
-        nome:
-          type: string
-        email:
-          type: string
-          format: email
-        cnpj:
-          type: string
-    OngUpdate:
-      type: object
-      properties:
-        nome:
-          type: string
-        email:
-          type: string
-          format: email
-        cnpj:
-          type: string
-
-    Pet:
-      type: object
-      properties:
-        id:
-          type: integer
-        nome:
-          type: string
-        idade:
-          type: integer
-        genero:
-          type: string
-        disponibilidade:
-          type: boolean
-        id_ong:
-          type: integer
-    PetCreate:
-      type: object
-      required: [nome, idade, genero, id_ong]
-      properties:
-        nome:
-          type: string
-        idade:
-          type: integer
-        genero:
-          type: string
-        id_ong:
-          type: integer
-    PetUpdate:
-      type: object
-      properties:
-        nome:
-          type: string
-        idade:
-          type: integer
-        genero:
-          type: string
-        disponibilidade:
-          type: boolean
-        id_ong:
-          type: integer
-
-    Doador:
-      type: object
-      properties:
-        id:
-          type: integer
-        nome:
-          type: string
-        email:
-          type: string
-          format: email
-        celular:
-          type: string
-
-    InteresseCreate:
-      type: object
-      properties:
-        mensagem:
-          type: string
-          description: Mensagem opcional do interessado.
-    InteresseAdocao:
-      type: object
-      properties:
-        data_interesse:
-          type: string
-          format: date-time
-        status:
-          type: string
-        mensagem:
-          type: string
-        doador:
-          $ref: '#/components/schemas/Doador'
-    
-    OngStats:
-      type: object
-      properties:
-        total_pets:
-          type: integer
-        pets_disponiveis:
-          type: integer
-        pets_adotados:
-          type: integer
-        total_doadores_unicos:
-          type: integer
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "API Petflix - Adoção de Pets",
+    "description": "API completa para gerenciar o ecossistema de adoção de pets, incluindo abrigos, ONGs, tutores, pets, raças, espécies e processos de adoção.",
+    "contact": {
+      "name": "João Pedro Teodoro Nunes Correia"
+    }
+  },
+  "host": "localhost:8080",
+  "basePath": "/v1/petflix",
+  "tags": [
+    { "name": "Pet", "description": "CRUD completo para Pets" },
+    { "name": "ResponsavelPet", "description": "CRUD completo para Responsáveis de pets" },
+    { "name": "TutorInteressado", "description": "CRUD completo para Tutores Interessados" },
+    { "name": "Abrigo", "description": "CRUD completo para Abrigos" },
+    { "name": "ONG", "description": "CRUD completo para ONGs" },
+    { "name": "Especie", "description": "CRUD completo para Espécies" },
+    { "name": "Raca", "description": "CRUD completo para Raças" },
+    { "name": "PedidoAdocao", "description": "CRUD completo para Pedidos de Adoção" },
+    { "name": "HistoricoAdocao", "description": "CRUD completo para Histórico de Adoções" },
+    { "name": "ParceriaAbrigoONG", "description": "CRUD completo para Parcerias entre Abrigos e ONGs" }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/pet": {
+      "get": {
+        "tags": ["Pet"],
+        "summary": "Listar todos os pets",
+        "responses": { "200": { "description": "Lista de pets", "schema": { "type": "array", "items": { "$ref": "#/definitions/PetCompleto" } } } }
+      },
+      "post": {
+        "tags": ["Pet"],
+        "summary": "Cadastrar um novo pet",
+        "parameters": [{ "in": "body", "name": "body", "required": true, "schema": { "$ref": "#/definitions/Pet" } }],
+        "responses": { "201": { "description": "Pet criado", "schema": { "$ref": "#/definitions/PetCompleto" } } }
+      }
+    },
+    "/pet/{id}": {
+      "get": {
+        "tags": ["Pet"],
+        "summary": "Buscar pet por ID",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "integer" }],
+        "responses": { "200": { "description": "Dados do pet", "schema": { "$ref": "#/definitions/PetCompleto" } }, "404": { "description": "Pet não encontrado" } }
+      },
+      "put": {
+        "tags": ["Pet"],
+        "summary": "Atualizar um pet",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "integer" }, { "in": "body", "name": "body", "required": true, "schema": { "$ref": "#/definitions/Pet" } }],
+        "responses": { "200": { "description": "Pet atualizado", "schema": { "$ref": "#/definitions/PetCompleto" } }, "404": { "description": "Pet não encontrado" } }
+      },
+      "delete": {
+        "tags": ["Pet"],
+        "summary": "Deletar um pet",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "integer" }],
+        "responses": { "204": { "description": "Pet deletado" }, "404": { "description": "Pet não encontrado" } }
+      }
+    },
+    "/responsavel": {
+      "get": {
+        "tags": ["ResponsavelPet"],
+        "summary": "Listar todos os responsáveis",
+        "responses": { "200": { "description": "Lista de responsáveis", "schema": { "type": "array", "items": { "$ref": "#/definitions/ResponsavelPet" } } } }
+      },
+      "post": {
+        "tags": ["ResponsavelPet"],
+        "summary": "Cadastrar um novo responsável",
+        "parameters": [{ "in": "body", "name": "body", "required": true, "schema": { "$ref": "#/definitions/ResponsavelPet" } }],
+        "responses": { "201": { "description": "Responsável criado", "schema": { "$ref": "#/definitions/ResponsavelPet" } } }
+      }
+    },
+    "/responsavel/{id}": {
+      "get": {
+        "tags": ["ResponsavelPet"],
+        "summary": "Buscar responsável por ID",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "integer" }],
+        "responses": { "200": { "description": "Dados do responsável", "schema": { "$ref": "#/definitions/ResponsavelPet" } }, "404": { "description": "Responsável não encontrado" } }
+      },
+      "put": {
+        "tags": ["ResponsavelPet"],
+        "summary": "Atualizar um responsável",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "integer" }, { "in": "body", "name": "body", "required": true, "schema": { "$ref": "#/definitions/ResponsavelPet" } }],
+        "responses": { "200": { "description": "Responsável atualizado", "schema": { "$ref": "#/definitions/ResponsavelPet" } }, "404": { "description": "Responsável não encontrado" } }
+      },
+      "delete": {
+        "tags": ["ResponsavelPet"],
+        "summary": "Deletar um responsável",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "integer" }],
+        "responses": { "204": { "description": "Responsável deletado" }, "404": { "description": "Responsável não encontrado" } }
+      }
+    },
+    "/tutor": {
+      "get": {
+        "tags": ["TutorInteressado"],
+        "summary": "Listar todos os tutores",
+        "responses": { "200": { "description": "Lista de tutores", "schema": { "type": "array", "items": { "$ref": "#/definitions/TutorInteressado" } } } }
+      },
+      "post": {
+        "tags": ["TutorInteressado"],
+        "summary": "Cadastrar um novo tutor",
+        "parameters": [{ "in": "body", "name": "body", "required": true, "schema": { "$ref": "#/definitions/TutorInteressado" } }],
+        "responses": { "201": { "description": "Tutor criado", "schema": { "$ref": "#/definitions/TutorInteressado" } } }
+      }
+    },
+    "/tutor/{id}": {
+      "get": {
+        "tags": ["TutorInteressado"],
+        "summary": "Buscar tutor por ID",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "integer" }],
+        "responses": { "200": { "description": "Dados do tutor", "schema": { "$ref": "#/definitions/TutorInteressado" } }, "404": { "description": "Tutor não encontrado" } }
+      },
+      "put": {
+        "tags": ["TutorInteressado"],
+        "summary": "Atualizar um tutor",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "integer" }, { "in": "body", "name": "body", "required": true, "schema": { "$ref": "#/definitions/TutorInteressado" } }],
+        "responses": { "200": { "description": "Tutor atualizado", "schema": { "$ref": "#/definitions/TutorInteressado" } }, "404": { "description": "Tutor não encontrado" } }
+      },
+      "delete": {
+        "tags": ["TutorInteressado"],
+        "summary": "Deletar um tutor",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "integer" }],
+        "responses": { "204": { "description": "Tutor deletado" }, "404": { "description": "Tutor não encontrado" } }
+      }
+    },
+    "/abrigo": {
+      "get": {
+        "tags": ["Abrigo"],
+        "summary": "Listar todos os abrigos",
+        "responses": { "200": { "description": "Lista de abrigos", "schema": { "type": "array", "items": { "$ref": "#/definitions/AbrigoCompleto" } } } }
+      },
+      "post": {
+        "tags": ["Abrigo"],
+        "summary": "Cadastrar um novo abrigo (com endereço)",
+        "parameters": [{ "in": "body", "name": "body", "required": true, "schema": { "$ref": "#/definitions/AbrigoPost" } }],
+        "responses": { "201": { "description": "Abrigo criado", "schema": { "$ref": "#/definitions/AbrigoCompleto" } } }
+      }
+    },
+    "/abrigo/{id}": {
+      "get": {
+        "tags": ["Abrigo"],
+        "summary": "Buscar abrigo por ID",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "integer" }],
+        "responses": { "200": { "description": "Dados do abrigo", "schema": { "$ref": "#/definitions/AbrigoCompleto" } }, "404": { "description": "Abrigo não encontrado" } }
+      },
+      "put": {
+        "tags": ["Abrigo"],
+        "summary": "Atualizar um abrigo (com endereço)",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "integer" }, { "in": "body", "name": "body", "required": true, "schema": { "$ref": "#/definitions/AbrigoPost" } }],
+        "responses": { "200": { "description": "Abrigo atualizado", "schema": { "$ref": "#/definitions/AbrigoCompleto" } }, "404": { "description": "Abrigo não encontrado" } }
+      },
+      "delete": {
+        "tags": ["Abrigo"],
+        "summary": "Deletar um abrigo",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "integer" }],
+        "responses": { "204": { "description": "Abrigo deletado" }, "404": { "description": "Abrigo não encontrado" } }
+      }
+    },
+    "/ong": {
+      "get": {
+        "tags": ["ONG"],
+        "summary": "Listar todas as ONGs",
+        "responses": { "200": { "description": "Lista de ONGs", "schema": { "type": "array", "items": { "$ref": "#/definitions/ONGCompleto" } } } }
+      },
+      "post": {
+        "tags": ["ONG"],
+        "summary": "Cadastrar uma nova ONG (com endereço)",
+        "parameters": [{ "in": "body", "name": "body", "required": true, "schema": { "$ref": "#/definitions/ONGPost" } }],
+        "responses": { "201": { "description": "ONG criada", "schema": { "$ref": "#/definitions/ONGCompleto" } } }
+      }
+    },
+    "/ong/{id}": {
+      "get": {
+        "tags": ["ONG"],
+        "summary": "Buscar ONG por ID",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "integer" }],
+        "responses": { "200": { "description": "Dados da ONG", "schema": { "$ref": "#/definitions/ONGCompleto" } }, "404": { "description": "ONG não encontrada" } }
+      },
+      "put": {
+        "tags": ["ONG"],
+        "summary": "Atualizar uma ONG (com endereço)",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "integer" }, { "in": "body", "name": "body", "required": true, "schema": { "$ref": "#/definitions/ONGPost" } }],
+        "responses": { "200": { "description": "ONG atualizada", "schema": { "$ref": "#/definitions/ONGCompleto" } }, "404": { "description": "ONG não encontrada" } }
+      },
+      "delete": {
+        "tags": ["ONG"],
+        "summary": "Deletar uma ONG",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "integer" }],
+        "responses": { "204": { "description": "ONG deletada" }, "404": { "description": "ONG não encontrada" } }
+      }
+    },
+    "/especie": {
+      "get": {
+        "tags": ["Especie"],
+        "summary": "Listar todas as espécies",
+        "responses": { "200": { "description": "Lista de espécies", "schema": { "type": "array", "items": { "$ref": "#/definitions/Especie" } } } }
+      },
+      "post": {
+        "tags": ["Especie"],
+        "summary": "Cadastrar uma nova espécie",
+        "parameters": [{ "in": "body", "name": "body", "required": true, "schema": { "$ref": "#/definitions/Especie" } }],
+        "responses": { "201": { "description": "Espécie criada", "schema": { "$ref": "#/definitions/Especie" } } }
+      }
+    },
+    "/especie/{id}": {
+      "get": {
+        "tags": ["Especie"],
+        "summary": "Buscar espécie por ID",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "integer" }],
+        "responses": { "200": { "description": "Dados da espécie", "schema": { "$ref": "#/definitions/Especie" } }, "404": { "description": "Espécie não encontrada" } }
+      },
+      "put": {
+        "tags": ["Especie"],
+        "summary": "Atualizar uma espécie",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "integer" }, { "in": "body", "name": "body", "required": true, "schema": { "$ref": "#/definitions/Especie" } }],
+        "responses": { "200": { "description": "Espécie atualizada", "schema": { "$ref": "#/definitions/Especie" } }, "404": { "description": "Espécie não encontrada" } }
+      },
+      "delete": {
+        "tags": ["Especie"],
+        "summary": "Deletar uma espécie",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "integer" }],
+        "responses": { "204": { "description": "Espécie deletada" }, "404": { "description": "Espécie não encontrada" } }
+      }
+    },
+    "/raca": {
+      "get": {
+        "tags": ["Raca"],
+        "summary": "Listar todas as raças",
+        "responses": { "200": { "description": "Lista de raças", "schema": { "type": "array", "items": { "$ref": "#/definitions/RacaCompleta" } } } }
+      },
+      "post": {
+        "tags": ["Raca"],
+        "summary": "Cadastrar uma nova raça",
+        "parameters": [{ "in": "body", "name": "body", "required": true, "schema": { "$ref": "#/definitions/Raca" } }],
+        "responses": { "201": { "description": "Raça criada", "schema": { "$ref": "#/definitions/RacaCompleta" } } }
+      }
+    },
+    "/raca/{id}": {
+      "get": {
+        "tags": ["Raca"],
+        "summary": "Buscar raça por ID",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "integer" }],
+        "responses": { "200": { "description": "Dados da raça", "schema": { "$ref": "#/definitions/RacaCompleta" } }, "404": { "description": "Raça não encontrada" } }
+      },
+      "put": {
+        "tags": ["Raca"],
+        "summary": "Atualizar uma raça",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "integer" }, { "in": "body", "name": "body", "required": true, "schema": { "$ref": "#/definitions/Raca" } }],
+        "responses": { "200": { "description": "Raça atualizada", "schema": { "$ref": "#/definitions/RacaCompleta" } }, "404": { "description": "Raça não encontrada" } }
+      },
+      "delete": {
+        "tags": ["Raca"],
+        "summary": "Deletar uma raça",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "integer" }],
+        "responses": { "204": { "description": "Raça deletada" }, "404": { "description": "Raça não encontrada" } }
+      }
+    },
+    "/pedido-adocao": {
+      "get": {
+        "tags": ["PedidoAdocao"],
+        "summary": "Listar todos os pedidos de adoção",
+        "responses": { "200": { "description": "Lista de pedidos", "schema": { "type": "array", "items": { "$ref": "#/definitions/PedidoAdocaoCompleto" } } } }
+      },
+      "post": {
+        "tags": ["PedidoAdocao"],
+        "summary": "Criar um novo pedido de adoção",
+        "parameters": [{ "in": "body", "name": "body", "required": true, "schema": { "$ref": "#/definitions/PedidoAdocao" } }],
+        "responses": { "201": { "description": "Pedido criado", "schema": { "$ref": "#/definitions/PedidoAdocaoCompleto" } } }
+      }
+    },
+    "/pedido-adocao/{id}": {
+      "get": {
+        "tags": ["PedidoAdocao"],
+        "summary": "Buscar pedido de adoção por ID",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "integer" }],
+        "responses": { "200": { "description": "Dados do pedido", "schema": { "$ref": "#/definitions/PedidoAdocaoCompleto" } }, "404": { "description": "Pedido não encontrado" } }
+      },
+      "put": {
+        "tags": ["PedidoAdocao"],
+        "summary": "Atualizar um pedido de adoção",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "integer" }, { "in": "body", "name": "body", "required": true, "schema": { "$ref": "#/definitions/PedidoAdocao" } }],
+        "responses": { "200": { "description": "Pedido atualizado", "schema": { "$ref": "#/definitions/PedidoAdocaoCompleto" } }, "404": { "description": "Pedido não encontrado" } }
+      },
+      "delete": {
+        "tags": ["PedidoAdocao"],
+        "summary": "Deletar um pedido de adoção",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "integer" }],
+        "responses": { "204": { "description": "Pedido deletado" }, "404": { "description": "Pedido não encontrado" } }
+      }
+    },
+    "/historico-adocao": {
+      "get": {
+        "tags": ["HistoricoAdocao"],
+        "summary": "Listar todo o histórico de adoções",
+        "responses": { "200": { "description": "Lista de históricos", "schema": { "type": "array", "items": { "$ref": "#/definitions/HistoricoAdocao" } } } }
+      }
+    },
+    "/parceria": {
+      "get": {
+        "tags": ["ParceriaAbrigoONG"],
+        "summary": "Listar todas as parcerias",
+        "responses": { "200": { "description": "Lista de parcerias", "schema": { "type": "array", "items": { "$ref": "#/definitions/ParceriaAbrigoONGCompleta" } } } }
+      },
+      "post": {
+        "tags": ["ParceriaAbrigoONG"],
+        "summary": "Criar uma nova parceria",
+        "parameters": [{ "in": "body", "name": "body", "required": true, "schema": { "$ref": "#/definitions/ParceriaAbrigoONG" } }],
+        "responses": { "201": { "description": "Parceria criada", "schema": { "$ref": "#/definitions/ParceriaAbrigoONGCompleta" } } }
+      }
+    },
+    "/parceria/{id}": {
+      "get": {
+        "tags": ["ParceriaAbrigoONG"],
+        "summary": "Buscar parceria por ID",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "integer" }],
+        "responses": { "200": { "description": "Dados da parceria", "schema": { "$ref": "#/definitions/ParceriaAbrigoONGCompleta" } }, "404": { "description": "Parceria não encontrada" } }
+      },
+      "put": {
+        "tags": ["ParceriaAbrigoONG"],
+        "summary": "Atualizar uma parceria",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "integer" }, { "in": "body", "name": "body", "required": true, "schema": { "$ref": "#/definitions/ParceriaAbrigoONG" } }],
+        "responses": { "200": { "description": "Parceria atualizada", "schema": { "$ref": "#/definitions/ParceriaAbrigoONGCompleta" } }, "404": { "description": "Parceria não encontrada" } }
+      },
+      "delete": {
+        "tags": ["ParceriaAbrigoONG"],
+        "summary": "Deletar uma parceria",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "integer" }],
+        "responses": { "204": { "description": "Parceria deletada" }, "404": { "description": "Parceria não encontrada" } }
+      }
+    }
+  },
+  "definitions": {
+    "ResponsavelPet": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer", "readOnly": true },
+        "nome": { "type": "string", "example": "Ana Souza" },
+        "cpf": { "type": "string", "example": "123.456.789-00" },
+        "contato": { "type": "string", "example": "11999998888" },
+        "email": { "type": "string", "format": "email", "example": "ana.souza@email.com" }
+      }
+    },
+    "Abrigo": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer", "readOnly": true },
+        "nome": { "type": "string", "example": "Abrigo Patinhas Felizes" },
+        "cnpj": { "type": "string", "example": "12.345.678/0001-90" },
+        "informacoes": { "type": "string", "example": "Especializado em cães idosos." },
+        "contato": { "type": "string", "example": "1133334444" },
+        "email": { "type": "string", "format": "email", "example": "contato@patinhas.com" }
+      }
+    },
+    "TutorInteressado": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer", "readOnly": true },
+        "nome": { "type": "string", "example": "Beatriz Mendes" },
+        "cpf": { "type": "string", "example": "111.222.333-44" },
+        "contato": { "type": "string", "example": "11955554444" },
+        "email": { "type": "string", "format": "email", "example": "bia.mendes@email.com" },
+        "data_nascimento": { "type": "string", "format": "date", "example": "1995-05-20" },
+        "lista_de_interesse": { "type": "string", "example": "Cães médios" },
+        "preferencias": { "type": "string", "example": "Animais agitados" }
+      }
+    },
+    "ONG": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer", "readOnly": true },
+        "nome": { "type": "string", "example": "ONG Amigos de 4 Patas" },
+        "cnpj": { "type": "string", "example": "11.222.333/0001-44" },
+        "informacoes": { "type": "string", "example": "Campanhas de castração." },
+        "email": { "type": "string", "format": "email", "example": "fale@amigos4patas.org" },
+        "contato": { "type": "string", "example": "11977776666" }
+      }
+    },
+    "Especie": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer", "readOnly": true },
+        "nome": { "type": "string", "example": "Cachorro" },
+        "habitat": { "type": "string", "example": "Doméstico" },
+        "descricao": { "type": "string" }
+      }
+    },
+    "Raca": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer", "readOnly": true },
+        "nome": { "type": "string", "example": "Husky Siberiano" },
+        "expectativa_de_vida": { "type": "integer", "example": 15 },
+        "saude": { "type": "string", "example": "Saudável" },
+        "peso_medio": { "type": "integer", "example": 27 },
+        "porte": { "type": "string", "enum": ["Pequeno", "Médio", "Grande", "Gigante"] },
+        "capacidades": { "type": "string", "example": "Carregar trenó, ficar em lugares extramente frios" },
+        "id_especie": { "type": "integer", "description": "ID da espécie relacionada" }
+      }
+    },
+    "Pet": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer", "readOnly": true },
+        "nome": { "type": "string", "example": "Aenocyon" },
+        "idade": { "type": "integer", "example": 3 },
+        "sexo": { "type": "string", "enum": ["Macho", "Fêmea"] },
+        "tamanho": { "type": "number", "format": "double", "example": 60.00 },
+        "status_adocao": { "type": "string", "enum": ["Disponível", "Em processo de adoção", "Já foi Adotado"] },
+        "nacionalidade": { "type": "string", "example": "Brasil" },
+        "necessidades_especiais": { "type": "string" },
+        "descricao": { "type": "string", "example": "Amigável e agitado" },
+        "midia": { "type": "string", "example": "https://www.petz.com.br/blog/wp-content/uploads/2023/07/husky-siberiano-e-bravo.jpg" },
+        "id_especie": { "type": "integer" },
+        "id_responsavel_pet": { "type": "integer" },
+        "id_abrigo": { "type": "integer" }
+      }
+    },
+    "Endereco": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer", "readOnly": true },
+        "logradouro": { "type": "string", "example": "Rua Barão de Vitória" },
+        "numero": { "type": "string", "example": "102" },
+        "bairro": { "type": "string", "example": "Casa Grande" },
+        "cidade": { "type": "string", "example": "Diadema" },
+        "uf": { "type": "string", "example": "SP" },
+        "cep": { "type": "string", "example": "09961660" }
+      }
+    },
+    "ParceriaAbrigoONG": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer", "readOnly": true },
+        "status_patrocinio": { "type": "string", "enum": ["Ativo", "Desfeita", "Em processo"] },
+        "tipo_paceria": { "type": "string", "example": "Financeira" },
+        "data_inicio": { "type": "string", "format": "date", "example": "2013-10-31" },
+        "data_fim": { "type": "string", "format": "date" },
+        "id_ong": { "type": "integer" },
+        "id_abrigo": { "type": "integer" }
+      }
+    },
+    "PedidoAdocao": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer", "readOnly": true },
+        "status_processo": { "type": "string", "enum": ["Em análise", "Aprovado", "Negado"] },
+        "informacoes": { "type": "string", "example": "Cachorro adotado" },
+        "data_pedido": { "type": "string", "format": "date", "example": "2025-11-20" },
+        "id_tutor_interessado": { "type": "integer" },
+        "id_responsavel_pet": { "type": "integer" },
+        "id_pet": { "type": "integer" }
+      }
+    },
+    "HistoricoAdocao": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer", "readOnly": true },
+        "pet": { "type": "string", "example": "Lunos" },
+        "informacoes": { "type": "string", "example": "Corvo adotado" },
+        "data_adocao": { "type": "string", "format": "date", "example": "2017-09-07" },
+        "observacoes": { "type": "string", "example": "Está até hoje com a Ave" },
+        "id_tutor_interessado": { "type": "integer" }
+      }
+    },
+    "RacaCompleta": {
+      "allOf": [{ "$ref": "#/definitions/Raca" }, { "type": "object", "properties": { "especie": { "$ref": "#/definitions/Especie" } } }]
+    },
+    "PetCompleto": {
+      "allOf": [{ "$ref": "#/definitions/Pet" }, { "type": "object", "properties": { "especie": { "$ref": "#/definitions/Especie" }, "responsavel_pet": { "$ref": "#/definitions/ResponsavelPet" }, "abrigo": { "$ref": "#/definitions/Abrigo" } } }]
+    },
+    "AbrigoPost": {
+      "type": "object", "properties": { "abrigo": { "$ref": "#/definitions/Abrigo" }, "endereco": { "$ref": "#/definitions/Endereco" } }
+    },
+    "AbrigoCompleto": {
+      "allOf": [{ "$ref": "#/definitions/Abrigo" }, { "type": "object", "properties": { "endereco": { "$ref": "#/definitions/Endereco" } } }]
+    },
+    "ONGPost": {
+      "type": "object", "properties": { "ong": { "$ref": "#/definitions/ONG" }, "endereco": { "$ref": "#/definitions/Endereco" } }
+    },
+    "ONGCompleto": {
+      "allOf": [{ "$ref": "#/definitions/ONG" }, { "type": "object", "properties": { "endereco": { "$ref": "#/definitions/Endereco" } } }]
+    },
+    "PedidoAdocaoCompleto": {
+      "allOf": [{ "$ref": "#/definitions/PedidoAdocao" }, { "type": "object", "properties": { "tutor_interessado": { "$ref": "#/definitions/TutorInteressado" }, "responsavel_pet": { "$ref": "#/definitions/ResponsavelPet" }, "pet": { "$ref": "#/definitions/Pet" } } }]
+    },
+    "ParceriaAbrigoONGCompleta": {
+      "allOf": [{ "$ref": "#/definitions/ParceriaAbrigoONG" }, { "type": "object", "properties": { "ong": { "$ref": "#/definitions/ONG" }, "abrigo": { "$ref": "#/definitions/Abrigo" } } }]
+    }
+  }
+}
