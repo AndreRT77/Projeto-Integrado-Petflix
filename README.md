@@ -10,3 +10,5 @@
 ## Protótipo de alta fidelidade
 <img width="994" height="836" alt="image" src="https://github.com/user-attachments/assets/50299c18-5303-4d94-838b-48020911013f" />
 
+LEIA!!!
+[Explicação da Entrega atrasada e não finalizada.pdf](https://github.com/user-attachments/files/24216881/Explicacao.da.Entrega.atrasada.e.nao.finalizada.pdf)
